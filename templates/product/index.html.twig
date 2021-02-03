@@ -137,16 +137,17 @@
 		</div>
 		<!-- /.card-body -->
 	</div>
-
-{% endblock %}
 {% block javascripts %}
-	{% if edit %}
+{% if edit %}
 		<script>
+		document.getElementById('collapse').click();
 
-
+{# 
 			$(function () {
 $('#collapse').trigger('click');
-})
+}) #}
 		</script>
 	{% endif %}
+{% endblock %}
+
 {% endblock %}
