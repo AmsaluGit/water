@@ -19,6 +19,18 @@ class DepartmentRepository extends ServiceEntityRepository
         parent::__construct($registry, Department::class);
     }
 
+    
+    public function findDepartment($search=null)
+    {
+        $qb=$this->createQueryBuilder('d');
+
+        if($search)
+            $qb->andWhere("d.name  LIKE '%".$search."%'");
+            return $qb->orderBy('d.id', 'ASC')
+                      ->getQuery()
+            ;
+    }
+
     // /**
     //  * @return Department[] Returns an array of Department objects
     //  */
