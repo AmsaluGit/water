@@ -72,6 +72,9 @@ class CategoryController extends AbstractController
             'edit'=>false
         ]);;
     }
+    /**
+     * @Route("/{id}", name="category_delete", methods={"DELETE"})
+     */
 
     public function delete(Request $request, Category $category): Response
     {
