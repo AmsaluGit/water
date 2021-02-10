@@ -39,9 +39,15 @@ class Product
      */
     private $stocks;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ConsumptionRequest::class, mappedBy="product", orphanRemoval=true)
+     */
+    private $consumptionRequests;
+
     public function __construct()
     {
         $this->stocks = new ArrayCollection();
+        $this->consumptionRequests = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,6 +115,36 @@ class Product
             // set the owning side to null (unless already changed)
             if ($stock->getProduct() === $this) {
                 $stock->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ConsumptionRequest[]
+     */
+    public function getConsumptionRequests(): Collection
+    {
+        return $this->consumptionRequests;
+    }
+
+    public function addConsumptionRequest(ConsumptionRequest $consumptionRequest): self
+    {
+        if (!$this->consumptionRequests->contains($consumptionRequest)) {
+            $this->consumptionRequests[] = $consumptionRequest;
+            $consumptionRequest->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConsumptionRequest(ConsumptionRequest $consumptionRequest): self
+    {
+        if ($this->consumptionRequests->removeElement($consumptionRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($consumptionRequest->getProduct() === $this) {
+                $consumptionRequest->setProduct(null);
             }
         }
 

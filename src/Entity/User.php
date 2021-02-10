@@ -62,9 +62,27 @@ class User implements UserInterface
      */
     private $stocks;
 
+    /**
+     * @ORM\OneToMany(targetEntity=StockApproval::class, mappedBy="approvedBy", orphanRemoval=true)
+     */
+    private $stockApprovals;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ConsumptionRequest::class, mappedBy="requester", orphanRemoval=true)
+     */
+    private $consumptionRequests;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ConsumptionApproval::class, mappedBy="approvedBy", orphanRemoval=true)
+     */
+    private $consumptionApprovals;
+
     public function __construct()
     {
         $this->stocks = new ArrayCollection();
+        $this->stockApprovals = new ArrayCollection();
+        $this->consumptionRequests = new ArrayCollection();
+        $this->consumptionApprovals = new ArrayCollection();
     }
 
  
@@ -233,6 +251,96 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($stock->getRegisteredBy() === $this) {
                 $stock->setRegisteredBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StockApproval[]
+     */
+    public function getStockApprovals(): Collection
+    {
+        return $this->stockApprovals;
+    }
+
+    public function addStockApproval(StockApproval $stockApproval): self
+    {
+        if (!$this->stockApprovals->contains($stockApproval)) {
+            $this->stockApprovals[] = $stockApproval;
+            $stockApproval->setApprovedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStockApproval(StockApproval $stockApproval): self
+    {
+        if ($this->stockApprovals->removeElement($stockApproval)) {
+            // set the owning side to null (unless already changed)
+            if ($stockApproval->getApprovedBy() === $this) {
+                $stockApproval->setApprovedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ConsumptionRequest[]
+     */
+    public function getConsumptionRequests(): Collection
+    {
+        return $this->consumptionRequests;
+    }
+
+    public function addConsumptionRequest(ConsumptionRequest $consumptionRequest): self
+    {
+        if (!$this->consumptionRequests->contains($consumptionRequest)) {
+            $this->consumptionRequests[] = $consumptionRequest;
+            $consumptionRequest->setRequester($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConsumptionRequest(ConsumptionRequest $consumptionRequest): self
+    {
+        if ($this->consumptionRequests->removeElement($consumptionRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($consumptionRequest->getRequester() === $this) {
+                $consumptionRequest->setRequester(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ConsumptionApproval[]
+     */
+    public function getConsumptionApprovals(): Collection
+    {
+        return $this->consumptionApprovals;
+    }
+
+    public function addConsumptionApproval(ConsumptionApproval $consumptionApproval): self
+    {
+        if (!$this->consumptionApprovals->contains($consumptionApproval)) {
+            $this->consumptionApprovals[] = $consumptionApproval;
+            $consumptionApproval->setApprovedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConsumptionApproval(ConsumptionApproval $consumptionApproval): self
+    {
+        if ($this->consumptionApprovals->removeElement($consumptionApproval)) {
+            // set the owning side to null (unless already changed)
+            if ($consumptionApproval->getApprovedBy() === $this) {
+                $consumptionApproval->setApprovedBy(null);
             }
         }
 

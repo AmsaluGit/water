@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\StockRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -46,6 +48,21 @@ class Stock
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="stocks")
      */
     private $registeredBy;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=UnitOfMeasure::class, inversedBy="stocks")
+     */
+    private $unitOfMeasure;
+
+    /**
+     * @ORM\OneToMany(targetEntity=StockApproval::class, mappedBy="stock", orphanRemoval=true)
+     */
+    private $stockApprovals;
+
+    public function __construct()
+    {
+        $this->stockApprovals = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -120,6 +137,48 @@ class Stock
     public function setRegisteredBy(?User $registeredBy): self
     {
         $this->registeredBy = $registeredBy;
+
+        return $this;
+    }
+
+    public function getUnitOfMeasure(): ?UnitOfMeasure
+    {
+        return $this->unitOfMeasure;
+    }
+
+    public function setUnitOfMeasure(?UnitOfMeasure $unitOfMeasure): self
+    {
+        $this->unitOfMeasure = $unitOfMeasure;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StockApproval[]
+     */
+    public function getStockApprovals(): Collection
+    {
+        return $this->stockApprovals;
+    }
+
+    public function addStockApproval(StockApproval $stockApproval): self
+    {
+        if (!$this->stockApprovals->contains($stockApproval)) {
+            $this->stockApprovals[] = $stockApproval;
+            $stockApproval->setStock($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStockApproval(StockApproval $stockApproval): self
+    {
+        if ($this->stockApprovals->removeElement($stockApproval)) {
+            // set the owning side to null (unless already changed)
+            if ($stockApproval->getStock() === $this) {
+                $stockApproval->setStock(null);
+            }
+        }
 
         return $this;
     }
