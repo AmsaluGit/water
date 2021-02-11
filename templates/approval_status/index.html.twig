@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product index
+{% endblock %}
+{% block maintitle %}
+	Product
+{% endblock %}
+
+
+{% block breadcrumb %}
+
+	<li class="breadcrumb-item active">Product</li>
+{% endblock %}
+{% block body %}
+	<div class="row">
+		<div class="card col-md">
+
+			<div class="card-body">
+				<div class="row">
+
+					<div class="col-md-12">
+						<div class="card ">
+							<div class="card-body">
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th>
+												#
+											</th>
+											<th>Approver Name</th>
+											<th> Approver Response</th> 
+											<th>Date of Approval</th>
+											<th>Approved Quantity</th>
+										</tr>
+									</thead>
+									<tbody>
+									
+										{% set i = 1 %}
+										{% for stock_approval in stock_approvals %}
+											<tr>
+                                                <td>
+													{{ i }}
+													{% set i = i+1 %}
+												</td>
+												<td>{{ stock_approval.approvedBy }}</td>
+                                                {% if stock_approval.approvalResponse == 1 %}
+                                                    <td>Approved</td>
+                                                {% else %}
+                                                    <td>Rejected</td>
+                                                {% endif %}
+												<td>{{ stock_approval.dateOfApproval | date("Y-m-d h:i:sa") }}</td>
+                                                <td>{{ stock_approval.approvedQuantity }}</td>
+										
+
+											</tr>
+										{% else %}
+											<tr>
+												<td colspan="5">no records found</td>
+											</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+								<br>
+								
+                                {# <div class="float-left">Total- {{ stock_approvals.getTotalItemCount }}</div>
+								{% do stock_approvals.setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') %}
+								<div class="float-right">{{ knp_pagination_render(stock_approvals) }}</div> #}
+							</div>
+						</div>
+					</div>
+					<!-- /.card-body -->
+				</div>
+			</div>
+
+		</div>
+		<!-- /.card-body -->
+	</div>
+
+{% endblock %}

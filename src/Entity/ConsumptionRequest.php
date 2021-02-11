@@ -36,10 +36,6 @@ class ConsumptionRequest
      */
     private $product;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=UnitOfMeasure::class, inversedBy="consumptionRequests")
-     */
-    private $unitOfMeasure;
 
     /**
      * @ORM\Column(type="integer")
@@ -102,17 +98,6 @@ class ConsumptionRequest
         return $this;
     }
 
-    public function getUnitOfMeasure(): ?UnitOfMeasure
-    {
-        return $this->unitOfMeasure;
-    }
-
-    public function setUnitOfMeasure(?UnitOfMeasure $unitOfMeasure): self
-    {
-        $this->unitOfMeasure = $unitOfMeasure;
-
-        return $this;
-    }
 
     public function getQuantity(): ?int
     {

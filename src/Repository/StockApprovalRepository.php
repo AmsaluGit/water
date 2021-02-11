@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\StockApproval;
+use App\Entity\Stock;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -22,19 +23,20 @@ class StockApprovalRepository extends ServiceEntityRepository
     // /**
     //  * @return StockApproval[] Returns an array of StockApproval objects
     //  */
-    /*
-    public function findByExampleField($value)
+    
+    public function findApprovalStatus(Stock $value)
     {
+
+
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
+            ->andWhere('s.stock = :val')
             ->setParameter('val', $value)
             ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+    
 
     /*
     public function findOneBySomeField($value): ?StockApproval

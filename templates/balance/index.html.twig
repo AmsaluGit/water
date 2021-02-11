@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Balance Controller
+{% endblock %}
+{% block maintitle %}
+	Balance
+{% endblock %}
+
+
+{% block breadcrumb %}
+
+	<li class="breadcrumb-item active">Balance</li>
+{% endblock %}
+{% block body %}
+	<div class="row">
+		<div class="card col-md">
+
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card card-info collapsed-card">
+							<div class="card-header">
+					<h3 class="card-title">Balance Controller</h3>
+								
+						</div>
+					</div>
+
+					<div class="col-md-12">
+						<div class="card ">
+							<div class="card-header">
+								
+								<div class="card-tools">
+								
+									<form class="form-inline ml-3" >
+										<div class="input-group ">
+											<input class="form-control" autocomplete="off" name="search" type="search" placeholder="Search" aria-label="Search">
+											<div class="input-group-append">
+												<button class=" input-group-text btn btn-navbar " type="submit">
+													<i class="fas fa-search"></i>
+												</button>	
+											</div>
+											
+										</div>
+									</form>
+
+									
+								</div>
+							</div>
+							<div class="card-body">
+
+
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th>
+												#
+											</th>
+
+											<th>products</th>
+											<th>Requested</th>
+											<th>available</th>
+											<th>Used</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% set i = 1 %}
+										{% for balance in balances %}
+											<tr>
+												<td>
+													{{ i }}
+													{% set i = i+1 %}
+												</td>
+												<td>{{ balance.name}}</td>
+												<td></td>
+												<td></td>
+												<td></td>
+											
+								
+												<td>
+
+													<form class="d-inline" method = "POST"  action="{{ path('productDetail_index',{'id':balance.name} ) }}">
+													 <input type="hidden" name="reply" value="{{ balance.name }}"> 
+													 <button class="btn btn-link" type = "submit" name="reply" value = "{{balance.name}}" >Request</button>
+													</form>
+													
+												</td>
+
+											</tr>
+										{% else %}
+											<tr>
+												<td colspan="5">no records found</td>
+											</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+								<br>
+						
+							</div>
+						</div>
+					</div>
+					<!-- /.card-body -->
+				</div>
+			</div>
+
+		</div>
+		<!-- /.card-body -->
+
+
+{% endblock %}

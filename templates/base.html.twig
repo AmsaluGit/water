@@ -22,18 +22,6 @@
 	</head>
 
 	<body class="hold-transition sidebar-mini">
-		{% for message in app.flashes('success') %}
-            <div class="alert alert-success">
-			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                {{ message }}
-            </div>
-        {% endfor %}
-		{% for message in app.flashes('error') %}
-            <div class="alert alert-danger">
-			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                {{ message }}
-            </div>
-        {% endfor %}
 
 		<div class="wrapper">
 			{% include 'master/navbar.html.twig' %}
@@ -106,7 +94,26 @@
 		
 				<div class="content">
 					<div class="container-fluid">
-							<div class="row"> <div class="col-md-12 col-sm-12 col-xs-12"> {% block body %}{% endblock %}
+							<div class="row"> <div class="col-md-12 col-sm-12 col-xs-12"> 
+							{% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                {{ message }}
+            </div>
+        {% endfor %}
+		{% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                {{ message }}
+            </div>
+        {% endfor %}
+		{% for message in app.flashes('warning') %}
+            <div class="alert alert-danger">
+			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                {{ message }}
+            </div>
+        {% endfor %}
+							{% block body %}{% endblock %}
 								</div>
 							</div>
 						</div>

@@ -50,11 +50,6 @@ class Stock
     private $registeredBy;
 
     /**
-     * @ORM\ManyToOne(targetEntity=UnitOfMeasure::class, inversedBy="stocks")
-     */
-    private $unitOfMeasure;
-
-    /**
      * @ORM\OneToMany(targetEntity=StockApproval::class, mappedBy="stock", orphanRemoval=true)
      */
     private $stockApprovals;
@@ -141,17 +136,6 @@ class Stock
         return $this;
     }
 
-    public function getUnitOfMeasure(): ?UnitOfMeasure
-    {
-        return $this->unitOfMeasure;
-    }
-
-    public function setUnitOfMeasure(?UnitOfMeasure $unitOfMeasure): self
-    {
-        $this->unitOfMeasure = $unitOfMeasure;
-
-        return $this;
-    }
 
     /**
      * @return Collection|StockApproval[]

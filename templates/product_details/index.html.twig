@@ -30,17 +30,14 @@
                                     <div class="form-group ">
                                         <label class="control-label no-padding-right">Product</label>
                                         <label class = "form-control" >{{ stock.product }}</label>
-                                        <div class="help-block with-errors"></div>
                                     </div>
                                     <div class="form-group ">
                                         <label class="control-label no-padding-right">Store</label>
                                         <label class = "form-control" >{{ stock.store}}</label>
-                                        <div class="help-block with-errors"></div>
                                     </div>
                                     <div class="form-group ">
                                         <label class="control-label no-padding-right">Quantity</label>
-                                        <label class = "form-control" >{{ stock.quantity}} {{stock.unitOfMeasure}} </label>
-                                        <div class="help-block with-errors"></div>
+                                        <label class = "form-control" >{{ stock.quantity}} </label>
                                     </div>
                                     <div class="form-group ">
                                         <label class="control-label no-padding-right">Total price</label>
@@ -76,7 +73,11 @@
                                         <input type="submit" name="approve" value="Approve" class="btn btn-success btn-sm">
                                         <input type="submit" name="reject" value="Reject" class="btn btn-danger btn-sm">
                                     
-                                    </form>  #}
+                else{
+        return $this->redirectToRoute('stock_index'); 
+       }                    </form>  #}
+
+                                   
 							    </div>
 						    </div> 
 					    </div>

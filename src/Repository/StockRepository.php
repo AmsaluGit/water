@@ -19,22 +19,23 @@ class StockRepository extends ServiceEntityRepository
         parent::__construct($registry, Stock::class);
     }
 
-    // /**
-    //  * @return Stock[] Returns an array of Stock objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Stock[] Returns an array of Stock objects
+     */
+    
+    public function findStock($value)
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
+        $qb=$this->createQueryBuilder('p');
+
+        if($value)
+            $qb->andWhere("p.name  LIKE '%".$value."%'");
+            return 
+            $qb->orderBy('p.id', 'ASC')
             ->getQuery()
-            ->getResult()
+            
         ;
     }
-    */
+    
 
     /*
     public function findOneBySomeField($value): ?Stock
