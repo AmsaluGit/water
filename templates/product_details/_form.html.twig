@@ -1,0 +1,30 @@
+{{ form_start(form,{'attr': {'role':'form'}}) }}
+
+
+
+	<div class="form-group ">
+		<label class="control-label no-padding-right">{{ form_label(form.approvedQuantity) }}</label>
+		{{ form_widget(form.approvedQuantity,{'attr':{'class':'form-control'}}) }}
+		<div class="help-block with-errors"></div>
+	</div>
+	<div class="form-group ">
+		<label class="control-label no-padding-right">{{ form_label(form.remark) }}</label>
+		{{ form_widget(form.remark,{'attr':{'class':'form-control'}}) }}
+		<div class="help-block with-errors"></div>
+	</div>
+	
+			<button class="btn btn-success" name = "approve" type = "submit" value="approve">Approve</button>
+			<button class="btn  btn-warning " style="margin-right:20px;" type="submit" name = "reject" value ="reject">Reject</button>
+
+			{# <input type="hidden" name="edit" value="{{edit}}"> #}
+			<a href="{{ path('product_index') }}" class="btn btn-primary">
+				Back
+			</a>
+
+			{# <button class="btn btn-success mr-2">{{ button_label|default('Save') }}</button> #}
+		
+
+
+
+
+{{ form_end(form) }}

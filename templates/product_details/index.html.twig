@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product index
+{% endblock %}
+{% block maintitle %}
+	Product
+{% endblock %}
+
+
+{% block breadcrumb %}
+
+	<li class="breadcrumb-item active">Product</li>
+{% endblock %}
+{% block body %}
+	<div class="row">
+		<div class="card col-md">
+
+			<div class="card-body">
+				<div class="row">
+
+					<div class="col-md-12">
+						<div class="card card-info">
+							<div class="card-header">
+                            
+								<h3 class="card-title">Product Details</h3><br>
+								<div class="card-tools">
+                                </div>
+                            </div>
+                            <div class="card-body"> 
+                                    <div class="form-group ">
+                                        <label class="control-label no-padding-right">Product</label>
+                                        <label class = "form-control" >{{ stock.product }}</label>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="control-label no-padding-right">Store</label>
+                                        <label class = "form-control" >{{ stock.store}}</label>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="control-label no-padding-right">Quantity</label>
+                                        <label class = "form-control" >{{ stock.quantity}} {{stock.unitOfMeasure}} </label>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="control-label no-padding-right">Total price</label>
+                                        <label class = "form-control" >{{ stock.totalPrice}}</label>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="control-label no-padding-right">Requested By</label>
+                                        <label class = "form-control" >{{ stock.registeredBy}}</label>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+									
+								</div>
+							</div>
+							<div class="card-body">
+						
+                                <div class="form-group">
+                                {{ include('product_details/_form.html.twig') }}
+                                    {# <form method = "post">
+                            
+                                        <div class="form-group ">
+                                                <label class="control-label no-padding-right">Quantity </label>
+                                                <input name="quantity" type="integer" class = "form-control"/>         
+                                                <div class="help-block with-errors"></div>
+                                        </div>
+                                        <div class="form-group ">
+                                                <label class="control-label no-padding-right">Remark </label>
+                                                <input name="remark" type="text-area" class = "form-control"/>        
+                                                <div class="help-block with-errors"></div>
+                                        </div>
+
+                                        <input type="submit" name="back" value="Back" class="btn btn-info btn-sm">
+                                        <input type="submit" name="approve" value="Approve" class="btn btn-success btn-sm">
+                                        <input type="submit" name="reject" value="Reject" class="btn btn-danger btn-sm">
+                                    
+                                    </form>  #}
+							    </div>
+						    </div> 
+					    </div>
+					    <!-- /.card-body -->
+				    </div>
+			    </div>
+            </div>
+		    <!-- /.card-body -->
+	    </div>
+    </div>
+
+{% endblock %}

@@ -29,7 +29,7 @@ class ProductController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->getDoctrine()->getManager()->flush();
     
-                //return $this->redirectToRoute('product_index');
+                return $this->redirectToRoute('product_index');
             }
 
             $queryBuilder=$productRepository->findProduct($request->query->get('name'));
@@ -53,7 +53,7 @@ class ProductController extends AbstractController
             $entityManager->persist($product);
             $entityManager->flush();
 
-            //return $this->redirectToRoute('product_index');
+            return $this->redirectToRoute('product_index');
         }
         
         $search = $request->query->get('search');
