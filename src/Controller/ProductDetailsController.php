@@ -25,6 +25,7 @@ class ProductDetailsController extends AbstractController
     {   
         
         $id=2;
+        //$id = $request->request->get('more');
         $stock=$stockRepository->findOneBy(['id'=>$id]);
         $user = $this->getUser();
         $stockApproval = new StockApproval();
@@ -39,10 +40,12 @@ class ProductDetailsController extends AbstractController
             if($request->request->get('approve')){
                 $stockApproval->setDateOfApproval(new \DateTime())
                               ->setApprovalResponse(1);
+                $this->addFlash('success', 'The request has been sucessfuly approved!');
             }
             elseif($request->request->get('reject')){
                 $stockApproval->setApprovalResponse(2)
                               ->setDateOfApproval(new \DateTime());
+                $this->addFlash('error', 'The request has been successfully Rejected!');
             }
             $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($stockApproval);
