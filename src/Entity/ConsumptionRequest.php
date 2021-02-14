@@ -53,7 +53,7 @@ class ConsumptionRequest
     private $consumptionApprovals;
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="smallint", nullable = true)
      */
     private $approvalStatus;
 

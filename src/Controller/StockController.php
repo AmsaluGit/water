@@ -24,7 +24,7 @@ class StockController extends AbstractController
      */
     public function index(StockRepository $stockRepository,SettingRepository $settingRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        $stockApprovalLevel = $settingRepository->findOneBy(['id'=>1])->getStockApprovalLevel();
+        $stockApprovalLevel = $settingRepository->findOneBy(['id'=>2])->getStockApprovalLevel();
         if($request->request->get('edit')){
             $id=$request->request->get('edit');
             $stock=$stockRepository->findOneBy(['id'=>$id]);
@@ -91,7 +91,7 @@ class StockController extends AbstractController
     public function approveStock(StockApprovalRepository $stockApprovalRepository,settingRepository $settingRepository, StockRepository $stockRepository, Request $request): Response
     {  
 
-        $stockApprovalLevel = $settingRepository->findOneBy(['id'=>1])->getStockApprovalLevel();
+        $stockApprovalLevel = $settingRepository->findOneBy(['id'=>2])->getStockApprovalLevel();
         $id=$request->request->get('more');
         $stock=$stockRepository->findOneBy(['id'=>$id]);
         $user = $this-> getUser();
@@ -109,7 +109,7 @@ class StockController extends AbstractController
                 //  return $this->redirectToRoute('product_details_index/'.$stock->getId());
             }else{
             if($request->request->get('approve')){
-                if($stockApprovalLevel = count($stock->getStockApprovals())){
+                if($stockApprovalLevel-1 == count($stock->getStockApprovals())){
                     $stock->setApprovalStatus(1);
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->persist($stock);

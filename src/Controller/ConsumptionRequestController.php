@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\ConsumptionRequest;
 use App\Form\ConsumptionRequestType;
 use App\Repository\ConsumptionRequestRepository;
+use App\Repository\SettingRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,8 +20,9 @@ class ConsumptionRequestController extends AbstractController
     /**
      * @Route("/", name="consumption_index", methods={"GET"})
      */
-    public function index(ConsumptionRequestRepository $consumptionRequestRepository, Request $request, PaginatorInterface $paginator): Response
+    public function index(ConsumptionRequestRepository $consumptionRequestRepository,SettingRepository $settingRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        $settingApprovalLevel = $settingRepository->findOneBy(['id'=>1])->getConsumptionApprovalLevel();
         $queryBuilder=$consumptionRequestRepository->findRequester($request->query->get('search'));
                  $data=$paginator->paginate(
                  $queryBuilder,
@@ -29,6 +31,7 @@ class ConsumptionRequestController extends AbstractController
             );
             return $this->render('consumption_request/index.html.twig', [
                 'consumption_requests' => $data,
+                'applevel' => $settingApprovalLevel
             ]);
     }
 
