@@ -16,8 +16,7 @@
 	        <input type = "hidden" name = "more" value = "{{stock.id}}">
 			<button class="btn btn-success" name = "approve" type = "submit" value="approve" onsubmit="return confirm('Are you sure you want to delete this item?');">Approve</button>
 			<button class="btn  btn-danger " style="margin-right:20px;" type="submit" name = "reject" value ="reject">Reject</button>
-
-			<a href="{{ path('stock_index') }}" class="btn btn-primary">
+			<a href="{{ path('stock_index') }}" class="btn btn-info">
 				Back
 			</a>
 

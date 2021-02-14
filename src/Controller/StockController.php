@@ -7,6 +7,7 @@ use App\Entity\StockApproval;
 use App\Form\StockType;
 use App\Form\StockApprovalType;
 use App\Repository\StockRepository;
+use App\Repository\SettingRepository;
 use App\Repository\StockApprovalRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,8 +22,9 @@ class StockController extends AbstractController
     /**
      * @Route("/", name="stock_index", methods={"GET","POST"})
      */
-    public function index(StockRepository $stockRepository, Request $request, PaginatorInterface $paginator): Response
+    public function index(StockRepository $stockRepository,SettingRepository $settingRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        $stockApprovalLevel = $settingRepository->findOneBy(['id'=>1])->getStockApprovalLevel();
         if($request->request->get('edit')){
             $id=$request->request->get('edit');
             $stock=$stockRepository->findOneBy(['id'=>$id]);
@@ -44,7 +46,8 @@ class StockController extends AbstractController
             return $this->render('stock/index.html.twig', [
                 'stocks' => $data,
                 'form' => $form->createView(),
-                'edit'=>$id
+                'edit'=>$id,
+                'applevel'=>$stockApprovalLevel
             ]);
 
         }
@@ -54,6 +57,7 @@ class StockController extends AbstractController
         $form->handleRequest($request);
         $stock ->setDatePurchased(new \DateTime());
         $stock->setRegisteredBy($this->getUser());
+        
 
         if ($form->isSubmitted() && $form->isValid()) {
             
@@ -76,18 +80,19 @@ class StockController extends AbstractController
         return $this->render('stock/index.html.twig', [
             'stocks' => $data,
             'form' => $form->createView(),
-            'edit'=>false
+            'edit'=>false,
+            'applevel'=>$stockApprovalLevel
         ]);
     }
     
     /**
      * @Route("/{id}", name="product_detail_index", methods={"GET","POST"})
      */
-    public function approveStock(StockApprovalRepository $stockApprovalRepository, StockRepository $stockRepository, Request $request): Response
-    {   
+    public function approveStock(StockApprovalRepository $stockApprovalRepository,settingRepository $settingRepository, StockRepository $stockRepository, Request $request): Response
+    {  
 
+        $stockApprovalLevel = $settingRepository->findOneBy(['id'=>1])->getStockApprovalLevel();
         $id=$request->request->get('more');
-        //$id = $request->request->get('more');
         $stock=$stockRepository->findOneBy(['id'=>$id]);
         $user = $this-> getUser();
         $stockApproval = new StockApproval();
@@ -104,6 +109,12 @@ class StockController extends AbstractController
                 //  return $this->redirectToRoute('product_details_index/'.$stock->getId());
             }else{
             if($request->request->get('approve')){
+                if($stockApprovalLevel = count($stock->getStockApprovals())){
+                    $stock->setApprovalStatus(1);
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($stock);
+                    $entityManager->flush();
+                }
                 $stockApproval->setDateOfApproval(new \DateTime())
                               ->setApprovalResponse(1);
                 $this->addFlash('success', 'The request has been sucessfuly approved!');
@@ -111,6 +122,10 @@ class StockController extends AbstractController
             elseif($request->request->get('reject')){
                 $stockApproval->setApprovalResponse(2)
                               ->setDateOfApproval(new \DateTime());
+                $stock->setApprovalStatus(2);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($stock);
+                $entityManager->flush();
                 $this->addFlash('error', 'The request has been successfully Rejected!');
             }
             $entityManager = $this->getDoctrine()->getManager();

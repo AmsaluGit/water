@@ -73,6 +73,7 @@
                                         <th>{{ knp_pagination_sortable(consumption_requests, 'Date', 'c.requestedDate') }}</th>
                                         <th>{{ knp_pagination_sortable(consumption_requests, 'Product', 'p.name') }}</th>
                                         <th>{{ knp_pagination_sortable(consumption_requests, 'Quantity', 'c.quantity') }}</th>
+                                        <th>Approval Status</th>
                                         <th>Remark</th>
                                         <th>Action</th>
                                     </tr>
@@ -88,6 +89,13 @@
                                         <td>{{ consumption_request.requestedDate | date('d-m-Y : h-m-s') }}</td>
                                         <td>{{ consumption_request.product }}</td>
                                         <td>{{ consumption_request.quantity }}</td>
+                                        {% if consumption_request.approvalStatus == 1 %}
+                                                    <td>Approved</td>
+                                        {% elseif consumption_request.approvalStatus == 2 %}
+                                            <td>Rejected</td>
+                                        {% else %}
+                                            <td>Waiting</td>
+                                        {% endif %}
                                         <td>{{ consumption_request.remark }}</td>
                                         <td>
                                             <form class="d-inline" method="post" action="{{ path('consumption_approval_index') }}">

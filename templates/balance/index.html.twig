@@ -72,9 +72,9 @@
 													{% set i = i+1 %}
 												</td>
 												<td>{{ balance.name}}</td>
-												<td></td>
-												<td></td>
-												<td></td>
+												<td>{{ balance.total}}</td>
+												{# <td>{{ balance.approved}}</td>
+												<td>{{ balance.rejected}}</td> #}
 											
 								
 												<td>
@@ -95,7 +95,7 @@
 									</tbody>
 								</table>
 								<br>
-						
+							{{ dump(balances) }}
 							</div>
 						</div>
 					</div>

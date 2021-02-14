@@ -16,6 +16,7 @@ class StockType extends AbstractType
             ->add('totalPrice')
             ->add('product')
             ->add('store')
+            
         ;
     }
 

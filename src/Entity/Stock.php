@@ -54,6 +54,11 @@ class Stock
      */
     private $stockApprovals;
 
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $approvalStatus;
+
     public function __construct()
     {
         $this->stockApprovals = new ArrayCollection();
@@ -169,4 +174,16 @@ class Stock
     // public function __toString(){
     //     return $this->id;
     // }
+
+    public function getApprovalStatus(): ?int
+    {
+        return $this->approvalStatus;
+    }
+
+    public function setApprovalStatus(int $approvalStatus): self
+    {
+        $this->approvalStatus = $approvalStatus;
+
+        return $this;
+    }
 }

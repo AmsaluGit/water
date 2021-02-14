@@ -52,6 +52,11 @@ class ConsumptionRequest
      */
     private $consumptionApprovals;
 
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $approvalStatus;
+
     public function __construct()
     {
         $this->consumptionApprovals = new ArrayCollection();
@@ -149,6 +154,18 @@ class ConsumptionRequest
                 $consumptionApproval->setConsumptionRequest(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getApprovalStatus(): ?int
+    {
+        return $this->approvalStatus;
+    }
+
+    public function setApprovalStatus(int $approvalStatus): self
+    {
+        $this->approvalStatus = $approvalStatus;
 
         return $this;
     }

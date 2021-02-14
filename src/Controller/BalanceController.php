@@ -29,17 +29,14 @@ class BalanceController extends AbstractController
 
 
 
-        $sql = "select p.name as name from product as p inner join stock as st on st.product_id = p.id";
+        $sql = "select p.name as name, count(p.id) as total from product as p inner join stock as st on st.product_id = p.id GROUP BY p.name ";
         $stmt=$conn->prepare($sql);
         $stmt->execute();
         $data=$stmt->fetchAll();
 
         return $this->render('balance/index.html.twig', [
             'balances' => $data,
-            
-
-
-            
+          
         ]);
 
 
