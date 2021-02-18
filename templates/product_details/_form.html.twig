@@ -1,4 +1,4 @@
-{{ form_start(form,{'attr': {'role':'form', onsubmit : "return confirm('Are you sure you want to make the changes?')"}}) }}
+{{ form_start(form,{'attr': {'role':'form', 'data-toggle':"confirm", 'data-confirm-class':"myModal", 'data-title':"Sure ?" ,'data-body':"Butterfly will die. Do you confirm ?" ,'data-cancel-button-class':"cancel" , 'data-confirm-button-class':"danger"}}) }}
 
 
 
@@ -14,7 +14,7 @@
 	</div>
 	
 	        <input type = "hidden" name = "more" value = "{{stock.id}}">
-			<button class="btn btn-success" name = "approve" type = "submit" value="approve" onsubmit="return confirm('Are you sure you want to delete this item?');">Approve</button>
+			<button class="btn btn-success" name = "approve" type = "submit" value="approve" >Approve</button>
 			<button class="btn  btn-danger " style="margin-right:20px;" type="submit" name = "reject" value ="reject">Reject</button>
 			<a href="{{ path('stock_index') }}" class="btn btn-info">
 				Back

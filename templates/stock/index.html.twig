@@ -79,6 +79,7 @@
 
 											<th>Store</th>
 											<th>Product</th>
+											<th>quantity</th>
 											<th>Registered by</th>
 											<th>Approval Status</th>
 										</tr>
@@ -90,6 +91,7 @@
 												
 												<td>{{ stock.store }}</td>
 												<td>{{ stock.product }}</td>
+												<td>{{ stock.quantity }}</td>
 												<td>{{ stock.registeredBy }}</td>
 												{% if stock.approvalStatus == 1 %}
                                                     <td>Approved</td>
@@ -122,7 +124,7 @@
 												{# </td> #}
 											 <td>
 											<form method="POST" action="{{path('approval_status_index', {'id': stock.id}) }}">
-                                                <button class="btn btn-link" type="submit" value="{{stock.id}}" name="id">Approval Status</button>
+                                                <button class="btn btn-link" type="submit" value="{{stock.id}}" name="id">View Status</button>
                                                </form>
 											    </td>
 											
@@ -130,10 +132,10 @@
                                                 <td>
 												 {% if applevel > stock.stockApprovals|length and stock.approvalStatus != 2 %}
 													<form method="POST" action="{{path('product_detail_index', {'id': stock.id}) }}">
-                                                		<button class="btn btn-link" type="submit" value="{{stock.id}}" name="more">More</button>
+                                                		<button class="btn btn-link" type="submit" value="{{stock.id}}" name="more">Approve</button>
                                                		</form>
 												{% else %} 
-													<button class="btn btn-link" disabled>More</button>
+													<button class="btn btn-link" disabled>Closed</button>
 											   {% endif %} 
                                                 </td>
 											</tr>

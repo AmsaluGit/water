@@ -105,14 +105,30 @@ class StockController extends AbstractController
 
         
         if ($form->isSubmitted() && $form->isValid()) {
+
             if($stock->getQuantity() < $form->getData()->getApprovedQuantity() ){
                 $this->addFlash('warning', 'The request cannot be executed because the approved quantity greater than the requested!');
                 //
-                return $this->redirectToRoute('product_details_index/'.$stock->getId());
+                return $this->render('product_details/index.html.twig', [
+                    'stock' => $stock,
+                    
+                    'form'=> $form->createView(),
+                ]);      
             }else{
             if($request->request->get('approve')){
+                if(!$form->getData()->getApprovedQuantity()){
+
+                $this->addFlash('error', 'Approved quantity is required!');
+                return $this->render('product_details/index.html.twig', [
+                    'stock' => $stock,
+                    
+                    'form'=> $form->createView(),
+                ]);    
+
+                }
                 if($stockApprovalLevel-1 == count($stock->getStockApprovals())){
-                    $stock->setApprovalStatus(1);
+                    $stock->setApprovalStatus(1)
+                          ->setApprovedQuantity($form->getData()->getApprovedQuantity());
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->persist($stock);
                     $entityManager->flush();
@@ -134,6 +150,8 @@ class StockController extends AbstractController
                 $entityManager->persist($stockApproval);
                 $entityManager->flush();
                 //$alertify->congrat('Congratulation !');
+                $this->get('session')->getFlashBag()->set("confirm", array('engine' => 'modal', 'title' => "Wow", 'button_class' => "btn btn-primary btn-large", "body"=> "<div>Some info</div>"));
+
                return $this->redirectToRoute('stock_index');      
         }
 

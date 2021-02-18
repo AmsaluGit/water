@@ -27,7 +27,7 @@ class BalanceController extends AbstractController
         $em=$this->getDoctrine()->getManager();
         $conn=$em->getConnection();
 
-        $sql = "select p.name as name, count(p.id) as total, count(CASE WHEN st.approval_status =1 THEN p.id END) as approved, count(CASE WHEN st.approval_status =2 THEN p.id END) as rejected from product as p inner join stock as st on st.product_id = p.id  GROUP BY p.name ";
+        $sql = "select p.name as name, sum(cr.quantity) as quantity, sum(st.quantity) as total, sum(CASE WHEN st.approval_status =1 THEN st.approved_quantity END) as approved, sum(CASE WHEN st.approval_status =2 THEN st.approved_quantity END) as rejected from product as p inner join stock as st on st.product_id = p.id inner join consumption_request as cr on cr.product_id = p.id  GROUP BY p.name ";
         $stmt=$conn->prepare($sql);
         $stmt->execute();
         $data=$stmt->fetchAll();
