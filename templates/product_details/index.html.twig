@@ -85,8 +85,9 @@
 				    </div>
 			    </div>
             </div>
+             {{ app.session|alertify|raw }}
 		    <!-- /.card-body -->
 	    </div>
     </div>
-
+<script src="{{ asset('bundles/troopersalertify/js/confirm.js') }}"></script>
 {% endblock %}

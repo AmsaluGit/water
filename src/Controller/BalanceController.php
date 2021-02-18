@@ -27,16 +27,15 @@ class BalanceController extends AbstractController
         $em=$this->getDoctrine()->getManager();
         $conn=$em->getConnection();
 
-
-
-        $sql = "select p.name as name, count(p.id) as total, count(sa.id) as approved from product as p inner join stock as st on st.product_id = p.id inner join stock_approval as sa on st.id = sa.stock_id GROUP BY p.name ";
+        $sql = "select p.name as name, count(p.id) as total, count(CASE WHEN st.approval_status =1 THEN p.id END) as approved, count(CASE WHEN st.approval_status =2 THEN p.id END) as rejected from product as p inner join stock as st on st.product_id = p.id  GROUP BY p.name ";
         $stmt=$conn->prepare($sql);
         $stmt->execute();
         $data=$stmt->fetchAll();
+
     
         return $this->render('balance/index.html.twig', [
             'balances' => $data,
-            
+           
         ]);
 
 

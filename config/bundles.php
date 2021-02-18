@@ -14,4 +14,7 @@ return [
     Twig\Extra\TwigExtraBundle\TwigExtraBundle::class => ['all' => true],
     Symfony\Bundle\WebServerBundle\WebServerBundle::class => ['dev' => true],
     Knp\Bundle\PaginatorBundle\KnpPaginatorBundle::class => ['all' => true],
+    FOS\JsRoutingBundle\FOSJsRoutingBundle::class => ['all' => true],
+    Troopers\AlertifyBundle\TroopersAlertifyBundle::class => ['all' => true],
+    //Troopers\AsseticInjectorBundle\TroopersAsseticInjectorBundle::class => ['all' => true],
 ];

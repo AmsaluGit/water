@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
+use Troopers\AlertifyBundle\Helper\AlertifyHelper;
 /**
  * @Route("/stock")
  */
@@ -88,7 +89,7 @@ class StockController extends AbstractController
     /**
      * @Route("/{id}", name="product_detail_index", methods={"GET","POST"})
      */
-    public function approveStock(StockApprovalRepository $stockApprovalRepository,settingRepository $settingRepository, StockRepository $stockRepository, Request $request): Response
+    public function approveStock(StockApprovalRepository $stockApprovalRepository,settingRepository $settingRepository, StockRepository $stockRepository, Request $request, AlertifyHelper $alertify): Response
     {  
 
         $stockApprovalLevel = $settingRepository->findOneBy(['id'=>2])->getStockApprovalLevel();
@@ -106,7 +107,8 @@ class StockController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             if($stock->getQuantity() < $form->getData()->getApprovedQuantity() ){
                 $this->addFlash('warning', 'The request cannot be executed because the approved quantity greater than the requested!');
-                //  return $this->redirectToRoute('product_details_index/'.$stock->getId());
+                //
+                return $this->redirectToRoute('product_details_index/'.$stock->getId());
             }else{
             if($request->request->get('approve')){
                 if($stockApprovalLevel-1 == count($stock->getStockApprovals())){
@@ -131,6 +133,7 @@ class StockController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($stockApproval);
                 $entityManager->flush();
+                //$alertify->congrat('Congratulation !');
                return $this->redirectToRoute('stock_index');      
         }
 
