@@ -19,14 +19,6 @@ class StockRequest
      */
     private $id;
 
-  
-
- 
-
-   
-
-  
-  
 
     /**
      * @ORM\ManyToOne(targetEntity=Department::class, inversedBy="stockRequests")

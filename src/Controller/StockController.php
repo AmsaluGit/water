@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Stock;
 use App\Entity\StockApproval;
+use App\Entity\StockList;
 use App\Form\StockType;
+use App\Form\StockListType;
 use App\Form\StockApprovalType;
 use App\Repository\StockRepository;
 use App\Repository\SettingRepository;
@@ -29,7 +31,7 @@ class StockController extends AbstractController
         if($request->request->get('edit')){
             $id=$request->request->get('edit');
             $stock=$stockRepository->findOneBy(['id'=>$id]);
-            $form = $this->createForm(stockType::class, $stock);
+            $form = $this->createForm(StockListType::class, $stock);
             $form->handleRequest($request);
     
             if ($form->isSubmitted() && $form->isValid()) {
@@ -53,11 +55,11 @@ class StockController extends AbstractController
 
         }
 
-        $stock = new stock();
-        $form = $this->createForm(StockType::class, $stock);
+        $stock = new StockList();
+        $form = $this->createForm(StockListType::class, $stock);
         $form->handleRequest($request);
-        $stock ->setDatePurchased(new \DateTime());
-        $stock->setRegisteredBy($this->getUser());
+        /*$stock ->setDatePurchased(new \DateTime());
+        $stock->setRegisteredBy($this->getUser());*/
         
 
         if ($form->isSubmitted() && $form->isValid()) {

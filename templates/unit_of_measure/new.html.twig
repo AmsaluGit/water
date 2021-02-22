@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New UnitOfMeasure{% endblock %}
+
+{% block body %}
+    <h1>Create new UnitOfMeasure</h1>
+
+    {{ include('unit_of_measure/_form.html.twig') }}
+
+    <a href="{{ path('unit_of_measure_index') }}">back to list</a>
+{% endblock %}

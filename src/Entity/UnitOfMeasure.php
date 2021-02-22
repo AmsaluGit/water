@@ -26,9 +26,12 @@ class UnitOfMeasure
 
   
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $description;
    
 
-  
 
     /**
      * @ORM\OneToMany(targetEntity=StockList::class, mappedBy="unitOfMeasure")
@@ -211,5 +214,10 @@ class UnitOfMeasure
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }
