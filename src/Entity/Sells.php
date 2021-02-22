@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SellsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -47,30 +49,7 @@ class Sells
      */
     private $phone;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="sells")
-     */
-    private $product;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $specification;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $quantity;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $weight;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $unitPrice;
 
     /**
      * @ORM\Column(type="text")
@@ -91,6 +70,16 @@ class Sells
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sells")
      */
     private $approvedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity=SellsList::class, mappedBy="sells")
+     */
+    private $sellsLists;
+
+    public function __construct()
+    {
+        $this->sellsLists = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -169,65 +158,6 @@ class Sells
         return $this;
     }
 
-    public function getProduct(): ?Product
-    {
-        return $this->product;
-    }
-
-    public function setProduct(?Product $product): self
-    {
-        $this->product = $product;
-
-        return $this;
-    }
-
-    public function getSpecification(): ?string
-    {
-        return $this->specification;
-    }
-
-    public function setSpecification(string $specification): self
-    {
-        $this->specification = $specification;
-
-        return $this;
-    }
-
-    public function getQuantity(): ?int
-    {
-        return $this->quantity;
-    }
-
-    public function setQuantity(?int $quantity): self
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    public function getWeight(): ?float
-    {
-        return $this->weight;
-    }
-
-    public function setWeight(float $weight): self
-    {
-        $this->weight = $weight;
-
-        return $this;
-    }
-
-    public function getUnitPrice(): ?float
-    {
-        return $this->unitPrice;
-    }
-
-    public function setUnitPrice(float $unitPrice): self
-    {
-        $this->unitPrice = $unitPrice;
-
-        return $this;
-    }
 
     public function getNote(): ?string
     {
@@ -273,6 +203,36 @@ class Sells
     public function setApprovedBy(?User $approvedBy): self
     {
         $this->approvedBy = $approvedBy;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SellsList[]
+     */
+    public function getSellsLists(): Collection
+    {
+        return $this->sellsLists;
+    }
+
+    public function addSellsList(SellsList $sellsList): self
+    {
+        if (!$this->sellsLists->contains($sellsList)) {
+            $this->sellsLists[] = $sellsList;
+            $sellsList->setSells($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSellsList(SellsList $sellsList): self
+    {
+        if ($this->sellsLists->removeElement($sellsList)) {
+            // set the owning side to null (unless already changed)
+            if ($sellsList->getSells() === $this) {
+                $sellsList->setSells(null);
+            }
+        }
 
         return $this;
     }

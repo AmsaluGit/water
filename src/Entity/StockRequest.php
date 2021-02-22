@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\StockRequestRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,30 +19,14 @@ class StockRequest
      */
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="stockRequests")
-     */
-    private $product;
+  
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $specification;
+ 
 
-    /**
-     * @ORM\ManyToOne(targetEntity=UnitOfMeasure::class, inversedBy="stockRequests")
-     */
-    private $unitOfMeasure;
+   
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $quantity;
-
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $description;
+  
+  
 
     /**
      * @ORM\ManyToOne(targetEntity=Department::class, inversedBy="stockRequests")
@@ -72,70 +58,21 @@ class StockRequest
      */
     private $requestStatus;
 
+    /**
+     * @ORM\OneToMany(targetEntity=StockRequestList::class, mappedBy="stockRequest")
+     */
+    private $stockRequestLists;
+
+    public function __construct()
+    {
+        $this->stockRequestLists = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getProduct(): ?Product
-    {
-        return $this->product;
-    }
-
-    public function setProduct(?Product $product): self
-    {
-        $this->product = $product;
-
-        return $this;
-    }
-
-    public function getSpecification(): ?string
-    {
-        return $this->specification;
-    }
-
-    public function setSpecification(string $specification): self
-    {
-        $this->specification = $specification;
-
-        return $this;
-    }
-
-    public function getUnitOfMeasure(): ?UnitOfMeasure
-    {
-        return $this->unitOfMeasure;
-    }
-
-    public function setUnitOfMeasure(?UnitOfMeasure $unitOfMeasure): self
-    {
-        $this->unitOfMeasure = $unitOfMeasure;
-
-        return $this;
-    }
-
-    public function getQuantity(): ?int
-    {
-        return $this->quantity;
-    }
-
-    public function setQuantity(int $quantity): self
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
-    }
 
     public function getRequestingDept(): ?Department
     {
@@ -205,6 +142,36 @@ class StockRequest
     public function setRequestStatus(?int $requestStatus): self
     {
         $this->requestStatus = $requestStatus;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StockRequestList[]
+     */
+    public function getStockRequestLists(): Collection
+    {
+        return $this->stockRequestLists;
+    }
+
+    public function addStockRequestList(StockRequestList $stockRequestList): self
+    {
+        if (!$this->stockRequestLists->contains($stockRequestList)) {
+            $this->stockRequestLists[] = $stockRequestList;
+            $stockRequestList->setStockRequest($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStockRequestList(StockRequestList $stockRequestList): self
+    {
+        if ($this->stockRequestLists->removeElement($stockRequestList)) {
+            // set the owning side to null (unless already changed)
+            if ($stockRequestList->getStockRequest() === $this) {
+                $stockRequestList->setStockRequest(null);
+            }
+        }
 
         return $this;
     }

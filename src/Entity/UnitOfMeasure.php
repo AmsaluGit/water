@@ -24,37 +24,40 @@ class UnitOfMeasure
      */
     private $name;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $description;
+  
+
+   
+
+  
 
     /**
-     * @ORM\OneToMany(targetEntity=Stock::class, mappedBy="unitOfMeasure")
+     * @ORM\OneToMany(targetEntity=StockList::class, mappedBy="unitOfMeasure")
      */
-    private $stocks;
+    private $stockLists;
 
     /**
-     * @ORM\OneToMany(targetEntity=StockRequest::class, mappedBy="unitOfMeasure")
+     * @ORM\OneToMany(targetEntity=StockRequestList::class, mappedBy="unitOfMeasure")
      */
-    private $stockRequests;
+    private $stockRequestLists;
 
     /**
-     * @ORM\OneToMany(targetEntity=ConsumptionRequest::class, mappedBy="unitOfMeasure")
+     * @ORM\OneToMany(targetEntity=ConsumptionRequestList::class, mappedBy="unitOfMeasure")
      */
-    private $consumptionRequests;
+    private $consumptionRequestLists;
 
     /**
-     * @ORM\OneToMany(targetEntity=ConsumptionDelivery::class, mappedBy="unitOfMeasure")
+     * @ORM\OneToMany(targetEntity=ConsumptionDeliveryList::class, mappedBy="unitOfMeasure")
      */
-    private $consumptionDeliveries;
+    private $consumptionDeliveryLists;
 
     public function __construct()
     {
-        $this->stocks = new ArrayCollection();
-        $this->stockRequests = new ArrayCollection();
-        $this->consumptionRequests = new ArrayCollection();
-        $this->consumptionDeliveries = new ArrayCollection();
+     
+     
+        $this->stockLists = new ArrayCollection();
+        $this->stockRequestLists = new ArrayCollection();
+        $this->consumptionRequestLists = new ArrayCollection();
+        $this->consumptionDeliveryLists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -86,30 +89,34 @@ class UnitOfMeasure
         return $this;
     }
 
+    
+
+     
+
     /**
-     * @return Collection|Stock[]
+     * @return Collection|StockList[]
      */
-    public function getStocks(): Collection
+    public function getStockLists(): Collection
     {
-        return $this->stocks;
+        return $this->stockLists;
     }
 
-    public function addStock(Stock $stock): self
+    public function addStockList(StockList $stockList): self
     {
-        if (!$this->stocks->contains($stock)) {
-            $this->stocks[] = $stock;
-            $stock->setUnitOfMeasure($this);
+        if (!$this->stockLists->contains($stockList)) {
+            $this->stockLists[] = $stockList;
+            $stockList->setUnitOfMeasure($this);
         }
 
         return $this;
     }
 
-    public function removeStock(Stock $stock): self
+    public function removeStockList(StockList $stockList): self
     {
-        if ($this->stocks->removeElement($stock)) {
+        if ($this->stockLists->removeElement($stockList)) {
             // set the owning side to null (unless already changed)
-            if ($stock->getUnitOfMeasure() === $this) {
-                $stock->setUnitOfMeasure(null);
+            if ($stockList->getUnitOfMeasure() === $this) {
+                $stockList->setUnitOfMeasure(null);
             }
         }
 
@@ -117,29 +124,29 @@ class UnitOfMeasure
     }
 
     /**
-     * @return Collection|StockRequest[]
+     * @return Collection|StockRequestList[]
      */
-    public function getStockRequests(): Collection
+    public function getStockRequestLists(): Collection
     {
-        return $this->stockRequests;
+        return $this->stockRequestLists;
     }
 
-    public function addStockRequest(StockRequest $stockRequest): self
+    public function addStockRequestList(StockRequestList $stockRequestList): self
     {
-        if (!$this->stockRequests->contains($stockRequest)) {
-            $this->stockRequests[] = $stockRequest;
-            $stockRequest->setUnitOfMeasure($this);
+        if (!$this->stockRequestLists->contains($stockRequestList)) {
+            $this->stockRequestLists[] = $stockRequestList;
+            $stockRequestList->setUnitOfMeasure($this);
         }
 
         return $this;
     }
 
-    public function removeStockRequest(StockRequest $stockRequest): self
+    public function removeStockRequestList(StockRequestList $stockRequestList): self
     {
-        if ($this->stockRequests->removeElement($stockRequest)) {
+        if ($this->stockRequestLists->removeElement($stockRequestList)) {
             // set the owning side to null (unless already changed)
-            if ($stockRequest->getUnitOfMeasure() === $this) {
-                $stockRequest->setUnitOfMeasure(null);
+            if ($stockRequestList->getUnitOfMeasure() === $this) {
+                $stockRequestList->setUnitOfMeasure(null);
             }
         }
 
@@ -147,29 +154,29 @@ class UnitOfMeasure
     }
 
     /**
-     * @return Collection|ConsumptionRequest[]
+     * @return Collection|ConsumptionRequestList[]
      */
-    public function getConsumptionRequests(): Collection
+    public function getConsumptionRequestLists(): Collection
     {
-        return $this->consumptionRequests;
+        return $this->consumptionRequestLists;
     }
 
-    public function addConsumptionRequest(ConsumptionRequest $consumptionRequest): self
+    public function addConsumptionRequestList(ConsumptionRequestList $consumptionRequestList): self
     {
-        if (!$this->consumptionRequests->contains($consumptionRequest)) {
-            $this->consumptionRequests[] = $consumptionRequest;
-            $consumptionRequest->setUnitOfMeasure($this);
+        if (!$this->consumptionRequestLists->contains($consumptionRequestList)) {
+            $this->consumptionRequestLists[] = $consumptionRequestList;
+            $consumptionRequestList->setUnitOfMeasure($this);
         }
 
         return $this;
     }
 
-    public function removeConsumptionRequest(ConsumptionRequest $consumptionRequest): self
+    public function removeConsumptionRequestList(ConsumptionRequestList $consumptionRequestList): self
     {
-        if ($this->consumptionRequests->removeElement($consumptionRequest)) {
+        if ($this->consumptionRequestLists->removeElement($consumptionRequestList)) {
             // set the owning side to null (unless already changed)
-            if ($consumptionRequest->getUnitOfMeasure() === $this) {
-                $consumptionRequest->setUnitOfMeasure(null);
+            if ($consumptionRequestList->getUnitOfMeasure() === $this) {
+                $consumptionRequestList->setUnitOfMeasure(null);
             }
         }
 
@@ -177,29 +184,29 @@ class UnitOfMeasure
     }
 
     /**
-     * @return Collection|ConsumptionDelivery[]
+     * @return Collection|ConsumptionDeliveryList[]
      */
-    public function getConsumptionDeliveries(): Collection
+    public function getConsumptionDeliveryLists(): Collection
     {
-        return $this->consumptionDeliveries;
+        return $this->consumptionDeliveryLists;
     }
 
-    public function addConsumptionDelivery(ConsumptionDelivery $consumptionDelivery): self
+    public function addConsumptionDeliveryList(ConsumptionDeliveryList $consumptionDeliveryList): self
     {
-        if (!$this->consumptionDeliveries->contains($consumptionDelivery)) {
-            $this->consumptionDeliveries[] = $consumptionDelivery;
-            $consumptionDelivery->setUnitOfMeasure($this);
+        if (!$this->consumptionDeliveryLists->contains($consumptionDeliveryList)) {
+            $this->consumptionDeliveryLists[] = $consumptionDeliveryList;
+            $consumptionDeliveryList->setUnitOfMeasure($this);
         }
 
         return $this;
     }
 
-    public function removeConsumptionDelivery(ConsumptionDelivery $consumptionDelivery): self
+    public function removeConsumptionDeliveryList(ConsumptionDeliveryList $consumptionDeliveryList): self
     {
-        if ($this->consumptionDeliveries->removeElement($consumptionDelivery)) {
+        if ($this->consumptionDeliveryLists->removeElement($consumptionDeliveryList)) {
             // set the owning side to null (unless already changed)
-            if ($consumptionDelivery->getUnitOfMeasure() === $this) {
-                $consumptionDelivery->setUnitOfMeasure(null);
+            if ($consumptionDeliveryList->getUnitOfMeasure() === $this) {
+                $consumptionDeliveryList->setUnitOfMeasure(null);
             }
         }
 

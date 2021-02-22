@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ConsumptionDeliveryRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,35 +29,7 @@ class ConsumptionDelivery
      */
     private $requestNo;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $codeNumber;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="consumptionDeliveries")
-     */
-    private $product;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=UnitOfMeasure::class, inversedBy="consumptionDeliveries")
-     */
-    private $unitOfMeasure;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $quantity;
-
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $unitPrice;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $remark;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
@@ -66,6 +40,16 @@ class ConsumptionDelivery
      * @ORM\ManyToOne(targetEntity=User::class)
      */
     private $approvedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ConsumptionDeliveryList::class, mappedBy="consumptionDelivery")
+     */
+    private $consumptionDeliveryLists;
+
+    public function __construct()
+    {
+        $this->consumptionDeliveryLists = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -96,78 +80,8 @@ class ConsumptionDelivery
         return $this;
     }
 
-    public function getCodeNumber(): ?string
-    {
-        return $this->codeNumber;
-    }
-
-    public function setCodeNumber(string $codeNumber): self
-    {
-        $this->codeNumber = $codeNumber;
-
-        return $this;
-    }
-
-    public function getProduct(): ?Product
-    {
-        return $this->product;
-    }
-
-    public function setProduct(?Product $product): self
-    {
-        $this->product = $product;
-
-        return $this;
-    }
-
-    public function getUnitOfMeasure(): ?UnitOfMeasure
-    {
-        return $this->unitOfMeasure;
-    }
-
-    public function setUnitOfMeasure(?UnitOfMeasure $unitOfMeasure): self
-    {
-        $this->unitOfMeasure = $unitOfMeasure;
-
-        return $this;
-    }
-
-    public function getQuantity(): ?int
-    {
-        return $this->quantity;
-    }
-
-    public function setQuantity(int $quantity): self
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    public function getUnitPrice(): ?float
-    {
-        return $this->unitPrice;
-    }
-
-    public function setUnitPrice(?float $unitPrice): self
-    {
-        $this->unitPrice = $unitPrice;
-
-        return $this;
-    }
-
-    public function getRemark(): ?string
-    {
-        return $this->remark;
-    }
-
-    public function setRemark(?string $remark): self
-    {
-        $this->remark = $remark;
-
-        return $this;
-    }
-
+    
+ 
     public function getDeliveredBy(): ?User
     {
         return $this->deliveredBy;
@@ -188,6 +102,36 @@ class ConsumptionDelivery
     public function setApprovedBy(?User $approvedBy): self
     {
         $this->approvedBy = $approvedBy;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ConsumptionDeliveryList[]
+     */
+    public function getConsumptionDeliveryLists(): Collection
+    {
+        return $this->consumptionDeliveryLists;
+    }
+
+    public function addConsumptionDeliveryList(ConsumptionDeliveryList $consumptionDeliveryList): self
+    {
+        if (!$this->consumptionDeliveryLists->contains($consumptionDeliveryList)) {
+            $this->consumptionDeliveryLists[] = $consumptionDeliveryList;
+            $consumptionDeliveryList->setConsumptionDelivery($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConsumptionDeliveryList(ConsumptionDeliveryList $consumptionDeliveryList): self
+    {
+        if ($this->consumptionDeliveryLists->removeElement($consumptionDeliveryList)) {
+            // set the owning side to null (unless already changed)
+            if ($consumptionDeliveryList->getConsumptionDelivery() === $this) {
+                $consumptionDeliveryList->setConsumptionDelivery(null);
+            }
+        }
 
         return $this;
     }

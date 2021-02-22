@@ -19,25 +19,16 @@ class Stock
      */
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="stocks")
-     */
-    private $product;
+   
 
     /**
      * @ORM\ManyToOne(targetEntity=Store::class, inversedBy="stocks")
      */
     private $store;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $quantity;
+ 
 
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $unitPrice;
+   
 
     /**
      * @ORM\Column(type="datetime")
@@ -59,10 +50,6 @@ class Stock
      */
     private $approvalStatus;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $approvedQuantity;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -94,19 +81,33 @@ class Stock
      */
     private $trailerNum;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $codeNumber;
+   
+
 
     /**
-     * @ORM\ManyToOne(targetEntity=UnitOfMeasure::class, inversedBy="stocks")
+     * @ORM\ManyToOne(targetEntity=User::class)
      */
-    private $unitOfMeasure;
+    private $receivedBy;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class)
+     */
+    private $deliveredBy;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class)
+     */
+    private $approvedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity=StockList::class, mappedBy="stock")
+     */
+    private $stockLists;
 
     public function __construct()
     {
         $this->stockApprovals = new ArrayCollection();
+        $this->stockLists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -114,17 +115,7 @@ class Stock
         return $this->id;
     }
 
-    public function getProduct(): ?Product
-    {
-        return $this->product;
-    }
-
-    public function setProduct(?Product $product): self
-    {
-        $this->product = $product;
-
-        return $this;
-    }
+   
 
     public function getStore(): ?Store
     {
@@ -138,29 +129,8 @@ class Stock
         return $this;
     }
 
-    public function getQuantity(): ?int
-    {
-        return $this->quantity;
-    }
+    
 
-    public function setQuantity(int $quantity): self
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    public function getUnitPrice(): ?float
-    {
-        return $this->unitPrice;
-    }
-
-    public function setUnitPrice(float $unitPrice): self
-    {
-        $this->unitPrice = $unitPrice;
-
-        return $this;
-    }
 
     public function getDatePurchased(): ?\DateTimeInterface
     {
@@ -316,26 +286,72 @@ class Stock
         return $this;
     }
 
-    public function getCodeNumber(): ?string
+
+
+
+
+    public function getReceivedBy(): ?User
     {
-        return $this->codeNumber;
+        return $this->receivedBy;
     }
 
-    public function setCodeNumber(string $codeNumber): self
+    public function setReceivedBy(?User $receivedBy): self
     {
-        $this->codeNumber = $codeNumber;
+        $this->receivedBy = $receivedBy;
 
         return $this;
     }
 
-    public function getUnitOfMeasure(): ?UnitOfMeasure
+    public function getDeliveredBy(): ?User
     {
-        return $this->unitOfMeasure;
+        return $this->deliveredBy;
     }
 
-    public function setUnitOfMeasure(?UnitOfMeasure $unitOfMeasure): self
+    public function setDeliveredBy(?User $deliveredBy): self
     {
-        $this->unitOfMeasure = $unitOfMeasure;
+        $this->deliveredBy = $deliveredBy;
+
+        return $this;
+    }
+
+    public function getApprovedBy(): ?User
+    {
+        return $this->approvedBy;
+    }
+
+    public function setApprovedBy(?User $approvedBy): self
+    {
+        $this->approvedBy = $approvedBy;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StockList[]
+     */
+    public function getStockLists(): Collection
+    {
+        return $this->stockLists;
+    }
+
+    public function addStockList(StockList $stockList): self
+    {
+        if (!$this->stockLists->contains($stockList)) {
+            $this->stockLists[] = $stockList;
+            $stockList->setStock($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStockList(StockList $stockList): self
+    {
+        if ($this->stockLists->removeElement($stockList)) {
+            // set the owning side to null (unless already changed)
+            if ($stockList->getStock() === $this) {
+                $stockList->setStock(null);
+            }
+        }
 
         return $this;
     }

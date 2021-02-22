@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProductDeliveryRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,35 +39,6 @@ class ProductDelivery
      */
     private $trialNumber;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="productDeliveries")
-     */
-    private $product;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $specification;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $quantity;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $weight;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $unitPrice;
-
-    /**
-     * @ORM\Column(type="simple_array")
-     */
-    private $phone = [];
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -91,6 +64,16 @@ class ProductDelivery
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="productDeliveries")
      */
     private $approvedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ProductDeliveryList::class, mappedBy="productDelivery")
+     */
+    private $productDeliveryLists;
+
+    public function __construct()
+    {
+        $this->productDeliveryLists = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -144,78 +127,8 @@ class ProductDelivery
 
         return $this;
     }
-
-    public function getProduct(): ?Product
-    {
-        return $this->product;
-    }
-
-    public function setProduct(?Product $product): self
-    {
-        $this->product = $product;
-
-        return $this;
-    }
-
-    public function getSpecification(): ?string
-    {
-        return $this->specification;
-    }
-
-    public function setSpecification(?string $specification): self
-    {
-        $this->specification = $specification;
-
-        return $this;
-    }
-
-    public function getQuantity(): ?int
-    {
-        return $this->quantity;
-    }
-
-    public function setQuantity(int $quantity): self
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    public function getWeight(): ?float
-    {
-        return $this->weight;
-    }
-
-    public function setWeight(float $weight): self
-    {
-        $this->weight = $weight;
-
-        return $this;
-    }
-
-    public function getUnitPrice(): ?float
-    {
-        return $this->unitPrice;
-    }
-
-    public function setUnitPrice(float $unitPrice): self
-    {
-        $this->unitPrice = $unitPrice;
-
-        return $this;
-    }
-
-    public function getPhone(): ?array
-    {
-        return $this->phone;
-    }
-
-    public function setPhone(array $phone): self
-    {
-        $this->phone = $phone;
-
-        return $this;
-    }
+ 
+ 
 
     public function getPhoneNumber(): ?string
     {
@@ -273,6 +186,36 @@ class ProductDelivery
     public function setApprovedBy(?User $approvedBy): self
     {
         $this->approvedBy = $approvedBy;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProductDeliveryList[]
+     */
+    public function getProductDeliveryLists(): Collection
+    {
+        return $this->productDeliveryLists;
+    }
+
+    public function addProductDeliveryList(ProductDeliveryList $productDeliveryList): self
+    {
+        if (!$this->productDeliveryLists->contains($productDeliveryList)) {
+            $this->productDeliveryLists[] = $productDeliveryList;
+            $productDeliveryList->setProductDelivery($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductDeliveryList(ProductDeliveryList $productDeliveryList): self
+    {
+        if ($this->productDeliveryLists->removeElement($productDeliveryList)) {
+            // set the owning side to null (unless already changed)
+            if ($productDeliveryList->getProductDelivery() === $this) {
+                $productDeliveryList->setProductDelivery(null);
+            }
+        }
 
         return $this;
     }

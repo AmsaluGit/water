@@ -34,44 +34,60 @@ class Product
      */
     private $category;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Stock::class, mappedBy="product")
-     */
-    private $stocks;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ConsumptionRequest::class, mappedBy="product", orphanRemoval=true)
-     */
-    private $consumptionRequests;
+  
 
-    /**
-     * @ORM\OneToMany(targetEntity=StockRequest::class, mappedBy="product")
-     */
-    private $stockRequests;
+  
 
-    /**
-     * @ORM\OneToMany(targetEntity=ConsumptionDelivery::class, mappedBy="product")
-     */
-    private $consumptionDeliveries;
+  
 
     /**
      * @ORM\OneToMany(targetEntity=ProductDelivery::class, mappedBy="product")
      */
     private $productDeliveries;
 
+  
+
     /**
-     * @ORM\OneToMany(targetEntity=Sells::class, mappedBy="product")
+     * @ORM\OneToMany(targetEntity=StockList::class, mappedBy="product")
      */
-    private $sells;
+    private $stockLists;
+
+    /**
+     * @ORM\OneToMany(targetEntity=StockRequestList::class, mappedBy="product")
+     */
+    private $stockRequestLists;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ConsumptionRequestList::class, mappedBy="product")
+     */
+    private $consumptionRequestLists;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ConsumptionDeliveryList::class, mappedBy="product")
+     */
+    private $consumptionDeliveryLists;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ProductDeliveryList::class, mappedBy="product")
+     */
+    private $productDeliveryLists;
+
+    /**
+     * @ORM\OneToMany(targetEntity=SellsList::class, mappedBy="product")
+     */
+    private $sellsLists;
 
     public function __construct()
     {
-        $this->stocks = new ArrayCollection();
-        $this->consumptionRequests = new ArrayCollection();
-        $this->stockRequests = new ArrayCollection();
-        $this->consumptionDeliveries = new ArrayCollection();
-        $this->productDeliveries = new ArrayCollection();
-        $this->sells = new ArrayCollection();
+   
+     
+        $this->stockLists = new ArrayCollection();
+        $this->stockRequestLists = new ArrayCollection();
+        $this->consumptionRequestLists = new ArrayCollection();
+        $this->consumptionDeliveryLists = new ArrayCollection();
+        $this->productDeliveryLists = new ArrayCollection();
+        $this->sellsLists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -115,30 +131,32 @@ class Product
         return $this;
     }
 
+   
+
     /**
-     * @return Collection|Stock[]
+     * @return Collection|StockList[]
      */
-    public function getStocks(): Collection
+    public function getStockLists(): Collection
     {
-        return $this->stocks;
+        return $this->stockLists;
     }
 
-    public function addStock(Stock $stock): self
+    public function addStockList(StockList $stockList): self
     {
-        if (!$this->stocks->contains($stock)) {
-            $this->stocks[] = $stock;
-            $stock->setProduct($this);
+        if (!$this->stockLists->contains($stockList)) {
+            $this->stockLists[] = $stockList;
+            $stockList->setProduct($this);
         }
 
         return $this;
     }
 
-    public function removeStock(Stock $stock): self
+    public function removeStockList(StockList $stockList): self
     {
-        if ($this->stocks->removeElement($stock)) {
+        if ($this->stockLists->removeElement($stockList)) {
             // set the owning side to null (unless already changed)
-            if ($stock->getProduct() === $this) {
-                $stock->setProduct(null);
+            if ($stockList->getProduct() === $this) {
+                $stockList->setProduct(null);
             }
         }
 
@@ -146,62 +164,29 @@ class Product
     }
 
     /**
-     * @return Collection|ConsumptionRequest[]
+     * @return Collection|StockRequestList[]
      */
-    public function getConsumptionRequests(): Collection
+    public function getStockRequestLists(): Collection
     {
-        return $this->consumptionRequests;
+        return $this->stockRequestLists;
     }
 
-    public function addConsumptionRequest(ConsumptionRequest $consumptionRequest): self
+    public function addStockRequestList(StockRequestList $stockRequestList): self
     {
-        if (!$this->consumptionRequests->contains($consumptionRequest)) {
-            $this->consumptionRequests[] = $consumptionRequest;
-            $consumptionRequest->setProduct($this);
+        if (!$this->stockRequestLists->contains($stockRequestList)) {
+            $this->stockRequestLists[] = $stockRequestList;
+            $stockRequestList->setProduct($this);
         }
 
         return $this;
     }
 
-    public function removeConsumptionRequest(ConsumptionRequest $consumptionRequest): self
+    public function removeStockRequestList(StockRequestList $stockRequestList): self
     {
-        if ($this->consumptionRequests->removeElement($consumptionRequest)) {
+        if ($this->stockRequestLists->removeElement($stockRequestList)) {
             // set the owning side to null (unless already changed)
-            if ($consumptionRequest->getProduct() === $this) {
-                $consumptionRequest->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
-    public function __toString(){
-        return $this->name;
-    }
-
-    /**
-     * @return Collection|StockRequest[]
-     */
-    public function getStockRequests(): Collection
-    {
-        return $this->stockRequests;
-    }
-
-    public function addStockRequest(StockRequest $stockRequest): self
-    {
-        if (!$this->stockRequests->contains($stockRequest)) {
-            $this->stockRequests[] = $stockRequest;
-            $stockRequest->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStockRequest(StockRequest $stockRequest): self
-    {
-        if ($this->stockRequests->removeElement($stockRequest)) {
-            // set the owning side to null (unless already changed)
-            if ($stockRequest->getProduct() === $this) {
-                $stockRequest->setProduct(null);
+            if ($stockRequestList->getProduct() === $this) {
+                $stockRequestList->setProduct(null);
             }
         }
 
@@ -209,29 +194,29 @@ class Product
     }
 
     /**
-     * @return Collection|ConsumptionDelivery[]
+     * @return Collection|ConsumptionRequestList[]
      */
-    public function getConsumptionDeliveries(): Collection
+    public function getConsumptionRequestLists(): Collection
     {
-        return $this->consumptionDeliveries;
+        return $this->consumptionRequestLists;
     }
 
-    public function addConsumptionDelivery(ConsumptionDelivery $consumptionDelivery): self
+    public function addConsumptionRequestList(ConsumptionRequestList $consumptionRequestList): self
     {
-        if (!$this->consumptionDeliveries->contains($consumptionDelivery)) {
-            $this->consumptionDeliveries[] = $consumptionDelivery;
-            $consumptionDelivery->setProduct($this);
+        if (!$this->consumptionRequestLists->contains($consumptionRequestList)) {
+            $this->consumptionRequestLists[] = $consumptionRequestList;
+            $consumptionRequestList->setProduct($this);
         }
 
         return $this;
     }
 
-    public function removeConsumptionDelivery(ConsumptionDelivery $consumptionDelivery): self
+    public function removeConsumptionRequestList(ConsumptionRequestList $consumptionRequestList): self
     {
-        if ($this->consumptionDeliveries->removeElement($consumptionDelivery)) {
+        if ($this->consumptionRequestLists->removeElement($consumptionRequestList)) {
             // set the owning side to null (unless already changed)
-            if ($consumptionDelivery->getProduct() === $this) {
-                $consumptionDelivery->setProduct(null);
+            if ($consumptionRequestList->getProduct() === $this) {
+                $consumptionRequestList->setProduct(null);
             }
         }
 
@@ -239,29 +224,29 @@ class Product
     }
 
     /**
-     * @return Collection|ProductDelivery[]
+     * @return Collection|ConsumptionDeliveryList[]
      */
-    public function getProductDeliveries(): Collection
+    public function getConsumptionDeliveryLists(): Collection
     {
-        return $this->productDeliveries;
+        return $this->consumptionDeliveryLists;
     }
 
-    public function addProductDelivery(ProductDelivery $productDelivery): self
+    public function addConsumptionDeliveryList(ConsumptionDeliveryList $consumptionDeliveryList): self
     {
-        if (!$this->productDeliveries->contains($productDelivery)) {
-            $this->productDeliveries[] = $productDelivery;
-            $productDelivery->setProduct($this);
+        if (!$this->consumptionDeliveryLists->contains($consumptionDeliveryList)) {
+            $this->consumptionDeliveryLists[] = $consumptionDeliveryList;
+            $consumptionDeliveryList->setProduct($this);
         }
 
         return $this;
     }
 
-    public function removeProductDelivery(ProductDelivery $productDelivery): self
+    public function removeConsumptionDeliveryList(ConsumptionDeliveryList $consumptionDeliveryList): self
     {
-        if ($this->productDeliveries->removeElement($productDelivery)) {
+        if ($this->consumptionDeliveryLists->removeElement($consumptionDeliveryList)) {
             // set the owning side to null (unless already changed)
-            if ($productDelivery->getProduct() === $this) {
-                $productDelivery->setProduct(null);
+            if ($consumptionDeliveryList->getProduct() === $this) {
+                $consumptionDeliveryList->setProduct(null);
             }
         }
 
@@ -269,29 +254,59 @@ class Product
     }
 
     /**
-     * @return Collection|Sells[]
+     * @return Collection|ProductDeliveryList[]
      */
-    public function getSells(): Collection
+    public function getProductDeliveryLists(): Collection
     {
-        return $this->sells;
+        return $this->productDeliveryLists;
     }
 
-    public function addSell(Sells $sell): self
+    public function addProductDeliveryList(ProductDeliveryList $productDeliveryList): self
     {
-        if (!$this->sells->contains($sell)) {
-            $this->sells[] = $sell;
-            $sell->setProduct($this);
+        if (!$this->productDeliveryLists->contains($productDeliveryList)) {
+            $this->productDeliveryLists[] = $productDeliveryList;
+            $productDeliveryList->setProduct($this);
         }
 
         return $this;
     }
 
-    public function removeSell(Sells $sell): self
+    public function removeProductDeliveryList(ProductDeliveryList $productDeliveryList): self
     {
-        if ($this->sells->removeElement($sell)) {
+        if ($this->productDeliveryLists->removeElement($productDeliveryList)) {
             // set the owning side to null (unless already changed)
-            if ($sell->getProduct() === $this) {
-                $sell->setProduct(null);
+            if ($productDeliveryList->getProduct() === $this) {
+                $productDeliveryList->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SellsList[]
+     */
+    public function getSellsLists(): Collection
+    {
+        return $this->sellsLists;
+    }
+
+    public function addSellsList(SellsList $sellsList): self
+    {
+        if (!$this->sellsLists->contains($sellsList)) {
+            $this->sellsLists[] = $sellsList;
+            $sellsList->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSellsList(SellsList $sellsList): self
+    {
+        if ($this->sellsLists->removeElement($sellsList)) {
+            // set the owning side to null (unless already changed)
+            if ($sellsList->getProduct() === $this) {
+                $sellsList->setProduct(null);
             }
         }
 

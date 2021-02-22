@@ -30,18 +30,9 @@ class ConsumptionRequest
      */
     private $requestedDate;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="consumptionRequests")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $product;
+ 
 
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $quantity;
-
+ 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
@@ -57,25 +48,11 @@ class ConsumptionRequest
      */
     private $approvalStatus;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $codeNumber;
+ 
 
-    /**
-     * @ORM\ManyToOne(targetEntity=UnitOfMeasure::class, inversedBy="consumptionRequests")
-     */
-    private $unitOfMeasure;
+  
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $available;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $issue;
+  
 
     /**
      * @ORM\Column(type="text")
@@ -92,10 +69,16 @@ class ConsumptionRequest
      */
     private $consumptionDeliveries;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ConsumptionRequestList::class, mappedBy="consumptionRequest")
+     */
+    private $consumptionRequestLists;
+
     public function __construct()
     {
         $this->consumptionApprovals = new ArrayCollection();
         $this->consumptionDeliveries = new ArrayCollection();
+        $this->consumptionRequestLists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -127,31 +110,10 @@ class ConsumptionRequest
         return $this;
     }
 
-    public function getProduct(): ?Product
-    {
-        return $this->product;
-    }
-
-    public function setProduct(?Product $product): self
-    {
-        $this->product = $product;
-
-        return $this;
-    }
+ 
 
 
-    public function getQuantity(): ?int
-    {
-        return $this->quantity;
-    }
-
-    public function setQuantity(int $quantity): self
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
+ 
     public function getRemark(): ?string
     {
         return $this->remark;
@@ -206,53 +168,10 @@ class ConsumptionRequest
         return $this;
     }
 
-    public function getCodeNumber(): ?string
-    {
-        return $this->codeNumber;
-    }
+  
 
-    public function setCodeNumber(string $codeNumber): self
-    {
-        $this->codeNumber = $codeNumber;
-
-        return $this;
-    }
-
-    public function getUnitOfMeasure(): ?UnitOfMeasure
-    {
-        return $this->unitOfMeasure;
-    }
-
-    public function setUnitOfMeasure(?UnitOfMeasure $unitOfMeasure): self
-    {
-        $this->unitOfMeasure = $unitOfMeasure;
-
-        return $this;
-    }
-
-    public function getAvailable(): ?int
-    {
-        return $this->available;
-    }
-
-    public function setAvailable(?int $available): self
-    {
-        $this->available = $available;
-
-        return $this;
-    }
-
-    public function getIssue(): ?int
-    {
-        return $this->issue;
-    }
-
-    public function setIssue(?int $issue): self
-    {
-        $this->issue = $issue;
-
-        return $this;
-    }
+  
+  
 
     public function getNote(): ?string
     {
@@ -302,6 +221,36 @@ class ConsumptionRequest
             // set the owning side to null (unless already changed)
             if ($consumptionDelivery->getRequestNo() === $this) {
                 $consumptionDelivery->setRequestNo(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ConsumptionRequestList[]
+     */
+    public function getConsumptionRequestLists(): Collection
+    {
+        return $this->consumptionRequestLists;
+    }
+
+    public function addConsumptionRequestList(ConsumptionRequestList $consumptionRequestList): self
+    {
+        if (!$this->consumptionRequestLists->contains($consumptionRequestList)) {
+            $this->consumptionRequestLists[] = $consumptionRequestList;
+            $consumptionRequestList->setConsumptionRequest($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConsumptionRequestList(ConsumptionRequestList $consumptionRequestList): self
+    {
+        if ($this->consumptionRequestLists->removeElement($consumptionRequestList)) {
+            // set the owning side to null (unless already changed)
+            if ($consumptionRequestList->getConsumptionRequest() === $this) {
+                $consumptionRequestList->setConsumptionRequest(null);
             }
         }
 
