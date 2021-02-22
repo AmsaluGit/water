@@ -25,7 +25,7 @@ class StockController extends AbstractController
      */
     public function index(StockRepository $stockRepository,SettingRepository $settingRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        $stockApprovalLevel = $settingRepository->findOneBy(['id'=>2])->getStockApprovalLevel();
+        $stockApprovalLevel = $settingRepository->findOneBy(['code'=>'stock_approval_level'])->getValue();
         if($request->request->get('edit')){
             $id=$request->request->get('edit');
             $stock=$stockRepository->findOneBy(['id'=>$id]);

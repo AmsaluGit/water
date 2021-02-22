@@ -77,12 +77,42 @@ class User implements UserInterface
      */
     private $consumptionApprovals;
 
+    /**
+     * @ORM\OneToMany(targetEntity=StockRequest::class, mappedBy="requestedBy")
+     */
+    private $stockRequests;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ConsumptionRequest::class, mappedBy="approvedBy")
+     */
+    private $consRequest;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ConsumptionDelivery::class, mappedBy="receiver")
+     */
+    private $consumptionDeliveries;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ProductDelivery::class, mappedBy="handOveredBy")
+     */
+    private $productDeliveries;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Sells::class, mappedBy="receivedBy")
+     */
+    private $sells;
+
     public function __construct()
     {
         $this->stocks = new ArrayCollection();
         $this->stockApprovals = new ArrayCollection();
         $this->consumptionRequests = new ArrayCollection();
         $this->consumptionApprovals = new ArrayCollection();
+        $this->stockRequests = new ArrayCollection();
+        $this->consRequest = new ArrayCollection();
+        $this->consumptionDeliveries = new ArrayCollection();
+        $this->productDeliveries = new ArrayCollection();
+        $this->sells = new ArrayCollection();
     }
 
  
@@ -341,6 +371,156 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($consumptionApproval->getApprovedBy() === $this) {
                 $consumptionApproval->setApprovedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StockRequest[]
+     */
+    public function getStockRequests(): Collection
+    {
+        return $this->stockRequests;
+    }
+
+    public function addStockRequest(StockRequest $stockRequest): self
+    {
+        if (!$this->stockRequests->contains($stockRequest)) {
+            $this->stockRequests[] = $stockRequest;
+            $stockRequest->setRequestedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStockRequest(StockRequest $stockRequest): self
+    {
+        if ($this->stockRequests->removeElement($stockRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($stockRequest->getRequestedBy() === $this) {
+                $stockRequest->setRequestedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ConsumptionRequest[]
+     */
+    public function getConsRequest(): Collection
+    {
+        return $this->consRequest;
+    }
+
+    public function addConsRequest(ConsumptionRequest $consRequest): self
+    {
+        if (!$this->consRequest->contains($consRequest)) {
+            $this->consRequest[] = $consRequest;
+            $consRequest->setApprovedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConsRequest(ConsumptionRequest $consRequest): self
+    {
+        if ($this->consRequest->removeElement($consRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($consRequest->getApprovedBy() === $this) {
+                $consRequest->setApprovedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ConsumptionDelivery[]
+     */
+    public function getConsumptionDeliveries(): Collection
+    {
+        return $this->consumptionDeliveries;
+    }
+
+    public function addConsumptionDelivery(ConsumptionDelivery $consumptionDelivery): self
+    {
+        if (!$this->consumptionDeliveries->contains($consumptionDelivery)) {
+            $this->consumptionDeliveries[] = $consumptionDelivery;
+            $consumptionDelivery->setReceiver($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConsumptionDelivery(ConsumptionDelivery $consumptionDelivery): self
+    {
+        if ($this->consumptionDeliveries->removeElement($consumptionDelivery)) {
+            // set the owning side to null (unless already changed)
+            if ($consumptionDelivery->getReceiver() === $this) {
+                $consumptionDelivery->setReceiver(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProductDelivery[]
+     */
+    public function getProductDeliveries(): Collection
+    {
+        return $this->productDeliveries;
+    }
+
+    public function addProductDelivery(ProductDelivery $productDelivery): self
+    {
+        if (!$this->productDeliveries->contains($productDelivery)) {
+            $this->productDeliveries[] = $productDelivery;
+            $productDelivery->setHandOveredBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductDelivery(ProductDelivery $productDelivery): self
+    {
+        if ($this->productDeliveries->removeElement($productDelivery)) {
+            // set the owning side to null (unless already changed)
+            if ($productDelivery->getHandOveredBy() === $this) {
+                $productDelivery->setHandOveredBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Sells[]
+     */
+    public function getSells(): Collection
+    {
+        return $this->sells;
+    }
+
+    public function addSell(Sells $sell): self
+    {
+        if (!$this->sells->contains($sell)) {
+            $this->sells[] = $sell;
+            $sell->setReceivedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSell(Sells $sell): self
+    {
+        if ($this->sells->removeElement($sell)) {
+            // set the owning side to null (unless already changed)
+            if ($sell->getReceivedBy() === $this) {
+                $sell->setReceivedBy(null);
             }
         }
 

@@ -44,10 +44,34 @@ class Product
      */
     private $consumptionRequests;
 
+    /**
+     * @ORM\OneToMany(targetEntity=StockRequest::class, mappedBy="product")
+     */
+    private $stockRequests;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ConsumptionDelivery::class, mappedBy="product")
+     */
+    private $consumptionDeliveries;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ProductDelivery::class, mappedBy="product")
+     */
+    private $productDeliveries;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Sells::class, mappedBy="product")
+     */
+    private $sells;
+
     public function __construct()
     {
         $this->stocks = new ArrayCollection();
         $this->consumptionRequests = new ArrayCollection();
+        $this->stockRequests = new ArrayCollection();
+        $this->consumptionDeliveries = new ArrayCollection();
+        $this->productDeliveries = new ArrayCollection();
+        $this->sells = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -152,5 +176,125 @@ class Product
     }
     public function __toString(){
         return $this->name;
+    }
+
+    /**
+     * @return Collection|StockRequest[]
+     */
+    public function getStockRequests(): Collection
+    {
+        return $this->stockRequests;
+    }
+
+    public function addStockRequest(StockRequest $stockRequest): self
+    {
+        if (!$this->stockRequests->contains($stockRequest)) {
+            $this->stockRequests[] = $stockRequest;
+            $stockRequest->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStockRequest(StockRequest $stockRequest): self
+    {
+        if ($this->stockRequests->removeElement($stockRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($stockRequest->getProduct() === $this) {
+                $stockRequest->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ConsumptionDelivery[]
+     */
+    public function getConsumptionDeliveries(): Collection
+    {
+        return $this->consumptionDeliveries;
+    }
+
+    public function addConsumptionDelivery(ConsumptionDelivery $consumptionDelivery): self
+    {
+        if (!$this->consumptionDeliveries->contains($consumptionDelivery)) {
+            $this->consumptionDeliveries[] = $consumptionDelivery;
+            $consumptionDelivery->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConsumptionDelivery(ConsumptionDelivery $consumptionDelivery): self
+    {
+        if ($this->consumptionDeliveries->removeElement($consumptionDelivery)) {
+            // set the owning side to null (unless already changed)
+            if ($consumptionDelivery->getProduct() === $this) {
+                $consumptionDelivery->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProductDelivery[]
+     */
+    public function getProductDeliveries(): Collection
+    {
+        return $this->productDeliveries;
+    }
+
+    public function addProductDelivery(ProductDelivery $productDelivery): self
+    {
+        if (!$this->productDeliveries->contains($productDelivery)) {
+            $this->productDeliveries[] = $productDelivery;
+            $productDelivery->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductDelivery(ProductDelivery $productDelivery): self
+    {
+        if ($this->productDeliveries->removeElement($productDelivery)) {
+            // set the owning side to null (unless already changed)
+            if ($productDelivery->getProduct() === $this) {
+                $productDelivery->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Sells[]
+     */
+    public function getSells(): Collection
+    {
+        return $this->sells;
+    }
+
+    public function addSell(Sells $sell): self
+    {
+        if (!$this->sells->contains($sell)) {
+            $this->sells[] = $sell;
+            $sell->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSell(Sells $sell): self
+    {
+        if ($this->sells->removeElement($sell)) {
+            // set the owning side to null (unless already changed)
+            if ($sell->getProduct() === $this) {
+                $sell->setProduct(null);
+            }
+        }
+
+        return $this;
     }
 }

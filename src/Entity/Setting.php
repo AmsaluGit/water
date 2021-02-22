@@ -18,41 +18,44 @@ class Setting
     private $id;
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="string", length=255)
      */
-    private $stockApprovalLevel;
+    private $code;
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="string", length=255)
      */
-    private $consumptionApprovalLevel;
+    private $value;
+ 
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getStockApprovalLevel(): ?int
+    public function getCode(): ?string
     {
-        return $this->stockApprovalLevel;
+        return $this->code;
     }
 
-    public function setStockApprovalLevel(int $stockApprovalLevel): self
+    public function setCode(string $code): self
     {
-        $this->stockApprovalLevel = $stockApprovalLevel;
+        $this->code = $code;
 
         return $this;
     }
 
-    public function getConsumptionApprovalLevel(): ?int
+    public function getValue(): ?string
     {
-        return $this->consumptionApprovalLevel;
+        return $this->value;
     }
 
-    public function setConsumptionApprovalLevel(int $consumptionApprovalLevel): self
+    public function setValue(string $value): self
     {
-        $this->consumptionApprovalLevel = $consumptionApprovalLevel;
+        $this->value = $value;
 
         return $this;
     }
+
+     
 }

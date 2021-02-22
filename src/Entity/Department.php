@@ -29,6 +29,16 @@ class Department
      */
     private $description;
 
+    /**
+     * @ORM\OneToMany(targetEntity=StockRequest::class, mappedBy="requestingDept")
+     */
+    private $stockRequests;
+
+    public function __construct()
+    {
+        $this->stockRequests = new ArrayCollection();
+    }
+
    
 
   
@@ -68,5 +78,35 @@ class Department
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection|StockRequest[]
+     */
+    public function getstockRequests(): Collection
+    {
+        return $this->stockRequests;
+    }
+
+    public function addstockRequest(StockRequest $StockRequest): self
+    {
+        if (!$this->stockRequests->contains($StockRequest)) {
+            $this->stockRequests[] = $StockRequest;
+            $StockRequest->setRequestingDept($this);
+        }
+
+        return $this;
+    }
+
+    public function removestockRequest(StockRequest $StockRequest): self
+    {
+        if ($this->stockRequests->removeElement($StockRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($StockRequest->getRequestingDept() === $this) {
+                $StockRequest->setRequestingDept(null);
+            }
+        }
+
+        return $this;
     }
 }

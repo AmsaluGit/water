@@ -37,7 +37,7 @@ class Stock
     /**
      * @ORM\Column(type="float")
      */
-    private $totalPrice;
+    private $unitPrice;
 
     /**
      * @ORM\Column(type="datetime")
@@ -63,6 +63,46 @@ class Stock
      * @ORM\Column(type="integer", nullable=true)
      */
     private $approvedQuantity;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $placeOfDelivery;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $typeOfDocAndNum;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $driver;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $mobile;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $trackPlateNum;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $trailerNum;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $codeNumber;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=UnitOfMeasure::class, inversedBy="stocks")
+     */
+    private $unitOfMeasure;
 
     public function __construct()
     {
@@ -110,14 +150,14 @@ class Stock
         return $this;
     }
 
-    public function getTotalPrice(): ?float
+    public function getUnitPrice(): ?float
     {
-        return $this->totalPrice;
+        return $this->unitPrice;
     }
 
-    public function setTotalPrice(float $totalPrice): self
+    public function setUnitPrice(float $unitPrice): self
     {
-        $this->totalPrice = $totalPrice;
+        $this->unitPrice = $unitPrice;
 
         return $this;
     }
@@ -200,6 +240,102 @@ class Stock
     public function setApprovedQuantity(?int $approvedQuantity): self
     {
         $this->approvedQuantity = $approvedQuantity;
+
+        return $this;
+    }
+
+    public function getPlaceOfDelivery(): ?string
+    {
+        return $this->placeOfDelivery;
+    }
+
+    public function setPlaceOfDelivery(?string $placeOfDelivery): self
+    {
+        $this->placeOfDelivery = $placeOfDelivery;
+
+        return $this;
+    }
+
+    public function getTypeOfDocAndNum(): ?string
+    {
+        return $this->typeOfDocAndNum;
+    }
+
+    public function setTypeOfDocAndNum(?string $typeOfDocAndNum): self
+    {
+        $this->typeOfDocAndNum = $typeOfDocAndNum;
+
+        return $this;
+    }
+
+    public function getDriver(): ?string
+    {
+        return $this->driver;
+    }
+
+    public function setDriver(?string $driver): self
+    {
+        $this->driver = $driver;
+
+        return $this;
+    }
+
+    public function getMobile(): ?string
+    {
+        return $this->mobile;
+    }
+
+    public function setMobile(?string $mobile): self
+    {
+        $this->mobile = $mobile;
+
+        return $this;
+    }
+
+    public function getTrackPlateNum(): ?string
+    {
+        return $this->trackPlateNum;
+    }
+
+    public function setTrackPlateNum(?string $trackPlateNum): self
+    {
+        $this->trackPlateNum = $trackPlateNum;
+
+        return $this;
+    }
+
+    public function getTrailerNum(): ?string
+    {
+        return $this->trailerNum;
+    }
+
+    public function setTrailerNum(?string $trailerNum): self
+    {
+        $this->trailerNum = $trailerNum;
+
+        return $this;
+    }
+
+    public function getCodeNumber(): ?string
+    {
+        return $this->codeNumber;
+    }
+
+    public function setCodeNumber(string $codeNumber): self
+    {
+        $this->codeNumber = $codeNumber;
+
+        return $this;
+    }
+
+    public function getUnitOfMeasure(): ?UnitOfMeasure
+    {
+        return $this->unitOfMeasure;
+    }
+
+    public function setUnitOfMeasure(?UnitOfMeasure $unitOfMeasure): self
+    {
+        $this->unitOfMeasure = $unitOfMeasure;
 
         return $this;
     }

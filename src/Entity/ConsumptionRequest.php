@@ -57,9 +57,45 @@ class ConsumptionRequest
      */
     private $approvalStatus;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $codeNumber;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=UnitOfMeasure::class, inversedBy="consumptionRequests")
+     */
+    private $unitOfMeasure;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $available;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $issue;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $note;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="consRequest")
+     */
+    private $approvedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ConsumptionDelivery::class, mappedBy="requestNo")
+     */
+    private $consumptionDeliveries;
+
     public function __construct()
     {
         $this->consumptionApprovals = new ArrayCollection();
+        $this->consumptionDeliveries = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -166,6 +202,108 @@ class ConsumptionRequest
     public function setApprovalStatus(int $approvalStatus): self
     {
         $this->approvalStatus = $approvalStatus;
+
+        return $this;
+    }
+
+    public function getCodeNumber(): ?string
+    {
+        return $this->codeNumber;
+    }
+
+    public function setCodeNumber(string $codeNumber): self
+    {
+        $this->codeNumber = $codeNumber;
+
+        return $this;
+    }
+
+    public function getUnitOfMeasure(): ?UnitOfMeasure
+    {
+        return $this->unitOfMeasure;
+    }
+
+    public function setUnitOfMeasure(?UnitOfMeasure $unitOfMeasure): self
+    {
+        $this->unitOfMeasure = $unitOfMeasure;
+
+        return $this;
+    }
+
+    public function getAvailable(): ?int
+    {
+        return $this->available;
+    }
+
+    public function setAvailable(?int $available): self
+    {
+        $this->available = $available;
+
+        return $this;
+    }
+
+    public function getIssue(): ?int
+    {
+        return $this->issue;
+    }
+
+    public function setIssue(?int $issue): self
+    {
+        $this->issue = $issue;
+
+        return $this;
+    }
+
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+
+    public function setNote(string $note): self
+    {
+        $this->note = $note;
+
+        return $this;
+    }
+
+    public function getApprovedBy(): ?User
+    {
+        return $this->approvedBy;
+    }
+
+    public function setApprovedBy(?User $approvedBy): self
+    {
+        $this->approvedBy = $approvedBy;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ConsumptionDelivery[]
+     */
+    public function getConsumptionDeliveries(): Collection
+    {
+        return $this->consumptionDeliveries;
+    }
+
+    public function addConsumptionDelivery(ConsumptionDelivery $consumptionDelivery): self
+    {
+        if (!$this->consumptionDeliveries->contains($consumptionDelivery)) {
+            $this->consumptionDeliveries[] = $consumptionDelivery;
+            $consumptionDelivery->setRequestNo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConsumptionDelivery(ConsumptionDelivery $consumptionDelivery): self
+    {
+        if ($this->consumptionDeliveries->removeElement($consumptionDelivery)) {
+            // set the owning side to null (unless already changed)
+            if ($consumptionDelivery->getRequestNo() === $this) {
+                $consumptionDelivery->setRequestNo(null);
+            }
+        }
 
         return $this;
     }
