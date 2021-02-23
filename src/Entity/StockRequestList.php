@@ -47,6 +47,11 @@ class StockRequestList
      */
     private $stockRequest;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $approvedQuantity;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -120,6 +125,18 @@ class StockRequestList
     public function setStockRequest(?StockRequest $stockRequest): self
     {
         $this->stockRequest = $stockRequest;
+
+        return $this;
+    }
+
+    public function getApprovedQuantity(): ?int
+    {
+        return $this->approvedQuantity;
+    }
+
+    public function setApprovedQuantity(?int $approvedQuantity): self
+    {
+        $this->approvedQuantity = $approvedQuantity;
 
         return $this;
     }

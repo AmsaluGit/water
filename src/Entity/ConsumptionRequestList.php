@@ -52,6 +52,11 @@ class ConsumptionRequestList
      */
     private $consumptionRequest;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $approvedQuantity;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -137,6 +142,18 @@ class ConsumptionRequestList
     public function setConsumptionRequest(?ConsumptionRequest $consumptionRequest): self
     {
         $this->consumptionRequest = $consumptionRequest;
+
+        return $this;
+    }
+
+    public function getApprovedQuantity(): ?int
+    {
+        return $this->approvedQuantity;
+    }
+
+    public function setApprovedQuantity(?int $approvedQuantity): self
+    {
+        $this->approvedQuantity = $approvedQuantity;
 
         return $this;
     }
