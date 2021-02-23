@@ -78,6 +78,16 @@ class Product
      */
     private $sellsLists;
 
+    /**
+     * @ORM\OneToMany(targetEntity=StockBalance::class, mappedBy="product")
+     */
+    private $stockBalances;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ConsumptionBalance::class, mappedBy="product")
+     */
+    private $consumptionBalances;
+
     public function __construct()
     {
    
@@ -88,6 +98,8 @@ class Product
         $this->consumptionDeliveryLists = new ArrayCollection();
         $this->productDeliveryLists = new ArrayCollection();
         $this->sellsLists = new ArrayCollection();
+        $this->stockBalances = new ArrayCollection();
+        $this->consumptionBalances = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -315,5 +327,65 @@ class Product
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection|StockBalance[]
+     */
+    public function getStockBalances(): Collection
+    {
+        return $this->stockBalances;
+    }
+
+    public function addStockBalance(StockBalance $stockBalance): self
+    {
+        if (!$this->stockBalances->contains($stockBalance)) {
+            $this->stockBalances[] = $stockBalance;
+            $stockBalance->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStockBalance(StockBalance $stockBalance): self
+    {
+        if ($this->stockBalances->removeElement($stockBalance)) {
+            // set the owning side to null (unless already changed)
+            if ($stockBalance->getProduct() === $this) {
+                $stockBalance->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ConsumptionBalance[]
+     */
+    public function getConsumptionBalances(): Collection
+    {
+        return $this->consumptionBalances;
+    }
+
+    public function addConsumptionBalance(ConsumptionBalance $consumptionBalance): self
+    {
+        if (!$this->consumptionBalances->contains($consumptionBalance)) {
+            $this->consumptionBalances[] = $consumptionBalance;
+            $consumptionBalance->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConsumptionBalance(ConsumptionBalance $consumptionBalance): self
+    {
+        if ($this->consumptionBalances->removeElement($consumptionBalance)) {
+            // set the owning side to null (unless already changed)
+            if ($consumptionBalance->getProduct() === $this) {
+                $consumptionBalance->setProduct(null);
+            }
+        }
+
+        return $this;
     }
 }

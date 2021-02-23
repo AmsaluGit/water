@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Entity\ConsumptionRequest;
+use App\Entity\StockBalance;
 use App\Form\BalanceType;
 use App\Form\ProductType;
 use App\Repository\BalanceRepository;
@@ -25,16 +26,17 @@ class BalanceController extends AbstractController
     public function index(BalanceRepository $BalanceRepository, ConsumptionRequestRepository $ConsumptionRequestRepository, Request $request, PaginatorInterface $paginator): Response
     {
         $em=$this->getDoctrine()->getManager();
-        $conn=$em->getConnection();
+        // $conn=$em->getConnection();
+        $balance = $em->getRepository(StockBalance::class)->findAll();
 
-        $sql = "select p.name as name, sum(cr.quantity) as quantity, sum(st.quantity) as total, sum(CASE WHEN st.approval_status =1 THEN st.approved_quantity END) as approved, sum(CASE WHEN st.approval_status =2 THEN st.approved_quantity END) as rejected from product as p inner join stock as st on st.product_id = p.id inner join consumption_request as cr on cr.product_id = p.id  GROUP BY p.name ";
+        /*$sql = "select p.name as name, sum(cr.quantity) as quantity, sum(st.quantity) as total, sum(CASE WHEN st.approval_status =1 THEN st.approved_quantity END) as approved, sum(CASE WHEN st.approval_status =2 THEN st.approved_quantity END) as rejected from product as p inner join stock as st on st.product_id = p.id inner join consumption_request as cr on cr.product_id = p.id  GROUP BY p.name ";
         $stmt=$conn->prepare($sql);
         $stmt->execute();
-        $data=$stmt->fetchAll();
+        $data=$stmt->fetchAll();*/
 
     
         return $this->render('balance/index.html.twig', [
-            'balances' => $data,
+            'balances' => $balance,
            
         ]);
 

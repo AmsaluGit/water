@@ -57,9 +57,10 @@
 											</th>
 
 											<th>products</th>
-											<th>Total</th>
-											<th>Approved</th>
 											<th>Requested</th>
+											<th>Delivered</th>
+											<th>Available</th>
+											
 											<th>Action</th>
 										</tr>
 									</thead>
@@ -71,17 +72,17 @@
 													{{ i }}
 													{% set i = i+1 %}
 												</td>
-												<td>{{ balance.name}}</td>
-												<td>{{ balance.total}}</td>
-												<td>{{ balance.approved}}</td>
-												<td>{{ balance.quantity}}</td>
+												<td>{{ balance.product}}</td>
+												<td>{{ balance.requested}}</td>
+												<td>{{ balance.delivered}}</td>
+												<td>{{ balance.available}}</td>
 											
 								
 												<td>
 
-													<form class="d-inline" method = "POST"  action="{{ path('productDetail_index',{'id':balance.name} ) }}">
-													 <input type="hidden" name="reply" value="{{ balance.name }}"> 
-													 <button class="btn btn-link" type = "submit" name="reply" value = "{{balance.name}}" >Request</button>
+													<form class="d-inline" method = "POST"  action="{{ path('productDetail_index',{'id':balance.product.id} ) }}">
+													 <input type="hidden" name="reply" value="{{ balance.product }}"> 
+													 <button class="btn btn-link" type = "submit" name="reply" value = "{{balance.product}}" >Request</button>
 													</form>
 													
 												</td>
