@@ -90,9 +90,9 @@
 											<tr>
 												
 												<td>{{ stock.store }}</td>
-												<td>{{ stock.product }}</td>
-												<td>{{ stock.quantity }}</td>
-												<td>{{ stock.registeredBy }}</td>
+												{# <td>{{ stock.product }}</td> #}
+												{# <td>{{ stock.quantity }}</td>
+												<td>{{ stock.registeredBy }}</td> #}
 												{% if stock.approvalStatus == 1 %}
                                                     <td>Approved</td>
 												{% elseif stock.approvalStatus == 2 %}

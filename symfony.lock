@@ -547,6 +547,9 @@
             "config/packages/troopers_alertify.yaml"
         ]
     },
+    "troopers/assetic-injector-bundle": {
+        "version": "1.1.1"
+    },
     "twig/extra-bundle": {
         "version": "v3.1.1"
     },

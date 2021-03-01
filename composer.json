@@ -40,8 +40,6 @@
         "symfony/web-link": "5.2.*",
         "symfony/web-server-bundle": "4.4",
         "symfony/yaml": "5.2.*",
-        "troopers/alertify-bundle": "^3.1",
-        "troopers/assetic-injector-bundle": "~1.0",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
     },
@@ -81,13 +79,7 @@
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
-        },
-        "post-install-cmd": [
-            "@auto-scripts"
-        ],
-        "post-update-cmd": [
-            "@auto-scripts"
-        ]
+        }
     },
     "conflict": {
         "symfony/symfony": "*"

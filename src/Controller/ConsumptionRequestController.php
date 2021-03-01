@@ -22,7 +22,7 @@ class ConsumptionRequestController extends AbstractController
      */
     public function index(ConsumptionRequestRepository $consumptionRequestRepository,SettingRepository $settingRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        $settingApprovalLevel = $settingRepository->findOneBy(['id'=>1])->getConsumptionApprovalLevel();
+        $settingApprovalLevel = $settingRepository->findOneBy(['id'=>1])->getValue();
         $queryBuilder=$consumptionRequestRepository->findRequester($request->query->get('search'));
                  $data=$paginator->paginate(
                  $queryBuilder,
