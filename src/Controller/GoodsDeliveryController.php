@@ -66,6 +66,8 @@ class GoodsDeliveryController extends AbstractController
         ]);
     }
     
+
+
     /**
      * @Route("/sell", name="new_sell_index", methods={"GET","POST"})
      */
@@ -73,6 +75,7 @@ class GoodsDeliveryController extends AbstractController
     {  
         $sellsId = null;
         $sellsListId = null;
+        // dd($request->request->all());
         
         if($request->request->get('edit')){
             $sellsId=$request->request->get('edit');
@@ -91,7 +94,7 @@ class GoodsDeliveryController extends AbstractController
                 //$sellsList->setSells($sell);
                 $entityManager->persist($sellsList);
                 $entityManager->flush(); 
-                $this->addFlash("save",'saved');
+                $this->addFlash("save",'saved1');
 
                 //return $this->redirectToRoute('goods_delivery_index');
             }
@@ -113,7 +116,7 @@ class GoodsDeliveryController extends AbstractController
                 'edit'=>$sellsId,
                 'edit_list'=>false,
                 'sells_lists'=>$sellsList,
-                'id'=>$sell,
+                'id'=>$sellsId,
             ]);
 
         }
@@ -144,6 +147,7 @@ class GoodsDeliveryController extends AbstractController
                 'edit'=>false,
                 'edit_list'=>$sellsListId,
                 'sells_lists'=>$sellsList,
+                'id'=>$sellsId,
             ]);
         }
         $sells = new Sells();
@@ -166,22 +170,26 @@ class GoodsDeliveryController extends AbstractController
                
         }
 
-        $sell = $sellsRepository->findOneBy(['id'=>$sellsId]);
-        $sellsList->setSells($sell);
+        // $sell = $sellsRepository->findOneBy(['id'=>$sellsId]);
+        $sellsList->setSells($sells);
         $form_sells_list = $this->createForm(SellsListType::class, $sellsList);
         $form_sells_list->handleRequest($request);      
+        $entityManager = $this->getDoctrine()->getManager();
 
-        if ($form_sells_list->isSubmitted() && $form_sells_list->isValid()) {    
-            
-            $entityManager = $this->getDoctrine()->getManager();
+        if ($form_sells_list->isSubmitted() && $form_sells_list->isValid()) {  
+            // dd($request->request->get("parentId"));  
+            $sells2 = $entityManager->getRepository(Sells::class)->find($request->request->get("parentId"));
+          
+            $sellsList->setSells($sells2);
+
             $entityManager->persist($sellsList);
             $entityManager->flush();   
-            $this->addFlash("save",'saved');
+            $this->addFlash("save",'saved2');
 
             
         }
-        if($sell){
-            $qb=$sellsListRepository->findBy(['sells'=>$sell]);
+        if($sells){
+            $qb=$sellsListRepository->findBy(['sells'=>$sells]);
         }else{
             $qb=null;
         }
@@ -194,6 +202,7 @@ class GoodsDeliveryController extends AbstractController
             'edit'=>$sellsId,
             'edit_list'=>false,
             'id'=>$sellsId,
+            
         ]);
        }
     
