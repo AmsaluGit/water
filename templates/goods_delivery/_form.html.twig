@@ -60,10 +60,15 @@
 					{% if not button_label is defined  %}
 						
 						<div class="col-4">
-							<button class="form-control btn btn-info" >{{ button_label|default('Save') }}</button>
+							<button class="form-control btn btn-success" >{{ button_label|default('Save') }}</button>
 						</div>
-						<div class="col-4">
+						{# <div class="col-4">
 							<button class="form-control btn  btn-warning " style="margin-right:20px;" type="reset">Reset</button>
+						</div> #}
+						<div class="col-4">
+							<a href="{{ path('goods_delivery_index') }}" class="form-control btn btn-primary" style = "float:right;">
+								Back
+							</a>
 						</div>
 						
 					{% else %}
@@ -73,7 +78,7 @@
 						</div>
 						<div class="col-4">
 							<a href="{{ path('goods_delivery_index') }}" class="form-control btn btn-primary" style = "float:right;">
-								Cancel
+								Back
 							</a>
 						</div>
 					{% endif %}

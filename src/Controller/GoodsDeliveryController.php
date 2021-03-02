@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
 use Troopers\AlertifyBundle\Helper\AlertifyHelper;
 /**
- * @Route("/goods")
+ * @Route("/sell")
  */
 class GoodsDeliveryController extends AbstractController
 {
@@ -33,19 +33,21 @@ class GoodsDeliveryController extends AbstractController
         
 
         if($request->request->get('approve')){
-
+            $note = $request->request->get('remark');
             $id = $request->request->get('approve');
             $sells = $sellsRepository->find($id);
             $user = $this->getUser();
             $sells->setApprovedBy($user)
-                  ->setNote($request->request->get('remark'));
-            $this->addFlash('save', 'The request has been sucessfuly approved!');
+                  ->setNote($note)
+                  ->setApprovalStatus(1);
+            $this->addFlash('save', 'The Sell has been approved!');
         }
         elseif($request->request->get('reject')){
             $user = $this->getUser();
             $sells->setApprovedBy($user)
-                  ->setNote($request->request->get('remark'));
-            $this->addFlash('save', 'The request has been successfully Rejected!');
+                  ->setNote($request->request->get('remark'))
+                  ->setApprovalStatus(2);
+            $this->addFlash('save', 'The Sell has been  Rejected!');
         }
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -60,7 +62,7 @@ class GoodsDeliveryController extends AbstractController
         
         $qb = $sellsListRepository->findAll();
         return $this->render('goods_delivery/index.html.twig', [
-            'sells' => $queryBuilder,
+            'sells' => $data,
             'edit'=>false,
             'sellslist'=>$qb,
         ]);
@@ -69,88 +71,19 @@ class GoodsDeliveryController extends AbstractController
 
 
     /**
-     * @Route("/sell", name="new_sell_index", methods={"GET","POST"})
+     * @Route("/new", name="new_sell_index", methods={"GET","POST"})
      */
     public function NewSell(SellsListRepository $sellsListRepository,settingRepository $settingRepository, Request $request, SellsRepository $sellsRepository ): Response
     {  
-        $sellsId = null;
-        $sellsListId = null;
-        // dd($request->request->all());
         
-        if($request->request->get('edit')){
-            $sellsId=$request->request->get('edit');
-           
-            $sell = $sellsRepository->findOneBy(['id'=>$sellsId]);
-            $form_sells = $this->createForm(SellsType::class, $sell);
-            $form_sells->handleRequest($request);
-
-            $sellsList = new SellsList();
-            $form_sells_list = $this->createForm(SellsListType::class,$sellsList);
-            $form_sells_list->handleRequest($request);
-            
-            if ($form_sells_list->isSubmitted() && $form_sells_list->isValid()) {
-
-                $entityManager = $this->getDoctrine()->getManager();
-                //$sellsList->setSells($sell);
-                $entityManager->persist($sellsList);
-                $entityManager->flush(); 
-                $this->addFlash("save",'saved1');
-
-                //return $this->redirectToRoute('goods_delivery_index');
-            }
-
-            if ($form_sells->isSubmitted() && $form_sells->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
-                $this->addFlash("save",'saved');
-                
-            }
-
-            
-            
-            $qb=$sellsListRepository->findBy(['sells'=>$sellsId]);
-            return $this->render('goods_delivery/goods_form.html.twig', [
-                'sells_list' => $qb,
-                'form_sells' => $form_sells->createView(),
-                'form_sells_list' => $form_sells_list->createView(),
-                'add_item'=>true,
-                'edit'=>$sellsId,
-                'edit_list'=>false,
-                'sells_lists'=>$sellsList,
-                'id'=>$sellsId,
-            ]);
-
+        // dd($request->request->all());
+        $entityManager = $this->getDoctrine()->getManager();
+        if ($request->request->get("parentId")){
+            $sells = $entityManager->getRepository(Sells::class)->find($request->request->get("parentId"));
+        }else{
+            $sells = new Sells();
         }
-    
-        if($request->request->get('edit_list')){
-            $sellsListId=$request->request->get('edit_list');
-           
-            $sellsList=$sellsListRepository->findOneBy(['id'=>$sellsListId]);
-            $sell = $sellsList->getSells();
-            $form_sells_list = $this->createForm(SellsListType::class, $sellsList);
-            $form_sells_list->handleRequest($request);
-
-            $form_sells = $this->createForm(SellsType::class,$sell);
-            $form_sells->handleRequest($request);
-
-            if ($form_sells_list->isSubmitted() && $form_sells_list->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
-                $this->addFlash("save",'saved');
-                return $this->redirectToRoute('goods_delivery_index');
-            }
-
-            $qb=$sellsListRepository->findBy(['sells'=>$sell]);
-            return $this->render('goods_delivery/goods_form.html.twig', [
-                'sells_list' => $qb,
-                'form_sells' => $form_sells->createView(),
-                'form_sells_list' => $form_sells_list->createView(),
-                'add_item'=>true,
-                'edit'=>false,
-                'edit_list'=>$sellsListId,
-                'sells_lists'=>$sellsList,
-                'id'=>$sellsId,
-            ]);
-        }
-        $sells = new Sells();
+        
         $sellsList = new SellsList();
         $form_sells = $this->createForm(SellsType::class, $sells);
         $form_sells->handleRequest($request);
@@ -171,7 +104,7 @@ class GoodsDeliveryController extends AbstractController
         }
 
         // $sell = $sellsRepository->findOneBy(['id'=>$sellsId]);
-        $sellsList->setSells($sells);
+      
         $form_sells_list = $this->createForm(SellsListType::class, $sellsList);
         $form_sells_list->handleRequest($request);      
         $entityManager = $this->getDoctrine()->getManager();
@@ -185,7 +118,7 @@ class GoodsDeliveryController extends AbstractController
             $entityManager->persist($sellsList);
             $entityManager->flush();   
             $this->addFlash("save",'saved2');
-
+            $addItems = true;
             
         }
         if($sells){
@@ -193,97 +126,112 @@ class GoodsDeliveryController extends AbstractController
         }else{
             $qb=null;
         }
+
         return $this->render('goods_delivery/goods_form.html.twig', [
             'sells_list' => $qb,
-            'sells_lists'=>$sellsList,
+            'sells_lists'=>$sells->getId(),
             'add_item'=>$addItems,
             'form_sells'=> $form_sells->createView(),
             'form_sells_list'=> $form_sells_list->createView(),
-            'edit'=>$sellsId,
+            'edit'=>$sells->getId(),
             'edit_list'=>false,
-            'id'=>$sellsId,
+            'id'=>$sells->getId(),
             
         ]);
        }
-    
-    //     /**
-    //  * @Route("/edit", name="edit_sell_index", methods={"GET","POST"})
-    //  */
-    // public function EditSell(SellsListRepository $sellsListRepository,settingRepository $settingRepository, Request $request, SellsRepository $sellsRepository ): Response
-    // {  
-    //     $sellsId = null;
-    //     $sellsListId = null;
 
-    //     if($request->request->get('edit_list')){
-    //         $sellsListId=$request->request->get('edit_list');
-           
-    //         $sellsList=$sellsListRepository->findOneBy(['id'=>$sellsListId]);
-    //         $sell = $sellsList->getSells();
-    //         $form_sells_list = $this->createForm(SellsListType::class, $sellsList);
-    //         $form_sells_list->handleRequest($request);
-
-    //         $form_sells = $this->createForm(SellsType::class,$sell);
-    //         $form_sells->handleRequest($request);
-
-    //         if ($form_sells_list->isSubmitted() && $form_sells_list->isValid()) {
-    //             $this->getDoctrine()->getManager()->flush();
-    //             $this->addFlash("save",'saved');
-    //             return $this->redirectToRoute('goods_delivery_index');
-    //         }
-
-    //         $qb=$sellsListRepository->findBy(['sells'=>$sell]);
-    //         return $this->render('goods_delivery/goods_form.html.twig', [
-    //             'sells_list' => $qb,
-    //             'form_sells' => $form_sells->createView(),
-    //             'form_sells_list' => $form_sells_list->createView(),
-    //             'add_item'=>true,
-    //             'edit'=>false,
-    //             'edit_list'=>$sellsListId,
-    //             'sells_lists'=>$sellsList,
-    //         ]);
-    //     }
-
-    //         $sellsId=$request->request->get('edit');
-           
-    //         $sell = $sellsRepository->findOneBy(['id'=>$sellsId]);
-    //         $form_sells = $this->createForm(SellsType::class, $sell);
-    //         $form_sells->handleRequest($request);
-
-    //         $sellsList = new SellsList();
-    //         $sellsList->setSells($sell);
-    //         $form_sells_list = $this->createForm(SellsListType::class,$sellsList);
-    //         $form_sells_list->handleRequest($request);
+    /**
+     * @Route("/editsells/{id}", name="edit_sells_index", methods={"GET","POST"})
+     */
+    public function EditSells(SellsListRepository $sellsListRepository,settingRepository $settingRepository, Request $request, SellsRepository $sellsRepository ): Response
+    {  
+        $entityManager = $this->getDoctrine()->getManager();
+        if($request->request->get('edit')){
+            $sellsId=$request->request->get('edit');
+            $sell = $sellsRepository->find($sellsId);
+        }else{
             
-    //         if ($form_sells_list->isSubmitted() && $form_sells_list->isValid()) {
+            $sell = $entityManager->getRepository(Sells::class)->find($request->request->get("parentId"));
+        }
 
-    //             $entityManager = $this->getDoctrine()->getManager();
-                
-    //             $entityManager->persist($sellsList);
-    //             $entityManager->flush(); 
-    //             //return $this->redirectToRoute('goods_delivery_index');
-    //         }
+        $form_sells = $this->createForm(SellsType::class, $sell);
+        $form_sells->handleRequest($request);
 
-    //         if ($form_sells->isSubmitted() && $form_sells->isValid()) {
-    //             $this->getDoctrine()->getManager()->flush();
-    //             $this->addFlash("save",'saved');
-                
-    //         }
-
-            
-            
-    //         $qb=$sellsListRepository->findBy(['sells'=>$sellsId]);
-    //         return $this->render('goods_delivery/goods_form.html.twig', [
-    //             'sells_list' => $qb,
-    //             'form_sells' => $form_sells->createView(),
-    //             'form_sells_list' => $form_sells_list->createView(),
-    //             'add_item'=>true,
-    //             'edit'=>$sellsId,
-    //             'edit_list'=>false,
-    //             'sells_lists'=>$sellsList,
-    //             'id'=>$sell,
-    //         ]);
+        $sellsList = new SellsList();
+        $form_sells_list = $this->createForm(SellsListType::class,$sellsList);
+        $form_sells_list->handleRequest($request);
         
-    //    }
+        if ($form_sells_list->isSubmitted() && $form_sells_list->isValid()) {
+
+            $sellsList->setSells($sell);
+            $entityManager->persist($sellsList);
+            $entityManager->flush(); 
+            $this->addFlash("save",'saved1');
+
+            
+        }
+
+        if ($form_sells->isSubmitted() && $form_sells->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash("save",'saved');
+            
+        }
+
+        
+        
+        $qb=$sellsListRepository->findBy(['sells'=>$sell]);
+        return $this->render('goods_delivery/goods_form.html.twig', [
+            'sells_list' => $qb,
+            'form_sells' => $form_sells->createView(),
+            'form_sells_list' => $form_sells_list->createView(),
+            'add_item'=>true,
+            'edit'=>$sell->getId(),
+            'edit_list'=>false,
+            'sells_lists'=>$sellsList,
+            'id'=>$sell->getId(),
+        ]);
+    
+
+       }
+    /**
+     * @Route("/editlist/{id}", name="edit_sells_list_index", methods={"GET","POST"})
+     */
+    public function EditSellsList(SellsListRepository $sellsListRepository,settingRepository $settingRepository, Request $request, SellsRepository $sellsRepository ): Response
+    {  
+        $sellsId = null;
+        $sellsListId = null;
+
+
+        $sellsListId=$request->request->get('edit_list');
+        
+        $sellsList=$sellsListRepository->find($sellsListId);
+        $sell = $sellsList->getSells();
+        $form_sells_list = $this->createForm(SellsListType::class, $sellsList);
+        $form_sells_list->handleRequest($request);
+
+        $form_sells = $this->createForm(SellsType::class,$sell);
+        $form_sells->handleRequest($request);
+
+        if ($form_sells_list->isSubmitted() && $form_sells_list->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash("save",'saved');
+            // return $this->redirectToRoute('goods_delivery_index');
+        }
+
+        $qb=$sellsListRepository->findBy(['sells'=>$sell]);
+        return $this->render('goods_delivery/goods_form.html.twig', [
+            'sells_list' => $qb,
+            'form_sells' => $form_sells->createView(),
+            'form_sells_list' => $form_sells_list->createView(),
+            'add_item'=>true,
+            'edit'=>false,
+            'edit_list'=>$sellsListId,
+            'sells_lists'=>$sellsList,
+            'id'=>$sell->getId(),
+        ]);
+        
+
+       }
     /**
      * @Route("/{id}", name="goods_delivery_delete", methods={"DELETE"})
      */

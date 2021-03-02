@@ -38,6 +38,7 @@
                                             <th>Reciever</th>
                                             <th>place of delivery</th>
                                             <th>driver</th>
+											{# <th>Status</th> #}
 											<th>approved by</th>
 											<th>Action</th>
                                             <th>view details</th>
@@ -55,11 +56,12 @@
 												<td>{{ permission.receivedBy }}</td>
 												<td>{{ permission.placeOfDelivery }}</td>
 												<td>{{ permission.driver }}</td>
-                                                <td>{{ permission.approvedBy }}</td>
+												{# <td>{{ permission.approvalStatus }}</td> #}
+                                                <td>{{ permission.approvedBy }}</td>												
 												<td>
 
 
-													<form class="d-inline" method="post" action="{{ path('new_sell_index') }}">
+													<form class="d-inline" method="post" action="{{ path('edit_sells_index',{'id' : permission.id}) }}">
 														<input type="hidden" name="edit" value="{{permission.id}}">
 														<button  class="btn btn-info btn-sm" title="Edit">
 															<i class="fa fa-edit"></i>
@@ -96,7 +98,7 @@
 																
 																	<thead>
 																		<tr>
-																			<td></td>
+																			<td>#</td>
 																			{# <th>{{ knp_pagination_sortable(sells, 'Name', 'p.name') }}</th>
 																			<th>{{ knp_pagination_sortable(sells, 'Code', 'p.code') }}</th> #}
 																			<th>Product</th>
@@ -109,20 +111,24 @@
 																	</thead>
 																
 																	<tbody>
-																		{% set j = 1 %}
+																		{% set j = 1 %}{% set k = 0 %}
 																		{% for sell in sellslist %}								
 																		{% if sell.sells.id == permission.id %} 
-																		
+																			{% set k = 1 %}
 																			<tr>
-																				<td></td>
+																				<td>
+																				{{ j }}
+																				{% set j = j+1 %}
+																				</td>
 																				<td>{{ sell.product }}</td>
 																				<td>{{ sell.specification }}</td>
 																				<td>{{ sell.quantity }}</td>
 																				<td>{{ sell.weight }}</td>
 																				<td>{{ sell.unitPrice }}</td>
 																				<td>{{ sell.quantity * sell.unitprice }}</td>
+																				{% if not permission.approvalStatus %}
 																				<td>
-																					<form class="d-inline" method="post" action="{{ path('new_sell_index') }}">
+																					<form class="d-inline" method="post" action="{{ path('edit_sells_list_index',{'id' : sell.id}) }}">
 																						<input type="hidden" name="edit_list" value="{{sell.id}}">
 																						<button  class="btn btn-info btn-sm" title="Edit">
 																							<i class="fa fa-edit"></i>
@@ -139,7 +145,12 @@
 																						</button>
 																					</form>
 																				</td>
+																				{% endif %}	
 																			</tr>
+																			{% endif %}	
+																			{% endfor %}
+																			{% if k == 1 %}
+																			{% if not permission.approvalStatus %}
 																			<tr>
 																				<td colspan="8">
 																					<form id = "approval" method="post">
@@ -164,14 +175,9 @@
 																						</div>
 																					</form>
 																				</td>
-																			</tr>
-																				
-																			{% else %}
-																				<tr>
-																					<td colspan="5">no records found</td>
-																				</tr>
+																			</tr>	
 																			{% endif %}	
-																			{% endfor %}																															
+																			{% endif %}																														
 																	</tbody>
 																</table>
 																<br>
@@ -191,8 +197,8 @@
 									</tbody>
 								</table>
 								<br>
-								{# {% do sells.setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') %} #}
-								{# <div class="float-right">{{ knp_pagination_render(sells) }}</div> #}
+								{% do sells.setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') %} 
+								<div class="float-right">{{ knp_pagination_render(sells) }}</div>
 
 
 							</div>
@@ -205,8 +211,7 @@
 		</div>
 		<!-- /.card-body -->
 	</div>
-{{dump(sellslist)}}
-{{dump(sells)}}
+
 {% endblock %}
 {% block javascripts %}
 	{% if edit %}

@@ -76,6 +76,11 @@ class Sells
      */
     private $sellsLists;
 
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $ApprovalStatus;
+
     public function __construct()
     {
         $this->sellsLists = new ArrayCollection();
@@ -233,6 +238,18 @@ class Sells
                 $sellsList->setSells(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getApprovalStatus(): ?int
+    {
+        return $this->ApprovalStatus;
+    }
+
+    public function setApprovalStatus(?int $ApprovalStatus): self
+    {
+        $this->ApprovalStatus = $ApprovalStatus;
 
         return $this;
     }

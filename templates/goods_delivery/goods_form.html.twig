@@ -47,6 +47,7 @@
 					</div>
                 </div>
                 {% endif %}
+				{% if add_item %}
                 <div class="row">
                     <div class="col-md-12">
                         <form class="d-inline" method="post">
@@ -54,15 +55,13 @@
                                 {% set new_button_label = 'Update' %}
                                 
                             {% endif %}
-                            {% if add_item %}
+                            
                             <button id ="collapse" name="add_items" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#demo">{{ new_button_label|default('Add Items') }}</button>                    <div class="col-md-12">
-                            {% else %}
-
-                            {% endif %}
+                             <br>  
                         </form>
                         
                     </div>
-                    <br>
+                   
                     <div class="col-md-12">
                         <div id="demo" class="card card-info collapse">
 							<div class="card-header">
@@ -89,6 +88,8 @@
 						</div>
                     </div>
 				</div>
+				{% else %}
+				{% endif %}
                 <div class="row">
 					<div class="col-md-12">
 						<div class="card ">
@@ -127,7 +128,7 @@
                                                 <td>{{ sell.unitPrice }}</td>
                                                 <td>{{ sell.quantity * sell.unitprice }}</td>
                                                 <td>
-                                                <form class="d-inline" method="post">
+                                                <form class="d-inline" method="post" action="{{ path('edit_sells_list_index',{'id' : sell.id}) }}">
                                                     <input type="hidden" name="edit_list" value="{{sell.id}}">
                                                     <button  class="btn btn-info btn-sm" title="Edit">
                                                         <i class="fa fa-edit"></i>
