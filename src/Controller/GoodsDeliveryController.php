@@ -227,7 +227,7 @@ class GoodsDeliveryController extends AbstractController
             'edit'=>false,
             'edit_list'=>true,
             'sells_lists'=>$sellsList,
-            'id'=>$sellsList->getId(),  
+            'id'=>$sell->getId(),  
         ]);
         
 

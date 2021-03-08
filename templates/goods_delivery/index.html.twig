@@ -52,8 +52,9 @@
 											<th>Status</th>
 											
 											<th>approved by</th>
+											<th>view </th>
 											<th>Action</th>
-                                            <th>view </th>
+                                            
 											
 										</tr>
 									</thead>
@@ -78,7 +79,15 @@
 													<i class="fa fa-spinner fa-spin"></i>
 													{% endif %}
 												</td>
-                                                <td>{{ sell.approvedBy }}</td>												
+                                                <td>{{ sell.approvedBy }}</td>
+												<td>
+												 	<form class="d-inline" method="post" action="{{ path('goods_delivery_index') }}">
+													 	<input type="hidden" name="view" value="{{sell.id}}">
+														<button title="view" type = "button" class="btn btn-link " data-target="#demo{{ sell.id }}" data-toggle="collapse">
+															View
+														</button>
+													</form>
+                                                </td>												
 												<td>
 
 													<form class="d-inline" method="post" action="{{ path('edit_sells_index',{'id' : sell.id}) }}">
@@ -117,14 +126,7 @@
 													
 												</td>
 
-												 <td>
-												 	<form class="d-inline" method="post" action="{{ path('goods_delivery_index') }}">
-													 	<input type="hidden" name="view" value="{{sell.id}}">
-														<button title="view" type = "button" class="btn btn-link " data-target="#demo{{ sell.id }}" data-toggle="collapse">
-															View
-														</button>
-													</form>
-                                                </td>													     							
+												 													     							
 											</tr>
 											
 											<tr>
