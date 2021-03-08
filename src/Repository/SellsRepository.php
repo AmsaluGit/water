@@ -19,6 +19,28 @@ class SellsRepository extends ServiceEntityRepository
         parent::__construct($registry, Sells::class);
     }
 
+    
+    public function findSells($search=null)
+    {
+        $qb=$this->createQueryBuilder('c')
+                ->select('c, u')
+                ->join('c.receivedBy', 'u')
+                ->where("u.id = c.receivedBy");
+                // ->join('c.product', 'p')
+                // ->where("p.id = c.product");
+                
+
+
+        if($search)
+            $qb->andWhere("u.firstName LIKE '%".$search."%'")
+               ->orWhere("u.middleName LIKE '%".$search."%'")
+               ->orWhere("u.lastName LIKE '%".$search."%'")
+               ;
+            return $qb->orderBy('u.id', 'ASC')
+                      ->getQuery()
+            ;
+    }
+
     // /**
     //  * @return Sells[] Returns an array of Sells objects
     //  */

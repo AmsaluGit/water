@@ -72,7 +72,7 @@ class Sells
     private $approvedBy;
 
     /**
-     * @ORM\OneToMany(targetEntity=SellsList::class, mappedBy="sells")
+     * @ORM\OneToMany(targetEntity=SellsList::class, mappedBy="sells", cascade={"remove"})
      */
     private $sellsLists;
 

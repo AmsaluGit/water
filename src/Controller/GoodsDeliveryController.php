@@ -30,8 +30,21 @@ class GoodsDeliveryController extends AbstractController
     public function index(SellsRepository $sellsRepository,SettingRepository $settingRepository, Request $request, PaginatorInterface $paginator, SellsListRepository $sellsListRepository): Response
     {
         $stockApprovalLevel = $settingRepository->findOneBy(['code'=>'stock_approval_level'])->getValue();
-        
+    
+        // $sellsList = $sellsListRepository->find($request->request->get('child_id'));
+        // $form_sells_list = $this->createForm(SellsListType::class, $sellsList);
+        // $form_sells_list->handleRequest($request);
+        // if ($form_sells_list->isSubmitted() && $form_sells_list->isValid()) {
+        //     $this->getDoctrine()->getManager()->flush();
+        //     $this->addFlash("save",'saved');
+        //     // return $this->redirectToRoute('goods_delivery_index');
+        // }
+        $editlist=false;
+        if($request->request->get('edit_list')){
+            $editlist = true;
+            
 
+        }
         if($request->request->get('approve')){
             $note = $request->request->get('remark');
             $id = $request->request->get('approve');
@@ -44,27 +57,39 @@ class GoodsDeliveryController extends AbstractController
         }
         elseif($request->request->get('reject')){
             $user = $this->getUser();
+            $id = $request->request->get('reject');
+            $sells = $sellsRepository->find($id);
             $sells->setApprovedBy($user)
                   ->setNote($request->request->get('remark'))
                   ->setApprovalStatus(2);
             $this->addFlash('save', 'The Sell has been  Rejected!');
         }
 
+        
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
     
-        $queryBuilder=$sellsRepository->findAll();
-        $data=$paginator->paginate(
-            $queryBuilder,
-            $request->query->getInt('page',1),
-            18
-        );
+        // $queryBuilder=$sellsRepository->findAll();
+        // $data=$paginator->paginate(
+        //     $queryBuilder,
+        //     $request->query->getInt('page',1),
+        //     10
+        // );
+      
+        $queryBuilder=$sellsRepository->findSells($request->query->get('search'));
+                 $data=$paginator->paginate(
+                 $queryBuilder,
+                 $request->query->getInt('page',1),
+               18
+            );
         
         $qb = $sellsListRepository->findAll();
         return $this->render('goods_delivery/index.html.twig', [
             'sells' => $data,
-            'edit'=>false,
+            'edit_list'=>$editlist,
             'sellslist'=>$qb,
+            'edit'=>false,
         ]);
     }
     
@@ -76,66 +101,39 @@ class GoodsDeliveryController extends AbstractController
     public function NewSell(SellsListRepository $sellsListRepository,settingRepository $settingRepository, Request $request, SellsRepository $sellsRepository ): Response
     {  
         
-        // dd($request->request->all());
         $entityManager = $this->getDoctrine()->getManager();
-        if ($request->request->get("parentId")){
-            $sells = $entityManager->getRepository(Sells::class)->find($request->request->get("parentId"));
-        }else{
-            $sells = new Sells();
-        }
-        
-        $sellsList = new SellsList();
-        $form_sells = $this->createForm(SellsType::class, $sells);
+       
+        $sell = new Sells();
+        $form_sells = $this->createForm(SellsType::class, $sell);
         $form_sells->handleRequest($request);
-
-        $addItems = false;
 
         if ($form_sells->isSubmitted() && $form_sells->isValid()) {    
                
             $entityManager = $this->getDoctrine()->getManager();
             
-            $entityManager->persist($sells);
+            $entityManager->persist($sell);
             $entityManager->flush();
-            $this->addFlash("save",'saved');
+            $this->addFlash("save",'New Delivery Added');
 
-            $sellsId = $sells->getId();
-            $addItems = true; 
+            $sellsId = $sell->getId();
+            return $this->redirectToRoute('edit_sells_index',['id'=>$sellsId]);
                
         }
 
-        // $sell = $sellsRepository->findOneBy(['id'=>$sellsId]);
-      
-        $form_sells_list = $this->createForm(SellsListType::class, $sellsList);
-        $form_sells_list->handleRequest($request);      
-        $entityManager = $this->getDoctrine()->getManager();
-
-        if ($form_sells_list->isSubmitted() && $form_sells_list->isValid()) {  
-            // dd($request->request->get("parentId"));  
-            $sells2 = $entityManager->getRepository(Sells::class)->find($request->request->get("parentId"));
-          
-            $sellsList->setSells($sells2);
-
-            $entityManager->persist($sellsList);
-            $entityManager->flush();   
-            $this->addFlash("save",'saved2');
-            $addItems = true;
-            
-        }
-        if($sells){
-            $qb=$sellsListRepository->findBy(['sells'=>$sells]);
+        if($sell){
+            $qb=$sellsListRepository->findBy(['sells'=>$sell]);
         }else{
             $qb=null;
         }
 
         return $this->render('goods_delivery/goods_form.html.twig', [
             'sells_list' => $qb,
-            'sells_lists'=>$sells->getId(),
-            'add_item'=>$addItems,
+            'sells_lists'=>$sell->getId(),
+            'add_item'=>false,
             'form_sells'=> $form_sells->createView(),
-            'form_sells_list'=> $form_sells_list->createView(),
-            'edit'=>$sells->getId(),
+            'edit'=>false,
             'edit_list'=>false,
-            'id'=>$sells->getId(),
+            'id'=>$sell->getId(),
             
         ]);
        }
@@ -143,17 +141,20 @@ class GoodsDeliveryController extends AbstractController
     /**
      * @Route("/editsells/{id}", name="edit_sells_index", methods={"GET","POST"})
      */
-    public function EditSells(SellsListRepository $sellsListRepository,settingRepository $settingRepository, Request $request, SellsRepository $sellsRepository ): Response
+    public function EditSells(SellsListRepository $sellsListRepository,settingRepository $settingRepository, Request $request, SellsRepository $sellsRepository,$id ): Response
     {  
+        
         $entityManager = $this->getDoctrine()->getManager();
         if($request->request->get('edit')){
             $sellsId=$request->request->get('edit');
             $sell = $sellsRepository->find($sellsId);
-        }else{
+        }elseif($request->request->get("parentId")){
             
             $sell = $entityManager->getRepository(Sells::class)->find($request->request->get("parentId"));
         }
-
+        else{
+            $sell = $sellsRepository->find($id);
+        }
         $form_sells = $this->createForm(SellsType::class, $sell);
         $form_sells->handleRequest($request);
 
@@ -161,23 +162,25 @@ class GoodsDeliveryController extends AbstractController
         $form_sells_list = $this->createForm(SellsListType::class,$sellsList);
         $form_sells_list->handleRequest($request);
         
-        if ($form_sells_list->isSubmitted() && $form_sells_list->isValid()) {
+        // edit info on sells
+        if ($form_sells->isSubmitted() && $form_sells->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash("save",'Sell Updated');
+            return $this->redirectToRoute('edit_sells_index',['id'=>$sellsId]);
+            
+        }
 
+        // add new item on the sell to sellsList
+        if ($form_sells_list->isSubmitted() && $form_sells_list->isValid()) {
+            
+            $sell = $entityManager->getRepository(Sells::class)->find($request->request->get("parentId"));
             $sellsList->setSells($sell);
             $entityManager->persist($sellsList);
             $entityManager->flush(); 
-            $this->addFlash("save",'saved1');
-
+            $this->addFlash("save",'Item Added');
+            return $this->redirectToRoute('edit_sells_index',['id'=>$sell->getId()]);
             
         }
-
-        if ($form_sells->isSubmitted() && $form_sells->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-            $this->addFlash("save",'saved');
-            
-        }
-
-        
         
         $qb=$sellsListRepository->findBy(['sells'=>$sell]);
         return $this->render('goods_delivery/goods_form.html.twig', [
@@ -196,15 +199,12 @@ class GoodsDeliveryController extends AbstractController
     /**
      * @Route("/editlist/{id}", name="edit_sells_list_index", methods={"GET","POST"})
      */
-    public function EditSellsList(SellsListRepository $sellsListRepository,settingRepository $settingRepository, Request $request, SellsRepository $sellsRepository ): Response
+    public function EditSellsList(SellsListRepository $sellsListRepository,settingRepository $settingRepository, Request $request, SellsRepository $sellsRepository,$id ): Response
     {  
-        $sellsId = null;
-        $sellsListId = null;
+      
+      
+        $sellsList = $sellsListRepository->find($id);
 
-
-        $sellsListId=$request->request->get('edit_list');
-        
-        $sellsList=$sellsListRepository->find($sellsListId);
         $sell = $sellsList->getSells();
         $form_sells_list = $this->createForm(SellsListType::class, $sellsList);
         $form_sells_list->handleRequest($request);
@@ -214,8 +214,8 @@ class GoodsDeliveryController extends AbstractController
 
         if ($form_sells_list->isSubmitted() && $form_sells_list->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash("save",'saved');
-            // return $this->redirectToRoute('goods_delivery_index');
+            $this->addFlash("save",'Item Updated');
+            return $this->redirect($request->headers->get('referer'));
         }
 
         $qb=$sellsListRepository->findBy(['sells'=>$sell]);
@@ -225,13 +225,14 @@ class GoodsDeliveryController extends AbstractController
             'form_sells_list' => $form_sells_list->createView(),
             'add_item'=>true,
             'edit'=>false,
-            'edit_list'=>$sellsListId,
+            'edit_list'=>true,
             'sells_lists'=>$sellsList,
-            'id'=>$sell->getId(),
+            'id'=>$sellsList->getId(),  
         ]);
         
 
        }
+    
     /**
      * @Route("/{id}", name="goods_delivery_delete", methods={"DELETE"})
      */
@@ -242,7 +243,20 @@ class GoodsDeliveryController extends AbstractController
             $entityManager->remove($sells);
             $entityManager->flush();
         }
-
-        return $this->redirectToRoute('goods_delivery_index');
+        return $this->redirect($request->headers->get('referer'));
+    }
+    /**
+     * @Route("/child/{id}", name="sells_list_delete", methods={"DELETE"})
+     */
+    public function deleteList(Request $request, SellsList $sells): Response
+    {
+        
+        if ($this->isCsrfTokenValid('delete'.$sells->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($sells);
+            $entityManager->flush();
+        }
+        
+        return $this->redirect($request->headers->get('referer'));
     }
 }
