@@ -30,7 +30,7 @@ class GoodsDeliveryController extends AbstractController
     public function index(SellsRepository $sellsRepository,SettingRepository $settingRepository, Request $request, PaginatorInterface $paginator, SellsListRepository $sellsListRepository): Response
     {
         $stockApprovalLevel = $settingRepository->findOneBy(['code'=>'stock_approval_level'])->getValue();
-    
+        // dd($request->request->all());
         // $sellsList = $sellsListRepository->find($request->request->get('child_id'));
         // $form_sells_list = $this->createForm(SellsListType::class, $sellsList);
         // $form_sells_list->handleRequest($request);
@@ -39,16 +39,45 @@ class GoodsDeliveryController extends AbstractController
         //     $this->addFlash("save",'saved');
         //     // return $this->redirectToRoute('goods_delivery_index');
         // }
+        
         $editlist=false;
         if($request->request->get('edit_list')){
             $editlist = true;
             
 
         }
+
+        
         if($request->request->get('approve')){
+
+            // dd($request->request->all());
             $note = $request->request->get('remark');
             $id = $request->request->get('approve');
             $sells = $sellsRepository->find($id);
+            
+            foreach($sells->getSellsLists() as $list){
+                $listId = $list->getId();
+                $var = $request->request->get("quantity$listId");
+                if($var > $list->getQuantity()){
+                    $this->addFlash('error', 'please make sure the approved quantity is less than the quantity!');
+                    return $this->redirectToRoute('goods_delivery_index');
+                }else{
+                if($request->request->get("quantity$listId")){
+                    $list->setApprovedQuantity($request->request->get("quantity$listId"))
+                         ->setApprovalStatus(1);
+                }
+                if($request->request->get("remark$listId")){
+                    $list->setRemark($request->request->get("remark$listId"));
+                }
+                if($request->request->get("mySelect$listId") == "Approve all"){
+                    $list->setApprovedQuantity($list->getQuantity())
+                         ->setApprovalStatus(1);
+                }
+                if($request->request->get("mySelect$listId") == "Reject"){
+                    $list->setApprovalStatus(2);
+                }
+             }
+            } 
             $user = $this->getUser();
             $sells->setApprovedBy($user)
                   ->setNote($note)
@@ -59,6 +88,22 @@ class GoodsDeliveryController extends AbstractController
             $user = $this->getUser();
             $id = $request->request->get('reject');
             $sells = $sellsRepository->find($id);
+            $sellsList = $sells->getSellsLists();
+            foreach($sellsList as $list){
+
+                $listId = $list->getId();
+                $list->setApprovalStatus(2);
+                // if($request->request->get("quantity.$listId")){
+                //     $list->setApprovedQuantity($request->request->get("quantity.$listId"));
+                // }
+                // if($request->request->get("remark.$listId")){
+                //     $list->setRemark($request->request->get("remark.$listId"));
+                // }
+                // if($request->request->get("mySelect$listId") == "Approve all"){
+                //     $list->setApprovedQuantity($list->getQuantity());
+                // }
+                
+            }
             $sells->setApprovedBy($user)
                   ->setNote($request->request->get('remark'))
                   ->setApprovalStatus(2);
@@ -90,6 +135,7 @@ class GoodsDeliveryController extends AbstractController
             'edit_list'=>$editlist,
             'sellslist'=>$qb,
             'edit'=>false,
+
         ]);
     }
     

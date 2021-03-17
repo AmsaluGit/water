@@ -147,9 +147,12 @@
 																			<th>Product</th>
 																			<th>Spec</th>
 																			<th>quantity</th>
-																			<th>weight</th>
+																			<th></th>
+																			{# <th>Approved Quantity</th>
+																			<th>Remark</th> #}
+																			{# <th>weight</th>
 																			<th>unitprice</th>
-																			<th>Total</th>
+																			<th>Total</th> #}
 																		</tr>
 																	</thead>
 																
@@ -167,11 +170,38 @@
 																				<td>{{ item.product }}</td>
 																				<td>{{ item.specification }}</td>
 																				<td>{{ item.quantity }}</td>
-																				<td>{{ item.weight }}</td>
+																				{# <td>{{ item.weight }}</td>
 																				<td>{{ item.unitPrice }}</td>
-																				<td>{{ item.quantity * item.unitprice }}</td>
+																				<td>{{ item.quantity * item.unitprice }}</td> #}
 																				{% if not sell.approvalStatus %}
 																				<td>
+																				<form id = "approval" method="post">
+																					
+																						<div class="form-group" >
+																							
+																							<select class="form-control" name="mySelect{{item.id}}" onchange = "myFunction(this.value,{{item.id}})" >
+																							<option>Select</option>
+																							<option>Approve all</option>
+																							<option>Approve some</option>
+																							<option>Reject</option>
+																	
+																							</select>
+																						
+																							
+																							
+																						</div>
+																				
+																				</td>
+																				
+																				<div class="form-group">
+																				
+																				<td><input class ="form-control" type= "text" name = "quantity{{item.id}}" id = "quantity{{item.id}}" placeholder="Approved Quantity" hidden></td>
+																				</div>
+																				
+																				<td><input class ="form-control" type= "text" name = "remark{{item.id}}" id = "remark{{item.id}}" placeholder="remark" hidden></td>
+																				</div>
+																				</div>
+																				{# <td>
 																					<form class="d-inline" method="post" action="{{ path('edit_sells_list_index',{'id': item.id}) }}">
 																						<input type="hidden" name="edit_list" value="{{item.id}}">
 																					
@@ -208,7 +238,7 @@
 																						</div>
 																					</div>															
 																					
-																				</td>
+																				</td> #}
 																					
 																			</tr>
 																			
@@ -223,7 +253,7 @@
 																			{# {% if not sell.approvalStatus %} #}
 																			<tr>
 																				<td colspan="8">
-																					<form id = "approval" method="post">
+																					{# <form id = "approval" method="post"> #}
 																						<div class="form" style = "margin: auto; width: 60%;">
 
 																							<div class="col-auto">
@@ -289,7 +319,32 @@
 		{% if edit_list %}
 		document.getElementById('collapse').click();
 		{% endif %}
+		
+		function myFunction(val,id) {
+  			
 
+			if(val == "Approve all"){
+				document.getElementById("quantity"+id).setAttribute('hidden',"true");
+				document.getElementById("remark"+id).setAttribute('hidden','true');
+			}
+			else if(val == "Approve some"){
+				document.getElementById("quantity"+id).removeAttribute('hidden',"true");
+				document.getElementById("remark"+id).removeAttribute('hidden', "false");
+			} 
+			else if(val == "Reject"){
+				document.getElementById("quantity"+id).setAttribute('hidden',"true");
+				document.getElementById("remark"+id).removeAttribute('hidden', "false");
+			} 
+
+			
+			
+			}
+    {# $(document).ready(function(){
+
+        $("#mySelect").on("change",function(){
+            alert($(this).val());
+        });
+    }); #}
 {#  
 			 $(function () {
  $('#collapse').trigger('click');
