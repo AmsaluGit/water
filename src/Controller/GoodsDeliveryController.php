@@ -39,13 +39,6 @@ class GoodsDeliveryController extends AbstractController
         //     $this->addFlash("save",'saved');
         //     // return $this->redirectToRoute('goods_delivery_index');
         // }
-        
-        $editlist=false;
-        if($request->request->get('edit_list')){
-            $editlist = true;
-            
-
-        }
 
         
         if($request->request->get('approve')){
@@ -62,19 +55,21 @@ class GoodsDeliveryController extends AbstractController
                     $this->addFlash('error', 'please make sure the approved quantity is less than the quantity!');
                     return $this->redirectToRoute('goods_delivery_index');
                 }else{
-                if($request->request->get("quantity$listId")){
+                if($request->request->get("quantity$listId") and $request->request->get("mySelect$listId") == "Approve some"){
                     $list->setApprovedQuantity($request->request->get("quantity$listId"))
+                         ->setRemark($request->request->get("remark$listId"))
                          ->setApprovalStatus(1);
                 }
-                if($request->request->get("remark$listId")){
-                    $list->setRemark($request->request->get("remark$listId"));
-                }
+                // if($request->request->get("remark$listId")){
+                //     $list->setRemark($request->request->get("remark$listId"));
+                // }
                 if($request->request->get("mySelect$listId") == "Approve all"){
                     $list->setApprovedQuantity($list->getQuantity())
                          ->setApprovalStatus(1);
                 }
-                if($request->request->get("mySelect$listId") == "Reject"){
-                    $list->setApprovalStatus(2);
+                if($request->request->get("mySelect$listId") == "Reject" and $request->request->get("remark$listId")){
+                    $list->setApprovalStatus(2)
+                         ->setRemark($request->request->get("remark$listId"));
                 }
              }
             } 
@@ -132,7 +127,7 @@ class GoodsDeliveryController extends AbstractController
         $qb = $sellsListRepository->findAll();
         return $this->render('goods_delivery/index.html.twig', [
             'sells' => $data,
-            'edit_list'=>$editlist,
+            // 'edit_list'=>$editlist,
             'sellslist'=>$qb,
             'edit'=>false,
 
@@ -152,6 +147,8 @@ class GoodsDeliveryController extends AbstractController
         $sell = new Sells();
         $form_sells = $this->createForm(SellsType::class, $sell);
         $form_sells->handleRequest($request);
+        $user = $this->getUser();
+        $sell->setReceivedBy($user);
 
         if ($form_sells->isSubmitted() && $form_sells->isValid()) {    
                

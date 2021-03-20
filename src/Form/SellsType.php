@@ -19,7 +19,7 @@ class SellsType extends AbstractType
             ->add('driver')
             ->add('phone')
             // ->add('note')
-            ->add('receivedBy')
+            // ->add('receivedBy')
             // ->add('deliveredBy')
             // ->add('approvedBy')
         ;
