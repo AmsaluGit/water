@@ -80,6 +80,7 @@
 													{% endif %}
 												</td>
                                                 <td>{{ sell.approvedBy }}</td>
+												
 												<td>
 												 	<form class="d-inline" method="post" action="{{ path('goods_delivery_index') }}">
 													 	<input type="hidden" name="view" value="{{sell.id}}">
@@ -87,7 +88,8 @@
 															View
 														</button>
 													</form>
-                                                </td>												
+                                                </td>
+												{% if not sell.approvalStatus %}												
 												<td>
 
 													<form class="d-inline" method="post" action="{{ path('edit_sells_index',{'id' : sell.id}) }}">
@@ -125,10 +127,10 @@
 													</div>
 													
 												</td>
-
+												{% endif %}
 												 													     							
 											</tr>
-											
+											{% if not sell.approvalStatus %}
 											<tr>
 												<td colspan="8">
 													<div class = "col-md-12" >
@@ -148,11 +150,13 @@
 																			<th>Spec</th>
 																			<th>quantity</th>
 																			<th></th>
+																			
 																			{# <th>Approved Quantity</th>
 																			<th>Remark</th> #}
 																			{# <th>weight</th>
 																			<th>unitprice</th>
 																			<th>Total</th> #}
+																			
 																		</tr>
 																	</thead>
 																
@@ -170,17 +174,19 @@
 																				<td>{{ item.product }}</td>
 																				<td>{{ item.specification }}</td>
 																				<td>{{ item.quantity }}</td>
-																				{# <td>{{ item.weight }}</td>
-																				<td>{{ item.unitPrice }}</td>
-																				<td>{{ item.quantity * item.unitprice }}</td> #}
-																				{% if not sell.approvalStatus %}
+																				
+																				{# <td>{{ item.approvedQuantity }}</td>
+																				<td>{{ item.remark }}</td> #}
+																				{# <td>{{ item.quantity * item.unitprice }}</td> #}
+																				
+																				{# {% if not sell.approvalStatus %} #}
 																				<td>
 																					<form id = "approval" method="post">
 																					
 																						<div class="form-group" >
 																							
 																							<select class="form-control" name="mySelect{{item.id}}" onchange = "myFunction(this.value,{{item.id}})" >
-																							<option selected="selected" disabled>Select</option>
+																							<option selected="selected" disabled>Select*</option>
 																							<option>Approve all</option>
 																							<option>Approve some</option>
 																							<option>Reject</option>
@@ -243,7 +249,7 @@
 																					
 																			</tr>
 																			
-																			{% endif %}
+																			
 																			{% else %}
 																			<tr>
 																				<td colspan="5">no records found</td>
@@ -291,7 +297,72 @@
 													</div>
 												</td>
 											</tr>
+											{% else %}
+											<tr>
+												<td colspan="8">
+													<div class = "col-md-12" >
+														<div class="card collapse" id = "demo{{ sell.id }}" >
+															<div class="card-header">
+															<h4 class="card-title">Items List</h4>
+															</div>
+															<div class="card-body">
+																<table class="table" >
+																
+																	<thead>
+																		<tr>
+																			<td>#</td>
+																			{# <th>{{ knp_pagination_sortable(sells, 'Name', 'p.name') }}</th>
+																			<th>{{ knp_pagination_sortable(sells, 'Code', 'p.code') }}</th> #}
+																			<th>Product</th>
+																			<th>Spec</th>
+																			<th>quantity</th>
+																			<th>Approved Quantity</th>
+																			<th>Remark</th>
+																			{# <th>weight</th>
+																			<th>unitprice</th>
+																			<th>Total</th> #}
+																			
+																		</tr>
+																	</thead>
+																
+																	<tbody>
+																	
+																		{% set j = 1 %}{% set k = 0 %}
+																		{% for item in sell.sellsLists %}								
+																		
+																			{% set k = 1 %}
+																			<tr>
+																				<td>
+																				{{ j }}
+																				{% set j = j+1 %}
+																				</td>
+																				<td>{{ item.product }}</td>
+																				<td>{{ item.specification }}</td>
+																				<td>{{ item.quantity }}</td>
+																				<td>{{ item.approvedQuantity }}</td>
+																				<td>{{ item.remark }}</td>
+																		
+																			</tr>
+																			
+																			
+																			{% else %}
+																			<tr>
+																				<td colspan="5">no records found</td>
+																			</tr>
 											
+																			{% endfor %}
+																																												
+																	</tbody>
+																</table>
+																<br>
+																
+																
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											{% endif %}
 										{% else %}
 											<tr>
 												<td colspan="5">no records found</td>
