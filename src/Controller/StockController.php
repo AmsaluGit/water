@@ -30,16 +30,6 @@ class StockController extends AbstractController
     {
     
         $stockApprovalLevel = $settingRepository->findOneBy(['code'=>'stock_approval_level'])->getValue();
-        // dd($request->request->all());
-        // $sellsList = $sellsListRepository->find($request->request->get('child_id'));
-        // $form_sells_list = $this->createForm(SellsListType::class, $sellsList);
-        // $form_sells_list->handleRequest($request);
-        // if ($form_sells_list->isSubmitted() && $form_sells_list->isValid()) {
-        //     $this->getDoctrine()->getManager()->flush();
-        //     $this->addFlash("save",'saved');
-        //     // return $this->redirectToRoute('goods_delivery_index');
-        // }
-
         
         if($request->request->get('approve')){
 
@@ -60,9 +50,7 @@ class StockController extends AbstractController
                          ->setRemark($request->request->get("remark$listId"))
                          ->setApprovalStatus(1);
                 }
-                // if($request->request->get("remark$listId")){
-                //     $list->setRemark($request->request->get("remark$listId"));
-                // }
+                
                 if($request->request->get("mySelect$listId") == "Approve all"){
                     $list->setApprovedQuantity($list->getQuantity())
                          ->setApprovalStatus(1);
@@ -99,15 +87,7 @@ class StockController extends AbstractController
 
                 $listId = $list->getId();
                 $list->setApprovalStatus(2);
-                // if($request->request->get("quantity.$listId")){
-                //     $list->setApprovedQuantity($request->request->get("quantity.$listId"));
-                // }
-                // if($request->request->get("remark.$listId")){
-                //     $list->setRemark($request->request->get("remark.$listId"));
-                // }
-                // if($request->request->get("mySelect$listId") == "Approve all"){
-                //     $list->setApprovedQuantity($list->getQuantity());
-                // }
+                
                 
             }
             $stock->setApprovedBy($user)
@@ -121,12 +101,6 @@ class StockController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
     
-        // $queryBuilder=$sellsRepository->findAll();
-        // $data=$paginator->paginate(
-        //     $queryBuilder,
-        //     $request->query->getInt('page',1),
-        //     10
-        // );
       
         $queryBuilder=$stockRepository->findStock($request->query->get('search'));
                  $data=$paginator->paginate(
