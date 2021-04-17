@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use App\Entity\ConsumptionRequest;
 use App\Entity\ConsumptionRequestList;
+use App\Entity\ConsumptionDelivery;
+
+use App\Entity\ConsumptionDeliveryList;
 
 use App\Form\ConsumptionRequestType;
 use App\Form\ConsumptionRequestListType;
@@ -32,6 +35,15 @@ class ConsumptionRequestController extends AbstractController
             $id = $request->request->get('approve');
             $consumptionRequest =$consumptionRequestRepository->find($id);
 
+            // $consumptionDelivery = new ConsumptionDelivery();        //new
+            // $consumptionDelivery->setRequestNo($consumptionRequest);
+            // $entityManager = $this->getDoctrine()->getManager();
+            // $entityManager->persist($consumptionDelivery);
+            // $entityManager->flush();                                 //new
+
+            // $consumptionDeliveryList =new ConsumptionDeliveryList();
+
+
             foreach($consumptionRequest->getConsumptionRequestLists() as $list){
                 $listId = $list->getId();
                 $var = $request->request->get("quantity$listId");
@@ -45,6 +57,9 @@ class ConsumptionRequestController extends AbstractController
                         $list->setApprovedQuantity($request->request->get("quantity$listId"))
                              ->setRemark($request->request->get("remark$listId"))
                              ->setApprovalStatus(1);
+                        // $consumptionDeliveryList->setProduct($list->getProduct())
+                        //                         ->setUnitOfMeasure($list->getUnitOfMeasure())
+                        //                         ->setCodeNumber($list->codeNumber();
                     }
 
                     if($request->request->get("mySelect$listId") == "Approve all"){
@@ -54,8 +69,8 @@ class ConsumptionRequestController extends AbstractController
                     if($request->request->get("mySelect$listId") == "Reject" and $request->request->get("remark$listId")){
                         $list->setApprovalStatus(2)
                              ->setRemark($request->request->get("remark$listId"));
-                    }   
-                    
+                    }
+
                 }
             }
 
@@ -63,7 +78,7 @@ class ConsumptionRequestController extends AbstractController
             $consumptionRequest->setApprovedBy($user)
                                ->setNote($note)
                                ->setApprovalStatus(1);
-            
+
             $this->addFlash('save', 'The Consumption request has been approved!');
 
         }
@@ -81,7 +96,7 @@ class ConsumptionRequestController extends AbstractController
             $consumptionRequest->setApprovedBy($user)
                                ->setNote($request->request->get('remark'))
                                ->setApprovalStatus(2);
-            
+
             $this->addFlash('save', 'The Consumption request has been  Rejected!');
         }
 
@@ -142,7 +157,7 @@ class ConsumptionRequestController extends AbstractController
             'edit'=>false,
             'edit_list'=>false,
             'id'=>$consumptionRequest->getId(),
-            
+
         ]);
     }
     /**
@@ -172,7 +187,7 @@ class ConsumptionRequestController extends AbstractController
           $form_consumption_list->handleRequest($request);
 
 
-          //edit info on Consumption Request 
+          //edit info on Consumption Request
           if($form_consumption->isSubmitted() && $form_consumption->isValid()){
 
             $this->getDoctrine()->getManager()->flush();
@@ -185,14 +200,14 @@ class ConsumptionRequestController extends AbstractController
               $consumptionRequest = $entityManager->getRepository(ConsumptionRequest::class)->find($request->request->get("parentId"));
               $consumptionRequestList->setConsumptionRequest($consumptionRequest);
               $consumptionRequestList->setAvailable(4);
-          
+
           // $consumptionRequestList->setIssue(4);
               $entityManager->persist($consumptionRequestList);
               $entityManager->flush();
               $this->addFlash("save",'ConsumptionList Added');
               return $this->redirectToRoute('edit_consumption_request_index',['id'=>$consumptionRequest->getId()]);
           }
-          
+
 
           $qb = $consumptionRequestListRepository->findBy(['consumptionRequest'=>$consumptionRequest]);
           return $this->render('consumption_request/newRequest_form.html.twig', [
@@ -205,14 +220,14 @@ class ConsumptionRequestController extends AbstractController
             'consumption_lists'=>$consumptionRequestList,
             'id'=>$consumptionRequest->getId(),
         ]);
-    
+
     }
     /**
      * @Route("/editconsumptionlist/{id}", name="edit_consumption_request_list_index", methods={"GET","POST"})
      */
     public function editConsumptionRequestList(ConsumptionRequestListRepository $consumptionRequestListRepository, Request $request, ConsumptionRequestRepository $consumptionRequestRepository,$id ): Response
-    {  
-      
+    {
+
         $consumptionRequestList = $consumptionRequestListRepository->find($id);
 
         $consumptionRequest = $consumptionRequestList->getConsumptionRequest();
@@ -237,9 +252,9 @@ class ConsumptionRequestController extends AbstractController
             'edit'=>false,
             'edit_list'=>true,
             'consumption_lists'=>$consumptionRequestList,
-            'id'=>$consumptionRequest->getId(),  
+            'id'=>$consumptionRequest->getId(),
         ]);
-        
+
     }
 
       /**
@@ -259,13 +274,13 @@ class ConsumptionRequestController extends AbstractController
      */
     public function deleteChild(Request $request, ConsumptionRequestList $consumptionRequestList): Response
     {
-        
+
         if ($this->isCsrfTokenValid('delete'.$consumptionRequestList->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($consumptionRequestList);
             $entityManager->flush();
         }
-        
+
         return $this->redirect($request->headers->get('referer'));
     }
 

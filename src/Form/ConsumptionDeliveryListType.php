@@ -16,7 +16,16 @@ class ConsumptionDeliveryListType extends AbstractType
             ->add('quantity')
             ->add('unitPrice')
             // ->add('remark')
-            ->add('product', null, ['required'=>true])
+            ->add('product',EntityType::class,[
+                'class' => Product::class,
+                'query_builder' => function (EntityRepository $er){
+                    return $er->createQueryBuilder('p')
+                              ->andWhere('p.type = :val')
+                              ->setParameter('val', 1)
+                              ->orderBy('p.name', 'ASC');
+                },   
+            ]
+            )
             ->add('unitOfMeasure', null, ['required'=>true])
             // ->add('consumptionDelivery')
         ;

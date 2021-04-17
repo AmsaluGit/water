@@ -2,6 +2,8 @@
 
 namespace App\Form;
 
+use App\Entity\Product;
+
 use App\Entity\ConsumptionRequestList;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,7 +17,7 @@ class ConsumptionRequestListType extends AbstractType
         $builder
             ->add('product', EntityType::class,[
                 'class' => Product::class,
-                'query_builder' => function (EntityReposistory $er){
+                'query_builder' => function (EntityRepository $er){
                     return $er->createQueryBuilder('p')
                               ->andWhere('p.type = :val')
                               ->setParameter('val', 1)
