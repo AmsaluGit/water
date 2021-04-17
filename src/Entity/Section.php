@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SectionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +33,16 @@ class Section
      * @ORM\Column(type="text", nullable=true)
      */
     private $description;
+
+    /**
+     * @ORM\OneToMany(targetEntity=StockRequest::class, mappedBy="section")
+     */
+    private $stockRequests;
+
+    public function __construct()
+    {
+        $this->stockRequests = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -69,6 +81,36 @@ class Section
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StockRequest[]
+     */
+    public function getStockRequests(): Collection
+    {
+        return $this->stockRequests;
+    }
+
+    public function addStockRequest(StockRequest $stockRequest): self
+    {
+        if (!$this->stockRequests->contains($stockRequest)) {
+            $this->stockRequests[] = $stockRequest;
+            $stockRequest->setSection($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStockRequest(StockRequest $stockRequest): self
+    {
+        if ($this->stockRequests->removeElement($stockRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($stockRequest->getSection() === $this) {
+                $stockRequest->setSection(null);
+            }
+        }
 
         return $this;
     }

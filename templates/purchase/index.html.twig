@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Permission index
+{% block title %}Purchase index
 {% endblock %}
 {% block maintitle %}
-	Permission
+	Purchase List
 {% endblock %}
 
 
 {% block breadcrumb %}
 
-	<li class="breadcrumb-item active">Goods Delivery</li>
+	<li class="breadcrumb-item active">Purchase Requisition</li>
 {% endblock %}
 {% block body %}
 	<div class="row">
@@ -20,7 +20,7 @@
 					<div class="col-md-12">
 						<div class="card card">
 							<div class="card-header">
-								<h3 class="card-title">Goods Delivery</h3>
+								<h3 class="card-title">Purchase Requisition</h3>
 								<div class="card-tools">
 									<form class="form-inline ml-3" >
 										<div class="input-group ">
@@ -35,8 +35,8 @@
 								</div>
 							</div>
 							<div class="card-body">
-								<a href="{{ path('new_sell_index') }}" class="btn btn-success btn-sm" style = "float:;">
-									New Sell
+								<a href="{{ path('new_purchase_index') }}" class="btn btn-success btn-sm" style = "float:;">
+									New Request
 								</a>
 								<table class="table table-hover">
 									<thead>
@@ -44,60 +44,62 @@
 											<th style="width: 10px">
 												#
 											</th>
-											<th>{{ knp_pagination_sortable(sells, 'Reciever', 'u.id') }}</th>
-											<th>{{ knp_pagination_sortable(sells, 'Place Of Delivery', 'c.placeOfDelivery') }}</th> 
-                                            {# <th>Reciever</th> #}
-                                            {# <th>place of delivery</th> #}
-                                            <th>driver</th>
-											<th>Status</th>
-											
-											<th>approved by</th>
-											<th>view </th>
-											<th>Action</th>
+											{# <th>{{ knp_pagination_sortable(sells, 'Reciever', 'u.id') }}</th>
+											<th>{{ knp_pagination_sortable(sells, 'Place Of Delivery', 'c.placeOfDelivery') }}</th>  #}
+                                            <th>requester</th> 
+                                            <th>department</th>
+										    <th>Date of Request</th>
+											<th>section</th>
+											<th>status</th>
+
+                                            <th>approved_by</th>
+											<th>Action</th> 
                                             
 											
 										</tr>
 									</thead>
 									<tbody>
 										{% set i = 1 %}
-										{% for sell in sells %}
+										{% for stockRequest in stockRequest %}
 											<tr>
 												<td style="width: 10px">
 													{{ i }}
 													{% set i = i+1 %}
 												</td>
-												<td>{{ sell.receivedBy }}</td>
-												<td>{{ sell.placeOfDelivery }}</td>
-												<td>{{ sell.driver }}</td>
+												<td>{{ stockRequest.requestedBy }}</td> 
+												<td>{{ stockRequest.requestingDept}}</td>
+												<td>{{ stockRequest.date }}</td> 
+                                                <td>{{ stockRequest.section }}</td>
 												<td>
-													{% if sell.approvalStatus == 1 %}
-													<i class="fa fa-check" aria-hidden="true"></i>
+													{% if stockRequest.approvalStatus == 1 %}
+													<i style="color:green" class="fa fa-check" aria-hidden="true"></i>
 													
-													{% elseif sell.approvalStatus == 2 %}
-													<i class="fa fa-times"></i>
+													{% elseif stockRequest.approvalStatus == 2 %}
+													<i style="color:red" class="fa fa-times"></i>
 													{% else %}
 													<i class="fa fa-spinner fa-spin"></i>
 													{% endif %}
-												</td>
-                                                <td>{{ sell.approvedBy }}</td>
+												</td> 
+												
+                                                <td>{{ stockRequest.approvedBy}}</td>
 												<td>
-												 	<form class="d-inline" method="post" action="{{ path('goods_delivery_index') }}">
-													 	<input type="hidden" name="view" value="{{sell.id}}">
-														<button title="view" type = "button" class="btn btn-link " data-target="#demo{{ sell.id }}" data-toggle="collapse">
+												 	<form class="d-inline" method="post" action="{{ path('purchase_index') }}">
+													 	<input type="hidden" name="view" value="{{stockRequest.id}}">
+														<button title="view" type = "button" class="btn btn-link " data-target="#demo{{ stockRequest.id }}" data-toggle="collapse">
 															View
 														</button>
 													</form>
                                                 </td>												
 												<td>
-
-													<form class="d-inline" method="post" action="{{ path('edit_sells_index',{'id' : sell.id}) }}">
-														<input type="hidden" name="edit" value="{{sell.id}}">
+                                                {% if stockRequest.approvalStatus == null%}
+													<form class="d-inline" method="post" action="{{ path('edit_stockRequest_index',{'id' : stockRequest.id}) }}">
+														<input type="hidden" name="edit" value="{{stockRequest.id}}">
 														<button  class="btn btn-info btn-sm" title="Edit">
 															<i class="fa fa-edit"></i>
 														</button>
 													</form>
-													<button href="#modalCenter{{sell.id}}" role="button" class="btn btn-danger btn-sm" data-toggle="modal"><i class="fa fa-trash"></i></button>
-													<div id="modalCenter{{sell.id}}" class="modal fade" tabindex="-1">
+													<button href="#modalCenter{{stockRequest.id}}" role="button" class="btn btn-danger btn-sm" data-toggle="modal"><i class="fa fa-trash"></i></button>
+													<div id="modalCenter{{stockRequest.id}}" class="modal fade" tabindex="-1">
 														<div class="modal-dialog modal-dialog-centered">
 															<div class="modal-content">
 																<div class="modal-header">
@@ -108,10 +110,10 @@
 																	<p>Are you sure you want to delete this entry?</p>
 																</div>
 																<div class="modal-footer">
-																	<form class="d-inline" method="post" action="{{ path('goods_delivery_delete', {'id': sell.id}) }}">
+																	<form class="d-inline" method="post" action="{{ path('purchase_delete', {'id': stockRequest.id}) }}">
 																		<input type="hidden" name="_method" value="DELETE">
 																		<input
-																		type="hidden" name="_token" value="{{ csrf_token('delete' ~ sell.id) }}">
+																		type="hidden" name="_token" value="{{ csrf_token('delete' ~ stockRequest.id) }}">
 																		{#  <button type="button" data-type="confirm" class="btn btn-danger js-sweetalert" title="Delete">#}
 																		<button class="btn btn-danger" title="Delete">
 																			Delete
@@ -123,7 +125,7 @@
 															</div>
 														</div>
 													</div>
-													
+													{% endif %}
 												</td>
 
 												 													     							
@@ -132,10 +134,27 @@
 											<tr>
 												<td colspan="8">
 													<div class = "col-md-12" >
-														<div class="card collapse" id = "demo{{ sell.id }}" >
+														<div class="card collapse" id = "demo{{ stockRequest.id }}" >
 															<div class="card-header">
 															<h4 class="card-title">Items List</h4>
-															</div>
+														<div class="card-tools">
+
+													{% if not stockRequest.approvalStatus == null%}	
+
+														 {# <form class="d-inline" method="post" action="{{path('download_purchase_index',{'id':stockRequest.id})}}"> #}
+														 {# <input type="hidden" name="edit" value="{{stockRequest.id}}"> #}
+
+														 <a target=" blank " href= "{{path('download_purchase_index',{'id':stockRequest.id})}}" class="btn btn-success btn-sm" title="Download"> Download  </a>
+														 </form>
+														
+													{% endif %}
+														 </div>
+														
+														
+														</div>	
+
+								    				
+											
 															<div class="card-body">
 																<table class="table" >
 																
@@ -145,9 +164,9 @@
 																			{# <th>{{ knp_pagination_sortable(sells, 'Name', 'p.name') }}</th>
 																			<th>{{ knp_pagination_sortable(sells, 'Code', 'p.code') }}</th> #}
 																			<th>Product</th>
-																			<th>Spec</th>
+																			<th>Specification</th>
+																			<th>Unit</th>
 																			<th>quantity</th>
-																			<th></th>
 																			{# <th>Approved Quantity</th>
 																			<th>Remark</th> #}
 																			{# <th>weight</th>
@@ -159,7 +178,7 @@
 																	<tbody>
 																	
 																		{% set j = 1 %}{% set k = 0 %}
-																		{% for item in sell.sellsLists %}								
+																		{% for item in stockRequest.stockRequestLists %}								
 																		
 																			{% set k = 1 %}
 																			<tr>
@@ -168,12 +187,13 @@
 																				{% set j = j+1 %}
 																				</td>
 																				<td>{{ item.product }}</td>
-																				<td>{{ item.specification }}</td>
+																				<td>{{ item.spcicification }}</td>
+																				<td>{{ item.unitOfMeasure }}</td>
 																				<td>{{ item.quantity }}</td>
 																				{# <td>{{ item.weight }}</td>
 																				<td>{{ item.unitPrice }}</td>
 																				<td>{{ item.quantity * item.unitprice }}</td> #}
-																				{% if not sell.approvalStatus %}
+																				{% if not stockRequest.approvalStatus %}
 																				<td>
 																					<form id = "approval" method="post">
 																					
@@ -250,7 +270,7 @@
 																			</tr>
 											
 																			{% endfor %}
-																			{% if k == 1 and not sell.approvalStatus %}
+																			{% if k == 1 and not stockRequest.approvalStatus %}
 																			{# {% if not sell.approvalStatus %} #}
 																			<tr>
 																				<td colspan="8">
@@ -269,9 +289,9 @@
 																
 																							<div class="d-inline col-auto" style="float:right;">
 																								{# <input type="hidden" name="approve" value="{{sell.id}}"> #}
-																								<button class="btn btn-success mb-2" value="{{sell.id}}" name="approve" title="approve">Approve</button>													
+																								<button class="btn btn-success mb-2" value="{{stockRequest.id}}" name="approve" title="approve">Approve</button>													
 																								{# <input type="hidden" name="reject"  value="{{sell.id}}"> #}
-																								<button class="btn btn-danger mb-2" name="reject" value="{{sell.id}}" title="Reject">Reject All</button>
+																								<button class="btn btn-danger mb-2" name="reject" value="{{stockRequest.id}}" title="Reject">Reject All</button>
 																							</div>
 																						</div>
 																					</form>
@@ -300,8 +320,8 @@
 									</tbody>
 								</table>
 								<br>
-								{% do sells.setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') %} 
-								<div class="float-right">{{ knp_pagination_render(sells) }}</div>
+								{% do stockRequest.setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') %} 
+								<div class="float-right">{{ knp_pagination_render(stockRequest) }}</div>
 
 
 							</div>
