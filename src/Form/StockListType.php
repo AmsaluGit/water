@@ -15,7 +15,15 @@ class StockListType extends AbstractType
             ->add('quantity')
             ->add('unitPrice')
             ->add('codeNumber')
-            ->add('product')
+            ->add('product',EntityType::class,[
+                'class' => Product::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                              ->andWhere('u.type = :val')
+                              ->setParameter('val', 1)
+                              ;
+                },
+            ])
             ->add('unitOfMeasure')
             // ->add('stock')
         ;
