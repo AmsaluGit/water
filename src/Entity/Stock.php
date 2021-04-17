@@ -90,7 +90,7 @@ class Stock
     private $receivedBy;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Customer::class)
+     * @ORM\ManyToOne(targetEntity=User::class)
      */
     private $deliveredBy;
 
@@ -302,12 +302,12 @@ class Stock
         return $this;
     }
 
-    public function getDeliveredBy(): ?Customer
+    public function getDeliveredBy(): ?User
     {
         return $this->deliveredBy;
     }
 
-    public function setDeliveredBy(?Customer $deliveredBy): self
+    public function setDeliveredBy(?User $deliveredBy): self
     {
         $this->deliveredBy = $deliveredBy;
 

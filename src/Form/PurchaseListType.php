@@ -2,28 +2,29 @@
 
 namespace App\Form;
 
-use App\Entity\Stock;
+use App\Entity\StockRequestList;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class StockType extends AbstractType
+class PurchaseListType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            // ->add('quantity')
-            // ->add('totalPrice')
-            // ->add('product')
-            ->add('store')
-            
+        ->add('product')
+        ->add('spcicification')
+        ->add('unitOfMeasure')
+        ->add('quantity')
+        // ->add('status')
+        
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Stock::class,
+            'data_class' => StockRequestList::class,
         ]);
     }
 }
