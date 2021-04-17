@@ -1,0 +1,115 @@
+<html>
+    <head>
+        <style>
+            body{
+                background-color: yellow;
+            }
+        #table1,#th,#td{
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding-bottom: 10px;
+            padding-top: 10px;
+            text-align: left;
+            
+        }
+       
+    
+           .k,#th1,#td1{
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding-bottom: 10px;
+            padding-top: 10px;
+            text-align:center;
+            
+           }
+           .g{
+            border: 1px solid black;
+            border-collapse: collapse;
+            
+           }
+           @media print {
+            #printPageButton {
+            display: none;
+            }
+         } 
+         @media print {
+             @page { margin: 0; }
+            body { margin: 1.6cm; }
+        }
+        </style> 
+    </head>
+    <body>
+    <button id="printPageButton" onClick="window.print();" style = "float:right;" >Print</button>
+         <p style="padding-left: 200px"><b>የእቃ ማስረከቢያ ሰነድ</b><span style="padding-left: 100px">ቀን </span></p> 
+        <p ><b style="text-decoration: underline;padding-left: 200px">Goods Delivery Order</b><span style="padding-left: 90px">Date  {{ date }}</span></p>
+        <table class="g"; width=65%>
+            <tr>
+                <th style="width: 40%"id="th" >የርክክብ ቦታ<br>Place of delivery</th>
+                <td id="td">{{sell.placeOfDelivery}}</td>
+            </tr>
+        </table>
+        <br>
+         <table class="g"; width=75%>
+            <tr>
+                <th style="width: 30%"id="th" >የተረካቢ ስም<br>Received</th>
+                <td style="width: 24%"id="td">{{ sell.receivedBy }}</td>
+                <td style="width: 23%"id="td">አድራሻ</td>
+                <td style="width: 23%"id="td"></td>
+            </tr>
+        </table>
+          <br>
+         <table class="g"; width=80%>
+            <tr>
+                <th style="width: 40%"id="th" >የክፍያ የተፈጠመበት ሰነድ አይነትና<br>ቁጥር<br>Payment Voucher No</th>
+                <td id="td">{{ sell.paymentVoucherNumber }}</td>
+            </tr>
+        </table>
+         <br>
+        <table class="g"; width=100%>
+            <tr>
+                <th style="width: 10%" id="th" >የመኪና ሰሌዳ ቁጥር</th>
+                <td style="width: 11%" id="td">{{ sell.plateNumber }}</td>
+                <td style="width: 33%" id="td">ተሳቢ ሰሌዳ ቁጥር {{ sell.trailNumber }}</td>
+                <td style="width: 19%" id="td">የሹፌር ስም {{ sell.driver }}</td>
+                <td style="width: 11%" id="td">የሹፈሩ ስልክ ቁጥር</td>
+                <td  id="td">{{ sell.phone }}</td>
+            </tr>
+        </table>
+        <br>
+        <table width=100% class="k">
+             <tr>
+                <th style="text-align:center" id="th1">ተቁ</th>
+                <th style="text-align:center" id="th1">የሸቀጥ አይነት</th>
+                <th  style="text-align:center" id="th1">መስፈርት</th>
+                <th style="text-align:center" id="th1">ብዛት</th>
+                <th style="text-align:center" colspan="2" id="th1">የተጣራ ክብደት</th>
+                <th style="text-align:center" colspan="2" id="th1">የአንዱ ዋጋ</th>
+                <th  style="text-align:center" colspan="2" id="th1">ጠቅላላ ዋጋ</th>
+            </tr>
+            
+            {% set j = 1 %}
+			{% for item in sellslist %}
+            <tr>
+                <td id="td1">{{j}} {% set j = j+1 %}</td>
+                 <td id="td1">{{ item.product }}</td>
+                  <td id="td1">{{ item.specification }}</td>
+                   <td id="td1">{{ item.approvedQuantity }}</td>
+                    <td id="td1" style="width: 8%">{{ item.weight }}</td>
+                      <td id="td1" style="width:3%"> </td>
+                     <td id="td1" style="width: 8%">{{ item.unitPrice }}</td>
+                      <td id="td1" style="width:3%"> </td>
+                      <td id="td1" style="width: 8%">{{ item.approvedQuantity * item.unitprice }}</td>
+                       <td id="td1" style="width: 3%"></td>
+            </tr>
+            {% endfor %}
+             
+        </table>
+        <p>ማስታዎሻ:</p>
+         <p><span style="text-decoration: underline">ያዘጋጀዉ</span> <span style="padding-left: 19%;text-decoration: underline">ተረካቢ  </span><span style="padding-left: 22%;text-decoration: underline"> አስረካቢ</span><span style="padding-left: 23%;text-decoration: underline">ያጠደቀ</span></p>
+         <p>ስም <span style="padding-left: 22%">ስም  {{ sell.receivedBy }}</span><span style="padding-left: 24%">ስም  {{ sell.deliveredBy }}</span> </span><span style="padding-left: 25%">ስም  {{ sell.approvedBy }}</span></p>
+         <p>ፊርማ<span style="padding-left: 21%">ፊርማ</span><span style="padding-left: 22%">ፊርማ</span> </span><span style="padding-left: 25%">ፊርማ </span></p>
+        <p><span style="text-decoration: underline"><b>ስርጭት</b>፡</span>1ኛ ኦርጅናል ነጭ ለሂሳብ ክፍል 2ተኛ ኮፒ ቢጫ ለአስረካቢ 3ተኛ ኮፒ ቀይ ለተረካቢ 4ተኛ ኮፒ ሰበር መዉጫ 5ተኛ ኮፒ ከጥራዝ ጋር ቀሪ</p>
+     
+     
+     </body>
+</html>

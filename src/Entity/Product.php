@@ -88,6 +88,11 @@ class Product
      */
     private $consumptionBalances;
 
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $type;
+
     public function __construct()
     {
    
@@ -385,6 +390,18 @@ class Product
                 $consumptionBalance->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getType(): ?int
+    {
+        return $this->type;
+    }
+
+    public function setType(?int $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }
