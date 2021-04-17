@@ -48,6 +48,7 @@
 											<th>{{ knp_pagination_sortable(sells, 'Place Of Delivery', 'c.placeOfDelivery') }}</th>  #}
                                             <th>requester</th> 
                                             <th>department</th>
+											<th>date of request</th>
 											<th>section</th>
 											<th>status</th>
 
@@ -67,7 +68,7 @@
 												</td>
 												<td>{{ stockRequest.requestedBy }}</td> 
 												<td>{{ stockRequest.requestingDept}}</td>
-												{# <td>{{ stockRequestest }}</td> #}
+												<td>{{ stockRequest.dateOfRequest | date('y-m-d  H:i:s') }}</td>
                                                 <td>{{ stockRequest.section }}</td>
 												<td>
 													{% if stockRequest.approvalStatus == 1 %}

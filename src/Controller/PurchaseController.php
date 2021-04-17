@@ -148,7 +148,8 @@ class PurchaseController extends AbstractController
         $form_stockRequest = $this->createForm(PurchaseType::class, $stockRequest);
         $form_stockRequest ->handleRequest($request);
         $user = $this->getUser();
-        $stockRequest ->setRequestedBy($user);
+        $stockRequest ->setRequestedBy($user)
+                      ->setDateOfRequest(new \DateTime());
 
         if ($form_stockRequest ->isSubmitted() && $form_stockRequest ->isValid()) {    
                
