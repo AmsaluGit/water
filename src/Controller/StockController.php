@@ -240,19 +240,19 @@ class StockController extends AbstractController
     }
 
     /**
-     * @Route("/stockitem/{id}", name="stock_list_delete", methods={"DELETE"})
+     * @Route("/list/{id}", name="stock_list_delete", methods={"DELETE"})
      */
-    public function deleteList(Request $request, StockList $stock): Response
+    public function deleteList(Request $request, StockList $stockList): Response
     {
-        
-        if ($this->isCsrfTokenValid('delete'.$stock->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$stockList->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($stock);
+            $entityManager->remove($stockList);
             $entityManager->flush();
         }
-        
+
         return $this->redirect($request->headers->get('referer'));
     }
+
 
      /**
      * @Route("/download/{id}", name="download_stock_index", methods={"POST","GET"})

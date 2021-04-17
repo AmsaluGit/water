@@ -10,6 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Repository\CustomerRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+
 class SellsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)

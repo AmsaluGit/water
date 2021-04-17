@@ -100,7 +100,7 @@ class Stock
     private $approvedBy;
 
     /**
-     * @ORM\OneToMany(targetEntity=StockList::class, mappedBy="stock")
+     * @ORM\OneToMany(targetEntity=StockList::class, mappedBy="stock", cascade={"remove"})
      */
     private $stockLists;
 
