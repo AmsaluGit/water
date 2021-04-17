@@ -39,6 +39,15 @@ class Product
 
   
 
+  
+
+    /**
+     * @ORM\OneToMany(targetEntity=ProductDelivery::class, mappedBy="product")
+     */
+    private $productDeliveries;
+
+  
+
     /**
      * @ORM\OneToMany(targetEntity=StockList::class, mappedBy="product")
      */
@@ -84,8 +93,6 @@ class Product
      */
     private $type;
 
- 
-
     public function __construct()
     {
    
@@ -98,7 +105,6 @@ class Product
         $this->sellsLists = new ArrayCollection();
         $this->stockBalances = new ArrayCollection();
         $this->consumptionBalances = new ArrayCollection();
-        $this->ProductDelivaries = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -382,36 +388,6 @@ class Product
             // set the owning side to null (unless already changed)
             if ($consumptionBalance->getProduct() === $this) {
                 $consumptionBalance->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|ProductDelivery[]
-     */
-    public function getProductDelivaries(): Collection
-    {
-        return $this->ProductDelivaries;
-    }
-
-    public function addProductDelivary(ProductDelivery $productDelivary): self
-    {
-        if (!$this->ProductDelivaries->contains($productDelivary)) {
-            $this->ProductDelivaries[] = $productDelivary;
-            $productDelivary->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProductDelivary(ProductDelivery $productDelivary): self
-    {
-        if ($this->ProductDelivaries->removeElement($productDelivary)) {
-            // set the owning side to null (unless already changed)
-            if ($productDelivary->getProduct() === $this) {
-                $productDelivary->setProduct(null);
             }
         }
 

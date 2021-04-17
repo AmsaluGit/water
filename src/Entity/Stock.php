@@ -90,7 +90,7 @@ class Stock
     private $receivedBy;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\ManyToOne(targetEntity=Customer::class)
      */
     private $deliveredBy;
 
@@ -100,7 +100,7 @@ class Stock
     private $approvedBy;
 
     /**
-     * @ORM\OneToMany(targetEntity=StockList::class, mappedBy="stock")
+     * @ORM\OneToMany(targetEntity=StockList::class, mappedBy="stock", cascade={"remove"})
      */
     private $stockLists;
 
@@ -302,12 +302,12 @@ class Stock
         return $this;
     }
 
-    public function getDeliveredBy(): ?User
+    public function getDeliveredBy(): ?Customer
     {
         return $this->deliveredBy;
     }
 
-    public function setDeliveredBy(?User $deliveredBy): self
+    public function setDeliveredBy(?Customer $deliveredBy): self
     {
         $this->deliveredBy = $deliveredBy;
 

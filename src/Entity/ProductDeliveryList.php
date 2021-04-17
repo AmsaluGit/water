@@ -47,21 +47,6 @@ class ProductDeliveryList
      */
     private $productDelivery;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $ApprovedQuantity;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $Remark;
-
-    /**
-     * @ORM\Column(type="smallint", nullable=true)
-     */
-    private $ApprovalStatus;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -135,47 +120,6 @@ class ProductDeliveryList
     public function setProductDelivery(?ProductDelivery $productDelivery): self
     {
         $this->productDelivery = $productDelivery;
-
-        return $this;
-    }
-    public function __toString()
-    {
-        return $this->typeOfDocAndNum;
-        // return $this->getProductDelivery()->getTypeOfDocAndNum();
-    }
-
-    public function getApprovedQuantity(): ?int
-    {
-        return $this->ApprovedQuantity;
-    }
-
-    public function setApprovedQuantity(?int $ApprovedQuantity): self
-    {
-        $this->ApprovedQuantity = $ApprovedQuantity;
-
-        return $this;
-    }
-
-    public function getRemark(): ?string
-    {
-        return $this->Remark;
-    }
-
-    public function setRemark(?string $Remark): self
-    {
-        $this->Remark = $Remark;
-
-        return $this;
-    }
-
-    public function getApprovalStatus(): ?int
-    {
-        return $this->ApprovalStatus;
-    }
-
-    public function setApprovalStatus(?int $ApprovalStatus): self
-    {
-        $this->ApprovalStatus = $ApprovalStatus;
 
         return $this;
     }

@@ -19,34 +19,32 @@ class UnitOfMeasureRepository extends ServiceEntityRepository
         parent::__construct($registry, UnitOfMeasure::class);
     }
 
-    public function findUnitOfMeasure($search=null)
+    // /**
+    //  * @return UnitOfMeasure[] Returns an array of UnitOfMeasure objects
+    //  */
+    /*
+    public function findByExampleField($value)
     {
-        $qb=$this->createQueryBuilder('p');
-
-        if($search)
-            $qb->andWhere("p.name  LIKE '%".$search."%'");
-            return 
-            $qb->orderBy('p.id', 'ASC')
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.exampleField = :val')
+            ->setParameter('val', $value)
+            ->orderBy('u.id', 'ASC')
+            ->setMaxResults(10)
             ->getQuery()
-            
+            ->getResult()
         ;
     }
-    public function findForUserGroup($usergroup=null)
+    */
+
+    /*
+    public function findOneBySomeField($value): ?UnitOfMeasure
     {
-        $qb=$this->createQueryBuilder('p');
-        
-        if (sizeof($usergroup)) {
-
-            $qb->andWhere('p.id not in ( :usergroup )')
-                ->setParameter('usergroup', $usergroup);
-        }
-       
-
-             
-            return $qb->orderBy('p.id', 'ASC')
-            ->getQuery()->getResult()
-     
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.exampleField = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
         ;
-      
     }
+    */
 }

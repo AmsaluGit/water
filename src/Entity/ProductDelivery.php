@@ -66,25 +66,9 @@ class ProductDelivery
     private $approvedBy;
 
     /**
-     * @ORM\OneToMany(targetEntity=ProductDeliveryList::class, mappedBy="productDelivery",cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=ProductDeliveryList::class, mappedBy="productDelivery")
      */
     private $productDeliveryLists;
-
-    /**
-     * @ORM\Column(type="smallint", nullable=true)
-     */
-    private $ApprovalStatus;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $Note;
-
-    /**
-     * @ORM\Column(type="date")
-     */
-    private $deliveryDate;
-
 
     public function __construct()
     {
@@ -235,59 +219,4 @@ class ProductDelivery
 
         return $this;
     }
-    public function __toString()
-    {
-        return $this->typeOfDocAndNum;
-    }
-
-    public function getApprovalStatus(): ?int
-    {
-        return $this->ApprovalStatus;
-    }
-
-    public function setApprovalStatus(?int $ApprovalStatus): self
-    {
-        $this->ApprovalStatus = $ApprovalStatus;
-
-        return $this;
-    }
-
-    public function getNote(): ?string
-    {
-        return $this->Note;
-    }
-
-    public function setNote(?string $Note): self
-    {
-        $this->Note = $Note;
-
-        return $this;
-    }
-
-    public function getProduct(): ?Product
-    {
-        return $this->product;
-    }
-
-    public function setProduct(?Product $product): self
-    {
-        $this->product = $product;
-
-        return $this;
-    }
-
-    public function getDeliveryDate(): ?\DateTimeInterface
-    {
-        return $this->deliveryDate;
-    }
-
-    public function setDeliveryDate(\DateTimeInterface $deliveryDate): self
-    {
-        $this->deliveryDate = $deliveryDate;
-
-        return $this;
-    }
-    
-   
-
 }

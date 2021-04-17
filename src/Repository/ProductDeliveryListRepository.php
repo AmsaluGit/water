@@ -18,43 +18,7 @@ class ProductDeliveryListRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ProductDeliveryList::class);
     }
-    
 
-    public function findProductDelivery($search = null)
-    {
-        $qb=$this->createQueryBuilder('p')
-                 ->select('p , c')
-                 ->join('p.productDelivery','c')
-                 ->where('p.id = val')
-                 ->setParameter('val',$search)
-                 ;
-                 
-
-        if($search)
-            $qb->andWhere("c = val ")
-                ->setParameter("val",$search)
-              // ->andwhere("c.name  LIKE '%".$search2."%'")
-               ;
-
-               return 
-            $qb->orderBy('p.id', 'ASC')
-               ->getQuery() 
-            
-        ;
-    }
-        
-    public function findProductDeliveryList($value)
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.product = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            // ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-  
     // /**
     //  * @return ProductDeliveryList[] Returns an array of ProductDeliveryList objects
     //  */
@@ -83,5 +47,4 @@ class ProductDeliveryListRepository extends ServiceEntityRepository
         ;
     }
     */
-    
 }
