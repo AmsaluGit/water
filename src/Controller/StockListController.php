@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class StockListController extends AbstractController
 {
     /**
-     * @Route("/", name="stock_list_index", methods={"GET"})
+     * @Route("/", name="stock_listindex", methods={"GET"})
      */
     public function index(StockListRepository $stockListRepository): Response
     {

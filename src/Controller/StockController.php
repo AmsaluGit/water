@@ -28,77 +28,8 @@ class StockController extends AbstractController
      */
     public function index(StockRepository $stockRepository, StockListRepository $stockListRepository, SettingRepository $settingRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        // $stockApprovalLevel = $settingRepository->findOneBy(['code'=>'stock_approval_level'])->getValue();
-        // if($request->request->get('edit')){
-        //     $id=$request->request->get('edit');
-        //     $stock=$stockRepository->findOneBy(['id'=>$id]);
-        //     $form = $this->createForm(StockListType::class, $stock);
-        //     $form->handleRequest($request);
     
-        //     if ($form->isSubmitted() && $form->isValid()) {
-        //         $this->getDoctrine()->getManager()->flush();
-        //         $this->addFlash("save",'saved');
-        //         return $this->redirectToRoute('stock_index');
-        //     }
-
-        //     $queryBuilder=$stockRepository->findstock($request->query->get('search'));
-        //     $data=$paginator->paginate(
-        //         $queryBuilder,
-        //         $request->query->getInt('page',1),
-        //         18
-        //     );
-        //     return $this->render('stock/index.html.twig', [
-        //         'stocks' => $data,
-        //         'form' => $form->createView(),
-        //         'edit'=>$id,
-        //         'applevel'=>$stockApprovalLevel
-        //     ]);
-
-        // }
-
-        // $stock = new StockList();
-        // $form = $this->createForm(StockListType::class, $stock);
-        // $form->handleRequest($request);
-        // /*$stock ->setDatePurchased(new \DateTime());
-        // $stock->setRegisteredBy($this->getUser());*/
-        
-
-        // if ($form->isSubmitted() && $form->isValid()) {
-            
-        //     $entityManager = $this->getDoctrine()->getManager();
-        //     $entityManager->persist($stock);
-        //     $entityManager->flush();
-
-        //     return $this->redirectToRoute('stock_index');
-        // }
-
-        // $search = $request->query->get('search');
-        
-        // $queryBuilder=$stockRepository->findStock($search);
-        // $data=$paginator->paginate(
-        //     $queryBuilder,
-        //     $request->query->getInt('page',1),
-        //     18
-        // );
-
-        // return $this->render('stock/index.html.twig', [
-        //     'stocks' => $data,
-        //     'form' => $form->createView(),
-        //     'edit'=>false,
-        //     'applevel'=>$stockApprovalLevel
-        // ]);
-
         $stockApprovalLevel = $settingRepository->findOneBy(['code'=>'stock_approval_level'])->getValue();
-        // dd($request->request->all());
-        // $sellsList = $sellsListRepository->find($request->request->get('child_id'));
-        // $form_sells_list = $this->createForm(SellsListType::class, $sellsList);
-        // $form_sells_list->handleRequest($request);
-        // if ($form_sells_list->isSubmitted() && $form_sells_list->isValid()) {
-        //     $this->getDoctrine()->getManager()->flush();
-        //     $this->addFlash("save",'saved');
-        //     // return $this->redirectToRoute('goods_delivery_index');
-        // }
-
         
         if($request->request->get('approve')){
 
@@ -119,9 +50,7 @@ class StockController extends AbstractController
                          ->setRemark($request->request->get("remark$listId"))
                          ->setApprovalStatus(1);
                 }
-                // if($request->request->get("remark$listId")){
-                //     $list->setRemark($request->request->get("remark$listId"));
-                // }
+                
                 if($request->request->get("mySelect$listId") == "Approve all"){
                     $list->setApprovedQuantity($list->getQuantity())
                          ->setApprovalStatus(1);
@@ -143,7 +72,7 @@ class StockController extends AbstractController
             $this->addFlash('save', 'The Stock has been rejected!');
             }else{
                 $stock->setApprovedBy($user)
-                //   ->setNote($note)
+                   ->setNote($note)
                   ->setApprovalStatus(1);
             $this->addFlash('save', 'The Stock has been approved!');
             }
@@ -158,15 +87,7 @@ class StockController extends AbstractController
 
                 $listId = $list->getId();
                 $list->setApprovalStatus(2);
-                // if($request->request->get("quantity.$listId")){
-                //     $list->setApprovedQuantity($request->request->get("quantity.$listId"));
-                // }
-                // if($request->request->get("remark.$listId")){
-                //     $list->setRemark($request->request->get("remark.$listId"));
-                // }
-                // if($request->request->get("mySelect$listId") == "Approve all"){
-                //     $list->setApprovedQuantity($list->getQuantity());
-                // }
+                
                 
             }
             $stock->setApprovedBy($user)
@@ -180,12 +101,6 @@ class StockController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
     
-        // $queryBuilder=$sellsRepository->findAll();
-        // $data=$paginator->paginate(
-        //     $queryBuilder,
-        //     $request->query->getInt('page',1),
-        //     10
-        // );
       
         $queryBuilder=$stockRepository->findStock($request->query->get('search'));
                  $data=$paginator->paginate(
@@ -210,77 +125,7 @@ class StockController extends AbstractController
     public function newStock(StockApprovalRepository $stockApprovalRepository,settingRepository $settingRepository, StockRepository $stockRepository, StockListRepository $stockListRepository, Request $request): Response
     {  
 
-    //     $stockApprovalLevel = $settingRepository->findOneBy(['id'=>2])->getStockApprovalLevel();
-    //     $id=$request->request->get('more');
-    //     $stock=$stockRepository->findOneBy(['id'=>$id]);
-    //     $user = $this-> getUser();
-    //     $stockApproval = new StockApproval();
-    //     $stockApproval->setApprovalLevel(1)
-    //                   ->setStock($stock)
-    //                   ->setApprovedBy($user);
-    //     $form = $this->createForm(StockApprovalType::class, $stockApproval);
-    //     $form->handleRequest($request);
-
-        
-    //     if ($form->isSubmitted() && $form->isValid()) {
-
-    //         if($stock->getQuantity() < $form->getData()->getApprovedQuantity() ){
-    //             $this->addFlash('warning', 'The request cannot be executed because the approved quantity greater than the requested!');
-    //             //
-    //             return $this->render('product_details/index.html.twig', [
-    //                 'stock' => $stock,
-                    
-    //                 'form'=> $form->createView(),
-    //             ]);      
-    //         }else{
-    //         if($request->request->get('approve')){
-    //             if(!$form->getData()->getApprovedQuantity()){
-
-    //             $this->addFlash('error', 'Approved quantity is required!');
-    //             return $this->render('product_details/index.html.twig', [
-    //                 'stock' => $stock,
-                    
-    //                 'form'=> $form->createView(),
-    //             ]);    
-
-    //             }
-    //             if($stockApprovalLevel-1 == count($stock->getStockApprovals())){
-    //                 $stock->setApprovalStatus(1)
-    //                       ->setApprovedQuantity($form->getData()->getApprovedQuantity());
-    //                 $entityManager = $this->getDoctrine()->getManager();
-    //                 $entityManager->persist($stock);
-    //                 $entityManager->flush();
-    //             }
-    //             $stockApproval->setDateOfApproval(new \DateTime())
-    //                           ->setApprovalResponse(1);
-    //             $this->addFlash('success', 'The request has been sucessfuly approved!');
-    //         }
-    //         elseif($request->request->get('reject')){
-    //             $stockApproval->setApprovalResponse(2)
-    //                           ->setDateOfApproval(new \DateTime());
-    //             $stock->setApprovalStatus(2);
-    //             $entityManager = $this->getDoctrine()->getManager();
-    //             $entityManager->persist($stock);
-    //             $entityManager->flush();
-    //             $this->addFlash('error', 'The request has been successfully Rejected!');
-    //         }
-    //         $entityManager = $this->getDoctrine()->getManager();
-    //             $entityManager->persist($stockApproval);
-    //             $entityManager->flush();
-    //             //$alertify->congrat('Congratulation !');
-    //             $this->get('session')->getFlashBag()->set("confirm", array('engine' => 'modal', 'title' => "Wow", 'button_class' => "btn btn-primary btn-large", "body"=> "<div>Some info</div>"));
-
-    //            return $this->redirectToRoute('stock_index');      
-    //     }
-
-    // }
-    //     return $this->render('product_details/index.html.twig', [
-    //         'stock' => $stock,
-            
-    //         'form'=> $form->createView(),
-    //     ]);
-
-
+    
     $entityManager = $this->getDoctrine()->getManager();
        
         $stock = new Stock();
@@ -391,7 +236,22 @@ class StockController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('stock_index');
+        return $this->redirect($request->headers->get('referer'));
+    }
+
+    /**
+     * @Route("/stockitem/{id}", name="stock_list_delete", methods={"DELETE"})
+     */
+    public function deleteList(Request $request, StockList $stock): Response
+    {
+        
+        if ($this->isCsrfTokenValid('delete'.$stock->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($stock);
+            $entityManager->flush();
+        }
+        
+        return $this->redirect($request->headers->get('referer'));
     }
 
      /**
