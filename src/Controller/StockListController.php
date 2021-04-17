@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class StockListController extends AbstractController
 {
     /**
-     * @Route("/", name="stock_listindex", methods={"GET"})
+     * @Route("/", name="stock_list_index", methods={"GET"})
      */
     public function index(StockListRepository $stockListRepository): Response
     {
@@ -78,17 +78,17 @@ class StockListController extends AbstractController
         ]);
     }
 
-    // /**
-    //  * @Route("/{id}", name="stock_list_delete", methods={"DELETE"})
-    //  */
-    // public function delete(Request $request, StockList $stockList): Response
-    // {
-    //     if ($this->isCsrfTokenValid('delete'.$stockList->getId(), $request->request->get('_token'))) {
-    //         $entityManager = $this->getDoctrine()->getManager();
-    //         $entityManager->remove($stockList);
-    //         $entityManager->flush();
-    //     }
+    /**
+     * @Route("/{id}", name="stock_list_delete", methods={"DELETE"})
+     */
+    public function delete(Request $request, StockList $stockList): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$stockList->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($stockList);
+            $entityManager->flush();
+        }
 
-    //     return $this->redirect($request->headers->get('referer'));
-    // }
+        return $this->redirectToRoute('stock_list_index');
+    }
 }

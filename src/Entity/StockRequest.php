@@ -25,6 +25,10 @@ class StockRequest
      */
     private $requestingDept;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $section;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="stockRequests")
@@ -51,28 +55,6 @@ class StockRequest
      */
     private $stockRequestLists;
 
-    /**
-     * @ORM\Column(type="smallint", nullable=true)
-     */
-    private $approvalStatus;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $note;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Section::class, inversedBy="stockRequests")
-     */
-    private $section;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $dateOfRequest;
-
- 
-
     public function __construct()
     {
         $this->stockRequestLists = new ArrayCollection();
@@ -96,6 +78,17 @@ class StockRequest
         return $this;
     }
 
+    public function getSection(): ?string
+    {
+        return $this->section;
+    }
+
+    public function setSection(?string $section): self
+    {
+        $this->section = $section;
+
+        return $this;
+    }
 
     public function getRequestedBy(): ?User
     {
@@ -174,59 +167,4 @@ class StockRequest
 
         return $this;
     }
-
-    public function getApprovalStatus(): ?int
-    {
-        return $this->approvalStatus;
-    }
-
-    public function setApprovalStatus(?int $approvalStatus): self
-    {
-        $this->approvalStatus = $approvalStatus;
-
-        return $this;
-    }
-
-    public function getNote(): ?string
-    {
-        return $this->note;
-    }
-
-    public function setNote(?string $note): self
-    {
-        $this->note = $note;
-
-        return $this;
-    }
-
-    public function getSection(): ?Section
-    {
-        return $this->section;
-    }
-
-    public function setSection(?Section $section): self
-    {
-        $this->section = $section;
-
-        return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->name;
-    }
-
-    public function getDateOfRequest(): ?\DateTimeInterface
-    {
-        return $this->dateOfRequest;
-    }
-
-    public function setDateOfRequest(?\DateTimeInterface $dateOfRequest): self
-    {
-        $this->dateOfRequest = $dateOfRequest;
-
-        return $this;
-    }
-
-  
 }

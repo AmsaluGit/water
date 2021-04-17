@@ -2,23 +2,26 @@
 
 namespace App\Form;
 
-use App\Entity\Sells;
+use App\Entity\ProductDelivery;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SellsType extends AbstractType
+class ProductDeliveryType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('placeOfDelivery')
-            ->add('paymentVoucherNumber')
+            ->add('typeOfDocAndNum')
+            // ->add('product')
+            // ->add('specification')
             ->add('plateNumber')
-            ->add('trailNumber')
-            ->add('driver')
-            ->add('phone')
-            // ->add('note')
+            ->add('trialNumber')
+            ->add('phoneNumber')
+            // ->add('remark')
+            ->add('handOveredBy', null, [
+                'required'   => true
+            ])
             // ->add('receivedBy')
             // ->add('deliveredBy')
             // ->add('approvedBy')
@@ -28,7 +31,8 @@ class SellsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Sells::class,
+            'data_class' => ProductDelivery::class,
         ]);
     }
+    
 }
