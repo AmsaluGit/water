@@ -72,7 +72,7 @@ class StockController extends AbstractController
             $this->addFlash('save', 'The Stock has been rejected!');
             }else{
                 $stock->setApprovedBy($user)
-                //   ->setNote($note)
+                   ->setNote($note)
                   ->setApprovalStatus(1);
             $this->addFlash('save', 'The Stock has been approved!');
             }
