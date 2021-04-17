@@ -25,10 +25,10 @@ class StockRequest
      */
     private $requestingDept;
 
-    // /**
-    //  * @ORM\Column(type="string", length=255, nullable=true)
-    //  */
-    // private $section;
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $section;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="stockRequests")
@@ -51,7 +51,7 @@ class StockRequest
     private $requestStatus;
 
     /**
-     * @ORM\OneToMany(targetEntity=StockRequestList::class, mappedBy="stockRequest",cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=StockRequestList::class, mappedBy="stockRequest")
      */
     private $stockRequestLists;
 
@@ -98,17 +98,17 @@ class StockRequest
         return $this;
     }
 
-    // public function getSection(): ?string
-    // {
-    //     return $this->section;
-    // }
+    public function getSection(): ?string
+    {
+        return $this->section;
+    }
 
-    // public function setSection(?string $section): self
-    // {
-    //     $this->section = $section;
+    public function setSection(?string $section): self
+    {
+        $this->section = $section;
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
     public function getRequestedBy(): ?User
     {

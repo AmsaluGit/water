@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}stock index
+{% block title %}Stock index
 {% endblock %}
 {% block maintitle %}
-	stock
+	Stock
 {% endblock %}
 
 
 {% block breadcrumb %}
 
-	<li class="breadcrumb-item active">Stock</li>
+	<li class="breadcrumb-item active">Stock Delivery</li>
 {% endblock %}
 {% block body %}
 	<div class="row">
@@ -18,43 +18,11 @@
 			<div class="card-body">
 				<div class="row">
 					<div class="col-md-12">
-						<div class="card card-info collapsed-card">
+						<div class="card card">
 							<div class="card-header">
-								<h3 class="card-title">
-									{% if edit  %}
-                                    Edit
-									{% else %}
-										Add New
-									{% endif %}	
-								</h3>
-
+								<h3 class="card-title">Stock Delivery</h3>
 								<div class="card-tools">
-									<button type="button" class="btn btn-tool " id="collapse" data-card-widget="collapse">
-										<i class="fas fa-plus"></i>
-									</button>
-								</div>
-								<!-- /.card-tools -->
-							</div>
-							<!-- /.card-header -->
-							<div class="card-body">
-								{% if edit  %}
-									{% set button_label = 'Update' %}
-								{% endif %}
-								{{ include('stock/_form.html.twig') }}
-
-
-							</div>
-							<!-- /.card-body -->
-						</div>
-					</div>
-
-					<div class="col-md-12">
-						<div class="card ">
-							<div class="card-header">
-								<h3 class="card-title">Stock List</h3>
-								<div class="card-tools">
-								
-									{# <form class="form-inline ml-3" >
+									<form class="form-inline ml-3" >
 										<div class="input-group ">
 											<input class="form-control" autocomplete="off" name="search" type="search" placeholder="Search" aria-label="Search">
 											<div class="input-group-append">
@@ -63,82 +31,302 @@
 												</button>
 											</div>
 										</div>
-									</form> #}
-
-									
+									</form>
 								</div>
 							</div>
 							<div class="card-body">
-
-
+								<a href="{{ path('new_stock_index') }}" class="btn btn-success btn-sm" style = "float:;">
+									New Stock
+								</a>
 								<table class="table table-hover">
 									<thead>
 										<tr>
+											<th style="width: 10px">
+												#
+											</th>
+											<th>{{ knp_pagination_sortable(stocks, 'delivered By', 'u.id') }}</th>
+											{# <th>{{ knp_pagination_sortable(sells, 'Place Of Delivery', 'c.placeOfDelivery') }}</th>  #}
+                                            {# <th>Reciever</th> #}
+                                            {# <th>place of delivery</th> #}
+                                            {# <th>driver</th> #}
+											<th>Status</th>
+											<th>Total</th>
+											<th>approved by</th>
+											<th>Details</th>
+											<th>Action</th>
+                                            
 											
-											{# <th>{{ knp_pagination_sortable(stocks, 'Name', 'p.name') }}</th> #}
-
-											<th>Store</th>
-											<th>Product</th>
-											<th>quantity</th>
-											<th>Registered by</th>
-											<th>Approval Status</th>
 										</tr>
 									</thead>
 									<tbody>
 										{% set i = 1 %}
 										{% for stock in stocks %}
+										
 											<tr>
+												<td style="width: 10px">
+													{{ i }}
+													{% set i = i+1 %}
+												</td>
+												<td>{{ stock.deliveredBy }}</td>
+												{# <td>{{ sell.placeOfDelivery }}</td>
+												<td>{{ sell.driver }}</td> #}
 												
-												<td>{{ stock.store }}</td>
-												{# <td>{{ stock.product }}</td> #}
-												{# <td>{{ stock.quantity }}</td>
-												<td>{{ stock.registeredBy }}</td> #}
+												<td>
+													{% if stock.approvalStatus == 1 %}
+													<i class="fa fa-check" aria-hidden="true" style="color:green;"></i>
+													
+													{% elseif stock.approvalStatus == 2 %}
+													<i class="fa fa-times" style="color:red;"></i>
+													{% else %}
+													<i class="fa fa-spinner fa-spin"></i>
+													{% endif %}
+												</td>
+												<td>
+												{% set T = 0 %}
 												{% if stock.approvalStatus == 1 %}
-                                                    <td>Approved</td>
-												{% elseif stock.approvalStatus == 2 %}
-                                                    <td>Rejected</td>
-                                                {% else %}
-                                                    <td>Waiting</td>
-                                                {% endif %}
-												
-												{# <td> #}
+													{% for item in stock.stockLists %}
+														{% set T = T + item.unitPrice * item.approvedQuantity %}
+													{% endfor %}
+												{% else %}
+													{% for item in stock.stockLists %}
+														{% set T = T + item.unitPrice * item.quantity %}
+													{% endfor %}
+												{% endif %}
+												{{ T }}
+												</td>
+                                                <td>{{ stock.approvedBy }}</td>
+												<td>
+												 	<form class="d-inline" method="post" action="{{ path('stock_index') }}">
+													 	<input type="hidden" name="view" value="{{stock.id}}">
+														<button title="view" type = "button" class="btn btn-link " data-target="#demo{{ stock.id }}" data-toggle="collapse">
+															View
+														</button>
+													</form>
+                                                </td>
+												{% if not stock.approvalStatus %}												
+												<td>
 
-													{# <form class="d-inline" method="post">
-
-
+													<form class="d-inline" method="post" action="{{ path('edit_stock_index',{'id' : stock.id}) }}">
 														<input type="hidden" name="edit" value="{{stock.id}}">
-														<button class="btn btn-info btn-sm" title="edit">
+														<button  class="btn btn-info btn-sm" title="Edit">
 															<i class="fa fa-edit"></i>
 														</button>
 													</form>
-													<form class="d-inline" method="post" action="{{ path('stock_delete', {'id': stock.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
-
-														<input type="hidden" name="_method" value="DELETE">
-														<input
-														type="hidden" name="_token" value="{{ csrf_token('delete' ~ stock.id) }}"> #}
-														{#  <button type="button" data-type="confirm" class="btn btn-danger js-sweetalert" title="Delete">#}
-														{# <button class="btn btn-danger btn-sm" title="Delete">
-															<i class="fa fa-trash"></i>
-														</button> #}
-													{# </form> #}
-												{# </td> #}
-											 <td>
-											<form method="POST" action="{{path('approval_status_index', {'id': stock.id}) }}">
-                                                <button class="btn btn-link" type="submit" value="{{stock.id}}" name="id">View Status</button>
-                                               </form>
-											    </td>
-											
-
-                                                <td>
-												 {% if applevel > stock.stockApprovals|length and stock.approvalStatus != 2 %}
-													<form method="POST" action="{{path('product_detail_index', {'id': stock.id}) }}">
-                                                		<button class="btn btn-link" type="submit" value="{{stock.id}}" name="more">Approve</button>
-                                               		</form>
-												{% else %} 
-													<button class="btn btn-link" disabled>Closed</button>
-											   {% endif %} 
-                                                </td>
+													<button href="#modalCenter{{stock.id}}" role="button" class="btn btn-danger btn-sm" data-toggle="modal"><i class="fa fa-trash"></i></button>
+													<div id="modalCenter{{stock.id}}" class="modal fade" tabindex="-1">
+														<div class="modal-dialog modal-dialog-centered">
+															<div class="modal-content">
+																<div class="modal-header">
+																	<h5 class="modal-title">Delete</h5>
+																	<button type="button" class="close" data-dismiss="modal">&times;</button>
+																</div>
+																<div class="modal-body">
+																	<p>Are you sure you want to delete this entry?</p>
+																</div>
+																<div class="modal-footer">
+																	<form class="d-inline" method="post" action="{{ path('stock_delete', {'id': stock.id}) }}">
+																		<input type="hidden" name="_method" value="DELETE">
+																		<input
+																		type="hidden" name="_token" value="{{ csrf_token('delete' ~ stock.id) }}">
+																		{#  <button type="button" data-type="confirm" class="btn btn-danger js-sweetalert" title="Delete">#}
+																		<button class="btn btn-danger" title="Delete">
+																			Delete
+																		</button>
+																	</form>
+																	<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+																	
+																</div>
+															</div>
+														</div>
+													</div>
+													
+												</td>
+												{% endif %}
+												 													     							
 											</tr>
+											
+											<tr>
+												<td colspan="8">
+													<div class = "col-md-12" >
+														<div class="card collapse" id = "demo{{ stock.id }}" >
+															<div class="card-header">
+																<h4 class="card-title">Items List</h4>
+																<div class="card-tools">
+																{% if  stock.approvalStatus == 1 %}
+																	<a type = "button" class="btn btn-success btn-sm" target="_blank" href = "{{ path('download_stock_index',{'id' : stock.id}) }}">
+																		Download
+																	</a>
+																</div>
+																{% endif %}
+															</div>
+															<div class="card-body">
+																<table class="table" >
+																
+																	<thead>
+																		<tr>
+																			<td>#</td>
+																			{# <th>{{ knp_pagination_sortable(sells, 'Name', 'p.name') }}</th>
+																			<th>{{ knp_pagination_sortable(sells, 'Code', 'p.code') }}</th> #}
+																			<th>Product</th>
+																			{# <th>Spec</th> #}
+																			<th>quantity</th>
+																			{# <th></th> #}
+																			{# <th>Approved Quantity</th>
+																			<th>Remark</th> #}
+																			{% if stock.approvalStatus %}
+																			{# <th>weight</th> #}
+																			<th>Approved Quantity</th>
+																			<th>unit price</th>
+																			<th>Total</th>
+																			{% endif %}
+																		</tr>
+																	</thead>
+																
+																	<tbody>
+																	
+																		{% set j = 1 %}{% set k = 0 %}
+																		{% for item in stock.stockLists %}								
+																		
+																			{% set k = 1 %}
+																			<tr>
+																				<td>
+																				{{ j }}
+																				{% set j = j+1 %}
+																				</td>
+																				<td>{{ item.product }}</td>
+																				{# /<td>{{ item.specification }}</td> #}
+																				<td>{{ item.quantity }}</td>
+
+																				{% if stock.approvalStatus %}
+																				{# <td>{{ item.weight }}</td> #}
+																				<td>{{ item.approvedQuantity }}</td>
+																				<td>{{ item.unitPrice }}</td>
+																				<td>{{ item.approvedQuantity * item.unitprice }}</td>
+																				{% endif %}
+																				{% if not stock.approvalStatus %}
+																				<td>
+																					<form id = "approval" method="post">
+																					
+																						<div class="form-group" >
+																							
+																							<select class="form-control" name="mySelect{{item.id}}" onchange = "myFunction(this.value,{{item.id}})" >
+																								<option>Approve all</option>
+																								<option>Approve some</option>
+																								<option>Reject</option>
+																							</select>
+																						
+																							
+																							
+																						</div>
+																				
+																				
+																				
+																						<div class="form-group">
+																							<input class ="form-control" type= "text" name = "quantity{{item.id}}" id = "quantity{{item.id}}" placeholder="Approved Quantity" hidden>
+																						</div>
+																						<div class="form-group">
+																							<input class ="form-control" type= "text" name = "remark{{item.id}}" id = "remark{{item.id}}" placeholder="remark" hidden>
+																						</div>
+																						
+																				</td>
+																				
+																				{# <td>
+																					<form class="d-inline" method="post" action="{{ path('edit_sells_list_index',{'id': item.id}) }}">
+																						<input type="hidden" name="edit_list" value="{{item.id}}">
+																					
+																						<button class="btn btn-info btn-sm" title="Edit">
+																							<i class="fa fa-edit"></i>
+																						</button>
+																					</form>
+																					
+																					<button href="#modalCenter2{{item.id}}" id = "collapse" role="button" class="btn btn-danger btn-sm" data-toggle="modal"><i class="fa fa-trash"></i></button>
+																					<div id="modalCenter2{{item.id}}" class="modal fade" tabindex="-1">
+																						<div class="modal-dialog modal-dialog-centered">
+																							<div class="modal-content">
+																								<div class="modal-header">
+																									<h5 class="modal-title">Delete</h5>
+																									<button type="button" class="close" data-dismiss="modal">&times;</button>
+																								</div>
+																								<div class="modal-body">
+																									<p>Are you sure you want to delete this entry?</p>
+																								</div>
+																								<div class="modal-footer">
+																									<form class="d-inline" method="post" action="{{ path('sells_list_delete', {'id': item.id}) }}">
+
+																										<input type="hidden" name="_method" value="DELETE">
+																										<input
+																										type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.id) }}">
+																										<button class="btn btn-danger" title="Delete">
+																											Delete
+																										</button>
+																									</form>
+																									<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+																									
+																								</div>
+																							</div>
+																						</div>
+																					</div>															
+																					
+																				</td> #}
+																					
+																			</tr>
+																			
+																			{% endif %}
+																			{% else %}
+																			<tr>
+																				<td colspan="5">no records found</td>
+																			</tr>
+											
+																			{% endfor %}
+																			{% if k == 1 and not stock.approvalStatus %}
+																			{# {% if not sell.approvalStatus %} #}
+																			<tr>
+																				<td colspan="8">
+																					{# <form id = "approval" method="post"> #}
+																						<div class="form" style = "margin: auto; width: 60%;">
+
+																							<div class="col-auto">
+																							<label>Remark</label>
+																							</div>
+
+																							<div class="col-auto">
+																								<textarea class="form-control " name="remark" form="approval"></textarea>
+																							{# <input type="textarea" class="form-control mb-2" id="inlineFormInput" placeholder=""> #}
+																							</div>
+																							<br>
+																
+																							<div class="d-inline col-auto" style="float:right;">
+																								{# <input type="hidden" name="approve" value="{{sell.id}}"> #}
+																								<button class="btn btn-success mb-2" value="{{stock.id}}" name="approve" title="approve">Approve</button>													
+																								{# <input type="hidden" name="reject"  value="{{sell.id}}"> #}
+																								<button class="btn btn-danger mb-2" name="reject" value="{{stock.id}}" title="Reject">Reject All</button>
+																							</div>
+																						</div>
+																					</form>
+																				</td>
+																			</tr>
+																			
+																			{# {% endif %}	 #}
+																			{% endif %}	
+																																																
+																	</tbody>
+																</table>
+																<br>
+																
+																
+															</div>
+															<div class = "card-footer">
+																<div class ="form-inline">
+																	<h6 class="col-2">Recieved By </h6>
+																	<h6 class="col-3">{{stock.receivedBy}}</h6>
+																	<h6 class="col-2"> Driver: </h6>
+																	<h6 class="col-3">{{stock.driver}}</h6>
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											
 										{% else %}
 											<tr>
 												<td colspan="5">no records found</td>
@@ -146,7 +334,11 @@
 										{% endfor %}
 									</tbody>
 								</table>
+								<br>
+								{% do stocks.setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') %} 
 								<div class="float-right">{{ knp_pagination_render(stocks) }}</div>
+
+
 							</div>
 						</div>
 					</div>
@@ -158,15 +350,51 @@
 		<!-- /.card-body -->
 	</div>
 
-{% endblock %}
 {% block javascripts %}
-	{% if edit %}
-		<script>
+<script>
+		{# {% if edit_list %}
+		document.getElementById('collapse').click();
+		{% endif %} #}
+		
+		function myFunction(val,id) {
+  			
 
+			if(val == "Approve all"){
+				document.getElementById("quantity"+id).setAttribute('hidden',"true");
+				document.getElementById("remark"+id).setAttribute('hidden','true');
+				document.getElementById("quantity"+id).removeAttribute('required',"true");
+			}
+			else if(val == "Approve some"){
+				document.getElementById("quantity"+id).removeAttribute('hidden',"true");
+				document.getElementById("quantity"+id).setAttribute('required','true');
+				document.getElementById("remark"+id).removeAttribute('hidden', "true");
+			} 
+			else if(val == "Reject"){
+				document.getElementById("quantity"+id).setAttribute('hidden',"true");
+				document.getElementById("remark"+id).removeAttribute('hidden', "true");
+				document.getElementById("quantity"+id).removeAttribute('required',"true");
+			}else{
+				document.getElementById("quantity"+id).setAttribute('hidden',"true");
+				document.getElementById("remark"+id).setAttribute('hidden','true');
+				document.getElementById("quantity"+id).removeAttribute('required',"true");
+			} 
 
-			$(function () {
-$('#collapse').trigger('click');
-})
+			
+			
+			}
+    {# $(document).ready(function(){
+
+        $("#mySelect").on("change",function(){
+            alert($(this).val());
+        });
+    }); #}
+{#  
+			 $(function () {
+ $('#collapse').trigger('click');
+})  #}
 		</script>
-	{% endif %}
+	
+{% endblock %}		
+
 {% endblock %}
+
