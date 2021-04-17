@@ -52,17 +52,6 @@ class StockRequestList
      */
     private $approvedQuantity;
 
-    /**
-     * @ORM\Column(type="smallint", nullable=true)
-     */
-    private $approvalStatus;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $remark;
-
-
     public function getId(): ?int
     {
         return $this->id;
@@ -151,30 +140,4 @@ class StockRequestList
 
         return $this;
     }
-
-    public function getApprovalStatus(): ?int
-    {
-        return $this->approvalStatus;
-    }
-
-    public function setApprovalStatus(int $approvalStatus): self
-    {
-        $this->approvalStatus = $approvalStatus;
-
-        return $this;
-    }
-
-    public function getRemark(): ?string
-    {
-        return $this->remark;
-    }
-
-    public function setRemark(?string $remark): self
-    {
-        $this->remark = $remark;
-
-        return $this;
-    }
-
-
 }

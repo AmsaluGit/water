@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\CustomerRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,29 +18,29 @@ class Customer
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $name;
+    private $Name;
 
     /**
-     * @ORM\Column(type="string", length=14, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $phone;
+    private $Address;
 
     /**
-     * @ORM\OneToMany(targetEntity=Sells::class, mappedBy="customer")
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $sells;
+    private $Phone;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $OrganizationName;
 
     /**
      * @ORM\Column(type="smallint", nullable=true)
      */
     private $type;
-
-    public function __construct()
-    {
-        $this->sells = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -51,61 +49,50 @@ class Customer
 
     public function getName(): ?string
     {
-        return $this->name;
+        return $this->Name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $Name): self
     {
-        $this->name = $name;
+        $this->Name = $Name;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->Address;
+    }
+
+    public function setAddress(?string $Address): self
+    {
+        $this->Address = $Address;
 
         return $this;
     }
 
     public function getPhone(): ?string
     {
-        return $this->phone;
+        return $this->Phone;
     }
 
-    public function setPhone(?string $phone): self
+    public function setPhone(?string $Phone): self
     {
-        $this->phone = $phone;
+        $this->Phone = $Phone;
 
         return $this;
     }
 
-    /**
-     * @return Collection|Sells[]
-     */
-    public function getSells(): Collection
+    public function getOrganizationName(): ?string
     {
-        return $this->sells;
+        return $this->OrganizationName;
     }
 
-    public function addSell(Sells $sell): self
+    public function setOrganizationName(?string $OrganizationName): self
     {
-        if (!$this->sells->contains($sell)) {
-            $this->sells[] = $sell;
-            $sell->setCustomer($this);
-        }
+        $this->OrganizationName = $OrganizationName;
 
         return $this;
-    }
-
-    public function removeSell(Sells $sell): self
-    {
-        if ($this->sells->removeElement($sell)) {
-            // set the owning side to null (unless already changed)
-            if ($sell->getCustomer() === $this) {
-                $sell->setCustomer(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->name;
     }
 
     public function getType(): ?int

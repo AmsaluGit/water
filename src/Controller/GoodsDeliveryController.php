@@ -29,7 +29,7 @@ class GoodsDeliveryController extends AbstractController
      */
     public function index(SellsRepository $sellsRepository,SettingRepository $settingRepository, Request $request, PaginatorInterface $paginator, SellsListRepository $sellsListRepository): Response
     {
-        $stockApprovalLevel = $settingRepository->findOneBy(['code'=>'stock_approval_level'])->getValue();
+        //  $stockApprovalLevel = $settingRepository->findOneBy(['code'=>'stock_approval_level'])->getValue();
         // dd($request->request->all());
         // $sellsList = $sellsListRepository->find($request->request->get('child_id'));
         // $form_sells_list = $this->createForm(SellsListType::class, $sellsList);
@@ -47,7 +47,7 @@ class GoodsDeliveryController extends AbstractController
             $note = $request->request->get('remark');
             $id = $request->request->get('approve');
             $sells = $sellsRepository->find($id);
-            $count = 0;
+            
             foreach($sells->getSellsLists() as $list){
                 $listId = $list->getId();
                 $var = $request->request->get("quantity$listId");
@@ -67,28 +67,17 @@ class GoodsDeliveryController extends AbstractController
                     $list->setApprovedQuantity($list->getQuantity())
                          ->setApprovalStatus(1);
                 }
-                
-                if($request->request->get("mySelect$listId") == "Reject"){
+                if($request->request->get("mySelect$listId") == "Reject" and $request->request->get("remark$listId")){
                     $list->setApprovalStatus(2)
                          ->setRemark($request->request->get("remark$listId"));
-                    $count = $count + 1;
                 }
              }
-             
             } 
             $user = $this->getUser();
-            if ($count == count($sells->getSellsLists())){
-                $sells->setApprovedBy($user)
-                  ->setNote($note)
-                  ->setApprovalStatus(2);
-            $this->addFlash('save', 'The sell has been rejected!');
-            }else{
-                $sells->setApprovedBy($user)
+            $sells->setApprovedBy($user)
                   ->setNote($note)
                   ->setApprovalStatus(1);
             $this->addFlash('save', 'The Sell has been approved!');
-            }
-            
         }
         elseif($request->request->get('reject')){
             $user = $this->getUser();
@@ -159,7 +148,7 @@ class GoodsDeliveryController extends AbstractController
         $form_sells = $this->createForm(SellsType::class, $sell);
         $form_sells->handleRequest($request);
         $user = $this->getUser();
-        $sell->setDeliveredBy($user);
+        $sell->setReceivedBy($user);
 
         if ($form_sells->isSubmitted() && $form_sells->isValid()) {    
                
@@ -269,8 +258,7 @@ class GoodsDeliveryController extends AbstractController
         if ($form_sells_list->isSubmitted() && $form_sells_list->isValid()) {
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash("save",'Item Updated');
-            // return $this->redirect($request->headers->get('referer'));
-            return $this->redirectToRoute('edit_sells_index',['id'=>$sell->getId()]);
+            return $this->redirect($request->headers->get('referer'));
         }
 
         $qb=$sellsListRepository->findBy(['sells'=>$sell]);
@@ -313,22 +301,5 @@ class GoodsDeliveryController extends AbstractController
         }
         
         return $this->redirect($request->headers->get('referer'));
-    }
-     /**
-     * @Route("/download/{id}", name="download_goods_delivery_index", methods={"POST","GET"})
-     */
-    public function downloadList(SellsListRepository $sellsListRepository, Request $request, SellsRepository $sellsRepository, $id): Response
-    {
-
-        $data = $sellsRepository->find($id);
-        // $sellsList = new SellsList();
-        $qb = $sellsListRepository->findBy(['sells' => $id]);
-        $theDate = new \DateTime();
-        $date = $theDate->format('Y-m-d H:i:s');
-        return $this->render('goods_delivery/6.html.twig', [
-            'sell' => $data,
-            'sellslist'=>$qb,
-            'date' => $date,
-        ]);
     }
 }

@@ -40,7 +40,7 @@ class PermissionController extends AbstractController
                 $request->query->getInt('page',1),
                 18
             );
-            return $this->render('permission/index.html.twig', [
+            return $this->render('customer/index.html.twig', [
                 'permissions' => $data,
                 'form' => $form->createView(),
                 'edit'=>$id
