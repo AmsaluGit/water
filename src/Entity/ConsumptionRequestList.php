@@ -38,12 +38,12 @@ class ConsumptionRequestList
     private $codeNumber;
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="smallint", nullable=true)
      */
     private $available;
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="smallint", nullable=true)
      */
     private $issue;
 
@@ -56,6 +56,16 @@ class ConsumptionRequestList
      * @ORM\Column(type="integer", nullable=true)
      */
     private $approvedQuantity;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $remark;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $approvalStatus;
 
     public function getId(): ?int
     {
@@ -154,6 +164,30 @@ class ConsumptionRequestList
     public function setApprovedQuantity(?int $approvedQuantity): self
     {
         $this->approvedQuantity = $approvedQuantity;
+
+        return $this;
+    }
+
+    public function getRemark(): ?string
+    {
+        return $this->remark;
+    }
+
+    public function setRemark(?string $remark): self
+    {
+        $this->remark = $remark;
+
+        return $this;
+    }
+
+    public function getApprovalStatus(): ?int
+    {
+        return $this->approvalStatus;
+    }
+
+    public function setApprovalStatus(?int $approvalStatus): self
+    {
+        $this->approvalStatus = $approvalStatus;
 
         return $this;
     }

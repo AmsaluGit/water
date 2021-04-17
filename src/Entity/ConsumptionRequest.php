@@ -29,9 +29,6 @@ class ConsumptionRequest
      * @ORM\Column(type="datetime")
      */
     private $requestedDate;
-
- 
-
  
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -48,14 +45,8 @@ class ConsumptionRequest
      */
     private $approvalStatus;
 
- 
-
-  
-
-  
-
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $note;
 
@@ -70,9 +61,14 @@ class ConsumptionRequest
     private $consumptionDeliveries;
 
     /**
-     * @ORM\OneToMany(targetEntity=ConsumptionRequestList::class, mappedBy="consumptionRequest")
+     * @ORM\OneToMany(targetEntity=ConsumptionRequestList::class, mappedBy="consumptionRequest", cascade="remove")
      */
     private $consumptionRequestLists;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Section::class, inversedBy="consumptionRequests")
+     */
+    private $section;
 
     public function __construct()
     {
@@ -178,7 +174,7 @@ class ConsumptionRequest
         return $this->note;
     }
 
-    public function setNote(string $note): self
+    public function setNote(?string $note): self
     {
         $this->note = $note;
 
@@ -256,4 +252,21 @@ class ConsumptionRequest
 
         return $this;
     }
+
+    public function getSection(): ?Section
+    {
+        return $this->section;
+    }
+
+    public function setSection(?Section $section): self
+    {
+        $this->section = $section;
+
+        return $this;
+    }
+
+    // public function __toString(){
+    //     return $this->;
+    // }
+ 
 }

@@ -41,6 +41,16 @@ class ConsumptionDeliveryList
      * @ORM\Column(type="float")
      */
     private $unitPrice;
+    
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $approvedQuantity;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $approvalStatus;
 
     /**
      * @ORM\Column(type="text")
@@ -137,6 +147,18 @@ class ConsumptionDeliveryList
     public function setConsumptionDelivery(?ConsumptionDelivery $consumptionDelivery): self
     {
         $this->consumptionDelivery = $consumptionDelivery;
+
+        return $this;
+    }
+
+    public function getApprovalStatus(): ?int
+    {
+        return $this->approvalStatus;
+    }
+
+    public function setApprovalStatus(int $approvalStatus): self
+    {
+        $this->approvalStatus = $approvalStatus;
 
         return $this;
     }

@@ -48,6 +48,12 @@
                   <p>Department</p>
                 </a>
               </li> 
+              <li class="nav-item">
+                <a href="{{ path('section_index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Section</p>
+                </a>
+              </li> 
 
               <li class="nav-item">
                 <a href="{{ path('product_index') }}" class="nav-link">
@@ -64,7 +70,13 @@
               <li class="nav-item">
                 <a href="{{ path('consumption_index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Consumption Requests</p>
+                  <p>Consumption Request</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ path('consumption_delivery_index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Consumption Delivery</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -77,12 +89,6 @@
                 <a href="{{ path('balance_index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Balance List</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ path('goods_delivery_index') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Goods Delivery</p>
                 </a>
               </li>
             </ul>

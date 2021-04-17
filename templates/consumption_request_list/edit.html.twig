@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ConsumptionRequestList index
+{% endblock %}
+{% block maintitle %}
+	ConsumptionRequestList
+{% endblock %}
+
+
+{% block breadcrumb %}
+
+	<li class="breadcrumb-item active">ConsumptionRequestList</li>
+{% endblock %}
+{% block body %}
+	<div class="row">
+		<div class="card col-md">
+
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card card-info">
+							<div class="card-header">
+								<h3 class="card-title">
+									Edit
+								</h3>
+							</div>
+							<!-- /.card-header -->
+							<div class="card-body">
+								{{ include('consumption_request_list/_form_edit.html.twig', {'button_label': 'Update'}) }}
+							   <form action="" method="get">
+									<div>
+										<input type="hidden" name="backlist" value="{{consumption_request_list.id}}}" />
+										<input type="hidden" name="context" value="{{context}}" />
+                                        <input type="hidden" name="parent-id" value="{{parentid}}" />
+										<button type="submit" class="btn btn-info" >Back to list</button>
+										{# style="display:inline ;margin-top:-38px;" #}
+									</div>
+			                  </form>
+							</div>
+							<!-- /.card-body -->
+						</div>
+				    </div>
+
+	
+				</div>
+			</div>
+
+		</div>
+		<!-- /.card-body -->
+	</div>
+{% endblock %}
+
+

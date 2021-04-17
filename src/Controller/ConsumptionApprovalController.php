@@ -25,7 +25,7 @@ class ConsumptionApprovalController extends AbstractController
      */
     public function index(ConsumptionRequestRepository $consumptionRequestRepository,SettingRepository $settingRepository, Request $request, ConsumptionApprovalRepository $consumptionApprovalRepository): Response
     {
-        $settingApprovalLevel = $settingRepository->findOneBy(['id'=>1])->getValue();
+        $settingApprovalLevel = $settingRepository->findOneBy(['id'=>1])->getConsumptionApprovalLevel();
 
         if ($request->request->get('replay')) {
             $id = $request->request->get('replay');

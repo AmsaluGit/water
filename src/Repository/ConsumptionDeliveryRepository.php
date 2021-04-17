@@ -18,6 +18,30 @@ class ConsumptionDeliveryRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ConsumptionDelivery::class);
     }
+    public function findDelivery($search=null)
+    {
+        $qb=$this->createQueryBuilder('cd')
+                ->select('cd, u')
+                ->join('cd.receiver', 'u')
+                ->where("u.id = cd.receiver");
+                // ->where("u.id = cd.deliveredBy")
+                // ->where("u.id = cd.approvedBy");
+                // ->join('c.consumptionRequestLists', 'cl')
+                // ->where('c.consumptionRequestLists = 'cl');
+                // // ->join('c.section', 's')
+                // ->where("c.section = s.id");
+                
+
+
+        if($search)
+            $qb->andWhere("u.firstName LIKE '%".$search."%'")
+               ->orWhere("u.middleName LIKE '%".$search."%'")
+               ->orWhere("u.lastName LIKE '%".$search."%'")
+               ;
+            return $qb->orderBy('u.id', 'ASC')
+                      ->getQuery()
+            ;
+    }
 
     // /**
     //  * @return ConsumptionDelivery[] Returns an array of ConsumptionDelivery objects

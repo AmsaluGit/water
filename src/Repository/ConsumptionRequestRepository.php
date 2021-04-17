@@ -22,11 +22,15 @@ class ConsumptionRequestRepository extends ServiceEntityRepository
     public function findRequester($search=null)
     {
         $qb=$this->createQueryBuilder('c')
-                ->select('c, u')
+                ->select('c, u, s')
                 ->join('c.requester', 'u')
-                ->where("u.id = c.requester");
-                // ->join('c.product', 'p')
-                // ->where("p.id = c.product");
+                ->where("u.id = c.requester")
+                ->join('c.section','s')
+                ->where('c.section = s.id');
+                // ->join('c.consumptionRequestLists', 'cl')
+                // ->where('c.consumptionRequestLists = 'cl');
+                // // ->join('c.section', 's')
+                // ->where("c.section = s.id");
                 
 
 

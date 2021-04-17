@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SectionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +33,16 @@ class Section
      * @ORM\Column(type="text", nullable=true)
      */
     private $description;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ConsumptionRequest::class, mappedBy="section")
+     */
+    private $consumptionRequests;
+
+    public function __construct()
+    {
+        $this->consumptionRequests = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -71,5 +83,39 @@ class Section
         $this->description = $description;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|ConsumptionRequest[]
+     */
+    public function getConsumptionRequests(): Collection
+    {
+        return $this->consumptionRequests;
+    }
+
+    public function addConsumptionRequest(ConsumptionRequest $consumptionRequest): self
+    {
+        if (!$this->consumptionRequests->contains($consumptionRequest)) {
+            $this->consumptionRequests[] = $consumptionRequest;
+            $consumptionRequest->setSection($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConsumptionRequest(ConsumptionRequest $consumptionRequest): self
+    {
+        if ($this->consumptionRequests->removeElement($consumptionRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($consumptionRequest->getSection() === $this) {
+                $consumptionRequest->setSection(null);
+            }
+        }
+
+        return $this;
+    }
+    public function __toString()
+    {
+        return $this->name;
     }
 }
