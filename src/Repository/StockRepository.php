@@ -23,38 +23,19 @@ class StockRepository extends ServiceEntityRepository
      * @return Stock[] Returns an array of Stock objects
      */
     
-    // public function findStock($value)
-    // {
-    //     $qb=$this->createQueryBuilder('p');
-
-    //     if($value)
-    //         $qb->andWhere("p.name  LIKE '%".$value."%'");
-    //         return 
-    //         $qb->orderBy('p.id', 'ASC')
-    //         ->getQuery()
-            
-    //     ;
-    // }
-    public function findStock($search=null)
+    public function findStock($value)
     {
-        $qb=$this->createQueryBuilder('c')
-                ->select('c, u')
-                ->join('c.receivedBy', 'u')
-                ->where("u.id = c.receivedBy");
-                // ->join('c.product', 'p')
-                // ->where("p.id = c.product");
-                
+        $qb=$this->createQueryBuilder('p');
 
-
-        if($search)
-            $qb->andWhere("u.firstName LIKE '%".$search."%'")
-               ->orWhere("u.middleName LIKE '%".$search."%'")
-               ->orWhere("u.lastName LIKE '%".$search."%'")
-               ;
-            return $qb->orderBy('u.id', 'ASC')
-                      ->getQuery()
-            ;
+        if($value)
+            $qb->andWhere("p.name  LIKE '%".$value."%'");
+            return 
+            $qb->orderBy('p.id', 'ASC')
+            ->getQuery()
+            
+        ;
     }
+    
 
     /*
     public function findOneBySomeField($value): ?Stock

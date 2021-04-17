@@ -1,0 +1,74 @@
+<html>
+   <head>
+      <style>
+        body{
+          margin-left: 10%;
+          margin-right: 10%;
+        }
+         table, th, td {
+         border: 1px solid black;
+        border-collapse: collapse;
+        }
+        td {
+         padding: 15px;
+        }
+        #center{
+        text-align: center;
+        }
+        .distrb{
+          text-decoration: underline;
+        }
+        #orginal{
+          padding-left: 60px;
+        }
+      </style>
+    </head>
+    <body>
+       <p style="padding-left: 57%"><b>ቀን</b>/Date: {{ date }}</p> 
+       <p style="padding-left: 57%"><b>ቁጥር</b>/No.________________________</p>
+       <p style="padding-left: 20%">ጠያቂዉ ክፍል/Requesting Work process: {{ stockRequest.requestedBy }}, Section:{{stockRequest.section}} </p>
+       <table style="width:100%">
+        <tr>
+          <th>ተቁ<br>S.N</th>
+          <th>የዕቃዉ ዐይነት <br>Item Description</th> 
+          <th>ዝርዝር መግለጫ<br>specfication</th>
+          <th>መለኪያ<br>Unit</th>
+          <th>ብዛት<br>Quantity</th>
+          <th>I/We Approved the<br>goods purchased are<br> according to (fit to) the<br>requested spec.</th>
+        </tr>
+        {% set i = 1  %}
+        {% for item in stockRequestList  %}'
+        <tr>
+        <td id="td1">{{ i }}</td> 
+        {% set i = i + 1%}
+
+        <td id="td1">{{item.product}}</td> 
+        <td id="td1">{{item.spcicification}}</td> 
+        {# <td id="td1">{{item.unitOfMeasure}}</td>  #}
+        <td id="td1">{{item.unitOfMeasure}}</td> 
+       <td id="td1">{{item.quantity}}</td> 
+
+        <td></td> 
+        
+
+        
+        </tr>
+        {% endfor %}
+       </table>
+      
+       
+          <p style="padding-left: 5%"><b>የጠያቂዉ ስም</b>/Requested by___________________________________________________<b>ፊርማ</b>/sig.__________________________</p>
+          <p style="padding-left: 5%"><b>ንብረት ክፍል</b>/Store keeper(for Goods not avail in store)________________________________________<b>ፊርማ</b>/sig.__________</p>
+          <p style="padding-left: 5%"><b>ያጠደቀዉ</b>/Approved by___________________________________________________<b>ፊርማ</b>/sig.____________</p> 
+          <p><b style="padding-left: 3%;" class='distrb'>DISTRIBUTION:-</b></p>
+          <p><span style="padding-left: 3%">Orginal--<em>finance </em></span><span style="padding-left: 15%">1st Copy--<em>purchased</em></span><span style="padding-left: 20%">2nd Copy--<em>Store</em></span></p>
+          <p><span style="padding-left: 3%">3rd Copy--<em>pad</em></span></p>
+          <p id="center"><b>____________________________________________________________________________________________________________________________</b></p>
+          <p id="center"><b>PLEASE MENTION THE CORRECT BEFFOR USE</b></p>
+
+<button id="printPageButton" onclick="window.print();">Print</button>
+<script></script>
+
+  </body>
+  
+</html>

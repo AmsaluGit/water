@@ -57,7 +57,7 @@ class Sells
     private $note;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="sells")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sells")
      */
     private $receivedBy;
 
@@ -80,11 +80,6 @@ class Sells
      * @ORM\Column(type="smallint", nullable=true)
      */
     private $ApprovalStatus;
-
-    // /**
-    //  * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="sells")
-    //  */
-    // private $customer;
 
     public function __construct()
     {
@@ -181,12 +176,12 @@ class Sells
         return $this;
     }
 
-    public function getReceivedBy(): ?Customer
+    public function getReceivedBy(): ?User
     {
         return $this->receivedBy;
     }
 
-    public function setReceivedBy(?Customer $receivedBy): self
+    public function setReceivedBy(?User $receivedBy): self
     {
         $this->receivedBy = $receivedBy;
 
@@ -258,16 +253,4 @@ class Sells
 
         return $this;
     }
-
-    // public function getCustomer(): ?Customer
-    // {
-    //     return $this->customer;
-    // }
-
-    // public function setCustomer(?Customer $customer): self
-    // {
-    //     $this->customer = $customer;
-
-    //     return $this;
-    // }
 }
