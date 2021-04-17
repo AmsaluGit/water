@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Form;
-
+use App\Entity\Product;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Doctrine\ORM\EntityRepository;
 use App\Entity\ConsumptionDeliveryList;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,8 +26,7 @@ class ConsumptionDeliveryListType extends AbstractType
                               ->setParameter('val', 1)
                               ->orderBy('p.name', 'ASC');
                 },   
-            ]
-            )
+            ])
             ->add('unitOfMeasure', null, ['required'=>true])
             // ->add('consumptionDelivery')
         ;

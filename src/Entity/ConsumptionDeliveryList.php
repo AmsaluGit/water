@@ -108,9 +108,20 @@ class ConsumptionDeliveryList
         return $this->quantity;
     }
 
-    public function setQuantity(int $quantity): self
+    public function setApprovedQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
+
+        return $this;
+    }
+    public function getApprovedQuantity(): ?int
+    {
+        return $this->approvedQuantity;
+    }
+
+    public function setQuantity(int $approvedQuantity): self
+    {
+        $this->approvedQuantity = $approvedQuantity;
 
         return $this;
     }

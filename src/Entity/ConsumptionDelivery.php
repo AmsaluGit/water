@@ -42,7 +42,7 @@ class ConsumptionDelivery
     private $approvedBy;
 
     /**
-     * @ORM\OneToMany(targetEntity=ConsumptionDeliveryList::class, mappedBy="consumptionDelivery")
+     * @ORM\OneToMany(targetEntity=ConsumptionDeliveryList::class, mappedBy="consumptionDelivery", cascade={"remove"})
      */
     private $consumptionDeliveryLists;
 

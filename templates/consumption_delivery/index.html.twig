@@ -90,9 +90,9 @@
 												    
 												{% if consumption_delivery.approvalStatus == null %}
 												   
-													<form class="d-inline" method="post" action="{{ path('edit_consumption_request_index',{'id' : consumption_delivery.id}) }}">
+													<form class="d-inline" method="post" action="{{ path('edit_consumption_delivery_index',{'id' : consumption_delivery.id}) }}">
 														<input type="hidden" name="edit" value="{{consumption_delivery.id}}">
-														<button style="margin-bottom:5px;"  class="btn btn-info btn-sm" title="Edit">
+														<button class="btn btn-info btn-sm" title="Edit">
 															<i class="fa fa-edit"></i>
 														</button>
 													</form>
@@ -138,7 +138,7 @@
 																<input type="hidden" name="parent_id" value="{{consumption_delivery.id}}"> #}
 																<h4 class="card-title">Items List</h4>
 																	{% if consumption_delivery.approvalStatus ==1 %}
-																		<a target="_blank" href="{{ path('print_page_index', {'id': consumption_delivery.id}) }}" style="float:right;" class="btn btn-primary">Generate PDF</a>
+																		<a target="_blank" href="{{ path('print_page_index1', {'id': consumption_delivery.id}) }}" style="float:right;" class="btn btn-primary">Generate PDF</a>
 																	{% endif %}	
 															{# </form>															 #}
 															</div>

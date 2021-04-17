@@ -52,17 +52,20 @@
         </style> 
     </head>
     <body>
-        <p style="padding-left: 45%"><b style="text-decoration: underline">የጥሬ እቃ መረከቢያ ደረሰኝ</b><em style="padding-left: 10%">N0.</em><em style="padding-left: 3%;color:red">0086</em></p> 
+        <p style="padding-left: 45%"><b style="text-decoration: underline">የጥሬ እቃ መረከቢያ ደረሰኝ</b><em style="padding-left: 10%">N0.</em><em style="padding-left: 3%;color:red">0086</em></p>
+         <button style="float:right;" id="printpagebutton" onclick="printpage()">
+                    Print
+                </button></p>  
         <p style="padding-left: 45%"><b>Goods Receiveds Voicher</b></p>
         <table width=100%; id="table1"; style="margin-left: 4%">
             <tr>
                 <th id="th">የርክክብ ቦታ<br>(place of delivery)</th>
-                <td style="width: 30%;" id="td">  </td>
+                <td style="width: 30%;" id="td"> </td>
                  <td style="width: 30%;" id="td"> ተረካቢ ክፍል </td> 
             </tr>
             <tr>
                 <th id="th">የተረካቢ ስም<br>(Receiver)</th>
-                 <td style="width: 30%;" id="td">  </td>
+                 <td style="width: 30%;" id="td">{{consumption_delivery.receiver}}</td>
                   <td style="width: 30%;" id="td">  </td>
             </tr>
               <tr>
@@ -86,16 +89,23 @@
                 <th style="text-align:center" id="th1">ምርመራ</th>
             </tr>
              <tr>
-                <td id="td1"></td>
-                 <td id="td1"></td>
-                  <td id="td1"></td>
-                   <td id="td1"></td>
-                    <td id="td1"></td>
-                     <td id="td1" style="width: 8%"></td>
-                      <td id="td1" style="width:3%"> </td>
-                      <td id="td1" style="width: 8%"></td>
+             {% for list in consumption_lists %}
+                 {% set i = 0%}
+                 {% set i = i +1 %}
+                <td id="td1">{{i}}</td>
+                 <td id="td1">{{list.codeNumber}}</td>
+                  <td id="td1">{{"none"}}</td>
+                   <td id="td1">{{list.unitOfMeasure}}</td>
+                    <td id="td1">{{list.approvedQuantity}}</td>
+                     <td id="td1" style="width: 8%">{{list.unitPrice}}</td>
+                      <td id="td1" style="width:3%"></td>
+                      <td id="td1" style="width: 8%">{{list.unitPrice * list.approvedQuantity}}</td>
                        <td id="td1" style="width: 3%"></td>
                        <td id="td1"></td>
+             {% else %}
+                 
+             {% endfor %}
+              
              </tr>
         </table>
            <div>
@@ -128,5 +138,19 @@
                 <p>ለተረካቢ<span style="padding-left: 150px"> ከጥራዝ ጋር ይቀራል </span></p>
             </div>
             
-         </div> </body>
+         </div> 
+           <script>
+                function printpage() {
+                    //Get the print button and put it into a variable
+                    var printButton = document.getElementById("printpagebutton");
+                    //Set the print button visibility to 'hidden' 
+                    printButton.style.visibility = 'hidden';
+                    //Print the page content
+                    window.print()
+                        //Set the print button to 'visible' again 
+                        //[Delete this line if you want it to stay hidden after printing]
+                    printButton.style.visibility = 'visible';
+                }
+            </script>
+         </body>
 </html>

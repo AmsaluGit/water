@@ -16,12 +16,12 @@ use Knp\Component\Pager\PaginatorInterface;
 
 
 /**
- * @Route("/consumption/delivery")
+ * @Route("/delivery")
  */
 class ConsumptionDeliveryController extends AbstractController
 {
     /**
-     * @Route("/", name="consumption_delivery_index", methods={"GET"})
+     * @Route("/", name="consumption_delivery_index", methods={"GET","POST"})
      */
     public function index(ConsumptionDeliveryListRepository $consumptionDeliveryListRepository, ConsumptionDeliveryRepository $consumptionDeliveryRepository, Request $request, PaginatorInterface $paginator): Response
     {
@@ -59,8 +59,8 @@ class ConsumptionDeliveryController extends AbstractController
 
             $user = $this->getUser();
             $consumptionDelivery->setApprovedBy($user)
-                               ->setNote($note)
-                               ->setApprovalStatus(1);
+                                ->setNote($note)
+                                ->setApprovalStatus(1);
             
             $this->addFlash('save', 'The Consumption Delivery has been approved!');
 
@@ -222,7 +222,9 @@ class ConsumptionDeliveryController extends AbstractController
         if ($form_consumption_list->isSubmitted() && $form_consumption_list->isValid()) {
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash("save",'Item Updated');
-            return $this->redirect($request->headers->get('referer'));
+            return $this->redirectToRoute('edit_consumption_delivery_index',['id'=>$consumptionDelivery->getId()]);
+
+            // return $this->redirectToRoute($request->headers->get('referer'));
         }
 
         $qb=$consumptionDeliveryListRepository->findBy(['consumptionDelivery'=>$consumptionDelivery]);
@@ -252,11 +254,10 @@ class ConsumptionDeliveryController extends AbstractController
         return $this->redirect($request->headers->get('referer'));
     }
     /**
-     * @Route("/child/{id}", name="consumption_request_list_delete", methods={"DELETE"})
+     * @Route("/child/{id}", name="consumption_delivery_list_delete1", methods={"DELETE"})
      */
     public function deleteChild(Request $request, ConsumptionDeliveryList $consumptionDeliveryList): Response
-    {
-        
+    {   
         if ($this->isCsrfTokenValid('delete'.$consumptionDeliveryList->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($consumptionDeliveryList);
@@ -267,14 +268,14 @@ class ConsumptionDeliveryController extends AbstractController
     }
 
     /**
-     * @Route("/print{id}", name="print_page_index", methods={"GET", "POST"})
+     * @Route("/print{id}", name="print_page_index1", methods={"GET", "POST"})
      */
     public function printPage(Request $request, ConsumptionDeliveryListRepository $consumptionDeliveryListRepository ,ConsumptionDeliveryRepository $consumptionDeliveryRepository, $id): Response
     {
         $consumptionDeliveryId = $id;
         $consumptionDelivery = $consumptionDeliveryRepository->find($consumptionDeliveryId);
         $consumptionDeliveryList=$consumptionDeliveryListRepository->findBy(['consumptionDelivery'=>$consumptionDelivery]);
-        return $this->render('consumption_delivery/page3.html.twig', [
+        return $this->render('consumption_delivery/page4.html.twig', [
            'consumption_delivery'=>$consumptionDelivery,
            'consumption_lists' =>$consumptionDeliveryList
        ]);
