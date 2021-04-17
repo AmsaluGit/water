@@ -3,10 +3,13 @@
 namespace App\Form;
 
 use App\Entity\Sells;
+use App\Entity\Customer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use App\Repository\CustomerRepository;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 class SellsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -19,7 +22,15 @@ class SellsType extends AbstractType
             ->add('driver')
             ->add('phone')
             // ->add('note')
-            // ->add('receivedBy')
+            ->add('receivedBy',EntityType::class,[
+                'class' => Customer::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                              ->andWhere('u.type = :val')
+                              ->setParameter('val', 1)
+                              ->orderBy('u.name', 'ASC');
+                },
+            ])
             // ->add('deliveredBy')
             // ->add('approvedBy')
         ;
