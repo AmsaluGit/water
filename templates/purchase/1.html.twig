@@ -33,7 +33,7 @@
       </style>
     </head>
     <body>
-       <p style="padding-left: 57%"><b>ቀን</b>/Date: {{ date }}</p> 
+       <p style="padding-left: 57%"><b>ቀን</b>/Date: {{ date}}</p> 
        <p style="padding-left: 57%"><b>ቁጥር</b>/No.________________________</p>
        <p style="padding-left: 20%">ጠያቂዉ ክፍል/Requesting Work process: {{ stockRequest.requestedBy }} <span style="padding-left: 60px"> Section: {{stockRequest.section}} </p>
        <table style="width:100%">
@@ -45,12 +45,12 @@
           <th>ብዛት<br>Quantity</th>
           <th>I/We Approved the<br>goods purchased are<br> according to (fit to) the<br>requested spec.</th>
         </tr>
-        {% set i = 1  %}
+        {% set i=1 %}
         {% for item in stockRequestList  %}'
         <tr>
-        <td id="td1">{{ i }}</td> 
-        {% set i = i + 1%}
 
+        <td id="td1">{{i}}</td> 
+         {% set i = i + 1%} 
         <td id="td1">{{item.product}}</td> 
         <td id="td1">{{item.spcicification}}</td> 
         {# <td id="td1">{{item.unitOfMeasure}}</td>  #}

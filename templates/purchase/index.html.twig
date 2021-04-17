@@ -48,7 +48,7 @@
 											<th>{{ knp_pagination_sortable(sells, 'Place Of Delivery', 'c.placeOfDelivery') }}</th>  #}
                                             <th>requester</th> 
                                             <th>department</th>
-											<th>date of request</th>
+										    <th>Date of Request</th>
 											<th>section</th>
 											<th>status</th>
 
@@ -141,11 +141,11 @@
 
 													{% if not stockRequest.approvalStatus == null%}	
 
-														 {# <form class="d-inline" method="post" action="{{path('download_purchase_index',{'id':stockRequest.id})}}">
-														 <input type="hidden" name="edit" value="{{stockRequest.id}}"> #}
+														 {# <form class="d-inline" method="post" action="{{path('download_purchase_index',{'id':stockRequest.id})}}"> #}
+														 {# <input type="hidden" name="edit" value="{{stockRequest.id}}"> #}
 
-														 <a target = "_blank" class="btn btn-success btn-sm"  href = "{{path('download_purchase_index',{'id':stockRequest.id})}}" title="download"> Download  </a>
-														 {# </form> #}
+														 <a target=" blank " href= "{{path('download_purchase_index',{'id':stockRequest.id})}}" class="btn btn-success btn-sm" title="Download"> Download  </a>
+														 </form>
 														
 													{% endif %}
 														 </div>
