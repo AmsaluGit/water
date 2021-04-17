@@ -25,10 +25,10 @@ class StockRequest
      */
     private $requestingDept;
 
-    // /**
-    //  * @ORM\Column(type="string", length=255, nullable=true)
-    //  */
-    // private $section;
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $section;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="stockRequests")
@@ -51,24 +51,9 @@ class StockRequest
     private $requestStatus;
 
     /**
-     * @ORM\OneToMany(targetEntity=StockRequestList::class, mappedBy="stockRequest",cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=StockRequestList::class, mappedBy="stockRequest")
      */
     private $stockRequestLists;
-
-    /**
-     * @ORM\Column(type="smallint", nullable=true)
-     */
-    private $approvalStatus;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Section::class, inversedBy="stockRequests")
-     */
-    private $section;
-
-    /**
-     * @ORM\Column(type="smallint", nullable=true)
-     */
-    private $note;
 
     public function __construct()
     {
@@ -93,17 +78,17 @@ class StockRequest
         return $this;
     }
 
-    // public function getSection(): ?string
-    // {
-    //     return $this->section;
-    // }
+    public function getSection(): ?string
+    {
+        return $this->section;
+    }
 
-    // public function setSection(?string $section): self
-    // {
-    //     $this->section = $section;
+    public function setSection(?string $section): self
+    {
+        $this->section = $section;
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
     public function getRequestedBy(): ?User
     {
@@ -179,42 +164,6 @@ class StockRequest
                 $stockRequestList->setStockRequest(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getApprovalStatus(): ?int
-    {
-        return $this->approvalStatus;
-    }
-
-    public function setApprovalStatus(?int $approvalStatus): self
-    {
-        $this->approvalStatus = $approvalStatus;
-
-        return $this;
-    }
-
-    public function getSection(): ?Section
-    {
-        return $this->section;
-    }
-
-    public function setSection(?Section $section): self
-    {
-        $this->section = $section;
-
-        return $this;
-    }
-
-    public function getNote(): ?int
-    {
-        return $this->note;
-    }
-
-    public function setNote(?int $note): self
-    {
-        $this->note = $note;
 
         return $this;
     }
