@@ -33,7 +33,7 @@ class ConsumptionDeliveryList
     private $codeNumber;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $quantity;
 
@@ -53,7 +53,7 @@ class ConsumptionDeliveryList
     private $approvalStatus;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $remark;
 
@@ -107,10 +107,17 @@ class ConsumptionDeliveryList
     {
         return $this->quantity;
     }
-
-    public function setApprovedQuantity(int $quantity): self
+    public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
+
+        return $this;
+    }
+
+
+    public function setApprovedQuantity(int $approvedQuantity): self
+    {
+        $this->approvedQuantity = $approvedQuantity;
 
         return $this;
     }
@@ -119,12 +126,6 @@ class ConsumptionDeliveryList
         return $this->approvedQuantity;
     }
 
-    public function setQuantity(int $approvedQuantity): self
-    {
-        $this->approvedQuantity = $approvedQuantity;
-
-        return $this;
-    }
 
     public function getUnitPrice(): ?float
     {

@@ -28,7 +28,7 @@ class ConsumptionRequestListType extends AbstractType
             ->add('unitOfMeasure',null, [
                 'required'=>true,
                 ])
-            ->add('quantity',);
+            ->add('quantity');
 
             // ->add('approvedQuantity')
             // ->add('issue')

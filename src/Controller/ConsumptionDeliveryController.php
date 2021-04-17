@@ -69,7 +69,7 @@ class ConsumptionDeliveryController extends AbstractController
             $user = $this->getUser();
             $id = $request->request->get('reject');
             $consumptionDelivery = $consumptionDeliveryRepository->find($id);
-            $consumptionDeliveryList = $consumptionDelivery->getConsumptionRequestLists();
+            $consumptionDeliveryList = $consumptionDelivery->getConsumptionDeliveryLists();
 
             foreach($consumptionDeliveryList as $list){
                 $listId =$list->getId();
