@@ -70,6 +70,12 @@ class ConsumptionRequest
      */
     private $section;
 
+    // /**
+    //  * @ORM\ManyToOne(targetEntity=Section::class, inversedBy="consumptionRequests")
+    //  */
+    // private $section;
+
+
     public function __construct()
     {
         $this->consumptionApprovals = new ArrayCollection();
@@ -253,6 +259,34 @@ class ConsumptionRequest
         return $this;
     }
 
+    // public function getSection(): ?Section
+    // {
+    //     return $this->section;
+    // }
+
+    // public function setSection(?Section $section): self
+    // {
+    //     $this->section = $section;
+
+    //     return $this;
+    // }
+
+    // public function __toString(){
+    //     return $this->;
+    // }
+
+    // public function getSection(): ?Section
+    // {
+    //     return $this->section;
+    // }
+
+    // public function setSection(?Section $section): self
+    // {
+    //     $this->section = $section;
+
+    //     return $this;
+    // }
+
     public function getSection(): ?Section
     {
         return $this->section;
@@ -264,9 +298,5 @@ class ConsumptionRequest
 
         return $this;
     }
-
-    // public function __toString(){
-    //     return $this->;
-    // }
  
 }

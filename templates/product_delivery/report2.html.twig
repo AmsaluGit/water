@@ -1,0 +1,225 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Permission index
+{% endblock %}
+{% block maintitle %}
+	Permission
+{% endblock %}
+
+
+{% block breadcrumb %}
+
+	<li class="breadcrumb-item active">Product Delivery</li>
+{% endblock %}
+{% block body %}
+	<div class="row">
+		<div class="card col-md">
+
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card card">
+							<div class="card-header">
+								<h3 class="card-title">Product Delivery Report</h3>
+								
+							</div>
+							<div class="card-body">
+								
+                            
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th style="width: 10px">
+												#
+											</th>
+											{# <th>{{ knp_pagination_sortable(ProductDelivery, 'Name of Hand Over', 'u.id') }}</th> #}
+											{# <th>{{ knp_pagination_sortable(products, 'Place Of Delivery', 'c.placeOfDelivery') }}</th>  #}
+                                            <th>Name of Hand over</th>
+                                            <th>Doc</th>
+                                            {# <th>place of delivery</th> #}
+                                            {# <th>driver</th> #}
+											<th>Recieved By</th>
+											<th>Status</th>
+											<th>Approved by</th>
+											<th>view </th>
+											<th></th>
+                                            
+											
+										</tr>
+									</thead>
+									<tbody>
+										{% set i = 1 %}
+										{% for product in ProductDelivery %}
+                                        {% if not product.approvalStatus == null %}
+
+											<tr>
+												<td style="width: 10px">
+													{{ i }}
+													{% set i = i+1 %}
+												</td>
+												<td>{{ product.handOveredBy }}</td>
+												<td>{{ product.TypeOfDocAndNum }}</td>
+												<td>{{ product.ReceivedBy }}</td>
+												<td>
+													{% if product.approvalStatus == 1 %}
+													<i class="fa fa-check" style="color:green" aria-hidden="true"></i>
+													
+													{% elseif product.approvalStatus == 2 %}
+													<i class="fa fa-times" style="color:red"></i>
+													{% else %}
+													<i class="fa fa-spinner fa-spin"></i>
+													{% endif %}
+												</td>
+                                                <td>{{ product.approvedBy }}</td>
+												<td>
+												 	<form class="d-inline" method="post" action="{{ path('product_delivery_index') }}">
+													 	<input type="hidden" name="view" value="{{product.id}}">
+														<button title="view" type = "button" class="btn btn-link " data-target="#demo{{ product.id }}" data-toggle="collapse">
+															View
+														</button>
+													</form>
+                                                </td>												
+											
+
+												 													     							
+											</tr>
+											
+											<tr>
+												<td colspan="8">
+													<div class = "col-md-12" >
+														<div class="card collapse" id = "demo{{ product.id }}" >
+															<div class="card-header">
+															<h4 class="card-title">Items List</h4>
+
+																
+																{# <form class="d-inline" method="post" target="_blank" action="{{ path('ProductDelivery_list_print') }}">
+																		<input type="hidden" name="id" value="{{product.id}}">
+																		<button title="view" style="float:right" type = "submit" class="btn btn-link " >
+																			Export to PDF
+																		</button>
+																</form> #}
+
+
+																{# <script>
+																document.getElementById("printer").onClick = "window.print()";
+																</script> #}
+															</div>
+															<div class="card-body">
+																<table class="table" >
+																
+																	<thead>
+																		<tr>
+																			<td>#</td>
+																			{# <th>{{ knp_pagination_sortable(products, 'Name', 'p.name') }}</th>
+																			<th>{{ knp_pagination_sortable(products, 'Code', 'p.code') }}</th> #}
+																			<th>Product</th>
+																			<th>Specification</th>
+																			<th>quantity</th>
+																			<th></th>
+																			{# <th>Approved Quantity</th>
+																			<th>Remark</th> #}
+																			{# <th>weight</th>
+																			<th>unitprice</th>
+																			<th>Total</th> #}
+																		</tr>
+																	</thead>
+																
+																	<tbody>
+																	
+																		{% set j = 1 %}{% set k = 0 %}
+																		{% for item in product.productDeliveryLists %}								
+																		
+																			{% set k = 1 %}
+																			<tr>
+																				<td>
+																				{{ j }}
+																				{% set j = j+1 %}
+																				</td>
+																				<td>{{ item.product }}</td>
+																				<td>{{ item.specification }}</td>
+																				<td>{{ item.quantity }}</td>
+				
+
+
+																		
+																			{% endfor %}
+																		
+                                                                        	
+																																																
+																	</tbody>
+																</table>
+																<br>
+																
+																
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											
+										{% endif %}
+										{% endfor %}
+									</tbody>
+								</table>
+								<br>
+								{# {% do product.setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') %}  #}
+								{# <div class="float-right">{{ knp_pagination_render(products) }}</div> #}
+
+                            
+							</div>
+						</div>
+					</div>
+					<!-- /.card-body -->
+				</div>
+			</div>
+
+		</div>
+		<!-- /.card-body -->
+	</div>
+
+{% block javascripts %}
+<script>
+		{# {% if edit_list %}
+		document.getElementById('collapse').click();
+		{% endif %} #}
+		
+		{# function myFunction(val,id) {
+  			
+
+			if(val == "Approve all"){
+				document.getElementById("quantity"+id).setAttribute('hidden',"true");
+				document.getElementById("remark"+id).setAttribute('hidden','true');
+			}
+			else if(val == "Approve some"){
+				document.getElementById("quantity"+id).removeAttribute('hidden',"true");
+				document.getElementById("remark"+id).removeAttribute('hidden', "true");
+			} 
+			else if(val == "Reject"){
+				document.getElementById("quantity"+id).setAttribute('hidden',"true");
+				document.getElementById("remark"+id).removeAttribute('hidden', "true");
+			}else{
+				document.getElementById("quantity"+id).setAttribute('hidden',"true");
+				document.getElementById("remark"+id).setAttribute('hidden','true');
+			} 
+
+			
+			
+			} #}
+
+
+    {# $(document).ready(function(){
+
+        $("#mySelect").on("change",function(){
+            alert($(this).val());
+        });
+    }); #}
+{#  
+			 $(function () {
+ $('#collapse').trigger('click');
+})  #}
+		</script>
+	
+{% endblock %}		
+
+{% endblock %}
+
