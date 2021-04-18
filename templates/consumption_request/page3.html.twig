@@ -1,0 +1,119 @@
+<html>
+
+<head>
+    <style>
+        body{
+            width:100%;
+        }
+        div{
+            width:95%;
+            padding:5px;
+        }
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 1%;
+        }
+        
+        th {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 1%;
+            vertical-align: top;
+        }
+        
+        .k {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 1%;
+        }
+        
+        .print {
+            width: 100%;
+            height: 40px;
+            padding: 20px;
+
+        }
+        
+        #printpagebutton {
+            width: 60px;
+            margin-right:40px;
+            text-transform:uppercase;
+        }
+        #printpagebutton:hover{
+            cursor:pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+
+            <p style="padding-left: 22%">Material Requestion Form<em style="padding-left:49%;">NO</em>
+                <button style="float:right;" id="printpagebutton" onclick="printpage()">
+                    Print
+                </button></p> 
+            <p style="padding-left: 24%">የእቃ መጠየቂያ ሰነድ<em style="padding-left:58%;color: red">0144</em></p>
+            <p style="padding-left: 22%">Requested by:- {{consumption_request.requester}}<em style="padding-left: 41%">Section:-{{consumption_request.section}}</em></p>
+            <p style="text-align: center"><b>_________________________________________________________________________________________________________________________________</b></p>
+            <p style="padding-left: 18%">Requested Material / ወጭ የሚደረጉ እቃዎች ዝርዝር</p>
+            
+            <table width=100% class="k">
+                    <tr>
+                        <th rowspan="2">Item<br>No</th>
+                        <th rowspan="2">Code<br>No</th>
+                        <th rowspan="2">Description</th>
+                        <th rowspan="2">Unit of <br>Measure-<br>ment</th>
+                        <th rowspan="2">Quantity</th>
+                        <th colspan="2"> to be filled by store</th>
+                    </tr>
+                    <tr>
+                        <th>Available</th>
+                        <th>Issue</th>
+                    </tr>
+                    {% set j = 1 %}
+                    {% for consumption_list in consumption_request.consumptionRequestLists %}
+                        <tr>
+                            <td>
+                                {{j}}
+                                {% set j = j+1 %}
+                            </td>
+                            <td>{{consumption_list.codeNumber}}</td>
+                            <td>{{consumption_list.remark}}</td>
+                            <td>{{consumption_list.unitOfMeasure}}</td>
+                            <td>{{consumption_list.approvedQuantity}}</td>
+                            <td>{{consumption_list.available}}</td>
+                            <td>{{consumption_list.issue}}</td>
+                        </tr>
+ 
+                    {% else %}
+                            <tr>
+                                <td colspan="5">no records found</td>
+                            </tr> 
+                    {% endfor %}
+            </table>   
+            <p style="padding-left: 3%">NOTE:-</p>
+            <p style="padding-left: 3%">Requested Name:- {{ consumption_request.requester }}<span style="padding-left: 50%">Sig:-_______________</span></p>
+            <p style="padding-left: 3%">Approved Name:-  {{ consumption_request.approvedBy }}</p>
+            <p><span style="padding-left:6.5%"><em>1st to store</em></span><span style="padding-left:8%">
+            <em>2nd to Finance</em></span><span style="padding-left:8%"><em>3rd Requested</em> </span> <span style="padding-left: 8%">4th pad</em>
+            </span></p>
+
+            <script>
+                function printpage() {
+                    //Get the print button and put it into a variable
+                    var printButton = document.getElementById("printpagebutton");
+                    //Set the print button visibility to 'hidden' 
+                    printButton.style.visibility = 'hidden';
+                    //Print the page content
+                    window.print()
+                        //Set the print button to 'visible' again 
+                        //[Delete this line if you want it to stay hidden after printing]
+                    printButton.style.visibility = 'visible';
+                }
+            </script>
+
+    </div>
+</body>
+
+</html>

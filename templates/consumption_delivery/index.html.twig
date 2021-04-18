@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Consumption Request index
+{% block title %}Consumption Delivery index
 {% endblock %}
 {% block maintitle %}
-	Consumption Request
+	Consumption Delivery
 {% endblock %}
 
 
 {% block breadcrumb %}
 
-	<li class="breadcrumb-item active">Consumption Request</li>
+	<li class="breadcrumb-item active">Consumption Delivery</li>
 {% endblock %}
 {% block body %}
 	<div class="row">
@@ -20,7 +20,7 @@
 					<div class="col-md-12">
 						<div class="card card">
 							<div class="card-header">
-								<h3 class="card-title">Consumption Request</h3>
+								<h3 class="card-title">Consumption Delivery</h3>
 								<div class="card-tools">
 									<form class="form-inline ml-3" >
 										<div class="input-group ">
@@ -35,8 +35,8 @@
 								</div>
 							</div>
 							<div class="card-body">
-								<a href="{{ path('new_consumption_request_index') }}" class="btn btn-success btn-sm" style = "float:;">
-									New Request
+								<a href="{{ path('new_consumption_delivery_index') }}" class="btn btn-success btn-sm" style = "float:;">
+									New Delivery
 								</a>
 								<table class="table table-hover">
 									<thead>
@@ -44,57 +44,60 @@
 											<th style="width: 10px">
 												#
 											</th>
-											<th>{{ knp_pagination_sortable(consumption_requests, 'Requester', 'u.username') }}</th>
-											<th>{{ knp_pagination_sortable(consumption_requests, 'Approver', 'u.username') }}</th>
-                                            <th>{{ knp_pagination_sortable(consumption_requests, 'Section', 's.name') }}</th>
+											<th>{{ knp_pagination_sortable(consumption_deliveries, 'Receiver', 'u.username') }}</th>
+											<th>{{ knp_pagination_sortable(consumption_deliveries, 'DeliveredBy', 'u.username') }}</th>
+                                            <th>{{ knp_pagination_sortable(consumption_deliveries, 'Approver', 'u.username') }}</th>
                                             <th>Status</th>
-                                            <th>{{ knp_pagination_sortable(consumption_requests, 'Date Of Request', 'c.requestedDate') }}</th>
+                                            <th>{{ knp_pagination_sortable(consumption_deliveries, 'Date', 'c.requestedDate') }}</th>
 											<th>view </th>
 											<th>Action</th>
 										</tr>
 									</thead>
 									<tbody>
 										{% set i = 1 %}
-										{% for consumption_request in consumption_requests %}
+										{% for consumption_delivery in consumption_deliveries %}    
 											<tr>
 												<td style="width: 10px">
 													{{ i }}
 													{% set i = i+1 %}
 												</td>
-												<td>{{ consumption_request.requester }}</td>
-												<td>{{ consumption_request.approvedBy }}</td>
-												<td>{{ consumption_request.section }}</td>
+												<td>{{ consumption_delivery.receiver }}</td>
+												<td>{{ consumption_delivery.deliveredBy }}</td>
+												<td>{{ consumption_delivery.approvedBy }}</td>
 												<td>
-													{% if consumption_request.approvalStatus == 1 %}
+													{% if consumption_delivery.approvalStatus == 1 %}
 													<i style="color:green;" class="fa fa-check" aria-hidden="true"></i>
 													
-													{% elseif consumption_request.approvalStatus == 2 %}
+													{% elseif consumption_delivery.approvalStatus == 2 %}
 													<i style="color:red;" class="fa fa-times"></i>
 													{% else %}
 													<i class="fa fa-spinner fa-spin"></i>
 													{% endif %}
 												</td>
-                                                <td>{{ consumption_request.requestedDate | date('d-m-Y : h-m-s') }}</td>
 												<td>
-												 	<form class="d-inline" method="post" action="{{ path('consumption_index') }}">
-													 	<input type="hidden" name="view" value="{{consumption_request.id}}">
-														<button title="view" type = "button" class="btn btn-link " data-target="#demo{{ consumption_request.id }}" data-toggle="collapse">
+												     {{ consumption_delivery.deliveredDate | date('d-m-Y : h-m-s') }}
+												</td>
+
+												<td>
+												 	<form class="d-inline" method="post" action="{{ path('consumption_delivery_index') }}">
+													 	<input type="hidden" name="view" value="{{consumption_delivery.id}}">
+														<button style="margin-left:-5px;" title="view" type = "button" class="btn btn-link " data-target="#demo{{ consumption_delivery.id }}" data-toggle="collapse">
 															View
 														</button>
 													</form>
                                                 </td>												
 												<td>
 												    
-												{% if consumption_request.approvalStatus == null %}
+												{% if consumption_delivery.approvalStatus == null %}
 												   
-													<form class="d-inline" method="post" action="{{ path('edit_consumption_request_index',{'id' : consumption_request.id}) }}">
-														<input type="hidden" name="edit" value="{{consumption_request.id}}">
+													<form class="d-inline" method="post" action="{{ path('edit_consumption_delivery_index',{'id' : consumption_delivery.id}) }}">
+														<input type="hidden" name="edit" value="{{consumption_delivery.id}}">
 														<button class="btn btn-info btn-sm" title="Edit">
 															<i class="fa fa-edit"></i>
 														</button>
 													</form>
-													<button href="#modalCenter{{consumption_request.id}}" role="button" class="btn btn-danger btn-sm" data-toggle="modal"><i class="fa fa-trash"></i></button>
-													<div id="modalCenter{{consumption_request.id}}" class="modal fade" tabindex="-1">
+													<button href="#modalCenter{{consumption_delivery.id}}" role="button" class="btn btn-danger btn-sm" data-toggle="modal"><i class="fa fa-trash"></i></button>
+													<div id="modalCenter{{consumption_delivery.id}}" class="modal fade" tabindex="-1">
 														<div class="modal-dialog modal-dialog-centered">
 															<div class="modal-content">
 																<div class="modal-header">
@@ -105,10 +108,10 @@
 																	<p>Are you sure you want to delete this entry?</p>
 																</div>
 																<div class="modal-footer">
-																	<form class="d-inline" method="post" action="{{ path('consumption_request_delete', {'id': consumption_request.id}) }}">
+																	<form class="d-inline" method="post" action="{{ path('consumption_delivery_delete', {'id': consumption_delivery.id}) }}">
 																		<input type="hidden" name="_method" value="DELETE">
 																		<input
-																		type="hidden" name="_token" value="{{ csrf_token('delete' ~ consumption_request.id) }}">
+																		type="hidden" name="_token" value="{{ csrf_token('delete' ~ consumption_delivery.id) }}">
 																		{#  <button type="button" data-type="confirm" class="btn btn-danger js-sweetalert" title="Delete">#}
 																		<button class="btn btn-danger" title="Delete">
 																			Delete
@@ -129,13 +132,13 @@
 											<tr>
 												<td colspan="8">
 													<div class = "col-md-12" >
-														<div class="card collapse" id = "demo{{ consumption_request.id }}" >
+														<div class="card collapse" id = "demo{{ consumption_delivery.id }}" >
 															<div class="card-header">
 															{# <form method="GET" action="{{ path('print_page_index')}}">
-																<input type="hidden" name="parent_id" value="{{consumption_request.id}}"> #}
+																<input type="hidden" name="parent_id" value="{{consumption_delivery.id}}"> #}
 																<h4 class="card-title">Items List</h4>
-																	{% if consumption_request.approvalStatus ==1 %}
-																		<a target="_blank" href="{{ path('print_page_index', {'id': consumption_request.id}) }}" style="float:right;" class="btn btn-primary">Generate PDF</a>
+																	{% if consumption_delivery.approvalStatus ==1 %}
+																		<a target="_blank" href="{{ path('print_page_index1', {'id': consumption_delivery.id}) }}" style="float:right;" class="btn btn-primary">Generate PDF</a>
 																	{% endif %}	
 															{# </form>															 #}
 															</div>
@@ -148,26 +151,23 @@
 																			{# <th>{{ knp_pagination_sortable(sells, 'Name', 'p.name') }}</th>
 																			<th>{{ knp_pagination_sortable(sells, 'Code', 'p.code') }}</th> #}
 																			<th>Product</th>
-																			{% if consumption_request.approvalStatus != null %}
+																			{% if consumption_delivery.approvalStatus != null %}
 																				<th>CodeNumber</th>
 																			{% endif %}
-																			
-																			<th>RequestedQuantity</th>
-																			{% if consumption_request.approvalStatus == 1 %}
+																			<th>DeliveredQuantity</th>
+																			{# <th>ApprovedQuantity</th> #}
+																			{% if consumption_delivery.approvalStatus == 1 %}
 																				<th>ApprovedQuantity</th>
 																			{% endif %}	
-																			{% if consumption_request.approvalStatus == null %}
-																				<th>Available</th>
-																			{% endif %}
-																			
-																			{# <th>Total</th> #}
+																			<th>UnitPrice</th>																			
+																			<th>Total</th>
 																		</tr>
 																	</thead>
 																
 																	<tbody>
 																	
 																		{% set j = 1 %}{% set k = 0 %}
-																		{% for item in consumption_request.consumptionRequestLists %}								
+																		{% for item in consumption_delivery.consumptionDeliveryLists %}								
 																		
 																			{% set k = 1 %}
 																			<tr>
@@ -184,13 +184,15 @@
 																				{% if item.approvalStatus == 1 %}
 																					<td>{{ item.approvedQuantity }}</td>
 																				{% endif %}
-																				{% if item.approvalStatus == null %}
+																				
+																				{# {% if item.approvalStatus == null %}
 																					<td>{{ item.available (item.unitOfMeasure)}}</td> 
-																				{% endif %}
+																				{% endif %} #}
                                                                                 
-																				{#<td>{{ item.unitPrice }}</td>
-																				<td>{{ item.quantity * item.unitprice }}</td> #}
-																				{% if not consumption_request.approvalStatus %}
+																				<td>{{ item.unitPrice }}</td>
+																				<td>{{ item.quantity * item.unitprice }}</td>
+
+																				{% if not consumption_delivery.approvalStatus %}
 																				<td>
 																					<form id = "approval" method="post">
 																					
@@ -266,7 +268,7 @@
 																			</tr>
 											
 																			{% endfor %}
-																			{% if k == 1 and not consumption_request.approvalStatus %}
+																			{% if k == 1 and not consumption_delivery.approvalStatus %}
 																			{# {% if not sell.approvalStatus %} #}
 																			<tr>
 																				<td colspan="8">
@@ -285,9 +287,9 @@
 																
 																							<div class="d-inline col-auto" style="float:right;">
 																								{# <input type="hidden" name="approve" value="{{sell.id}}"> #}
-																								<button class="btn btn-success mb-2" value="{{consumption_request.id}}" name="approve" title="approve">Approve</button>													
+																								<button class="btn btn-success mb-2" value="{{consumption_delivery.id}}" name="approve" title="approve">Approve</button>													
 																								{# <input type="hidden" name="reject"  value="{{sell.id}}"> #}
-																								<button class="btn btn-danger mb-2" name="reject" value="{{consumption_request.id}}" title="Reject">Reject All</button>
+																								<button class="btn btn-danger mb-2" name="reject" value="{{consumption_delivery.id}}" title="Reject">Reject All</button>
 																							</div>
 																						</div>
 																					</form>
@@ -316,8 +318,8 @@
 									</tbody>
 								</table>
 								<br>
-								{% do consumption_requests.setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') %} 
-								<div class="float-right">{{ knp_pagination_render(consumption_requests) }}</div>
+								{% do consumption_deliveries.setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') %} 
+								<div class="float-right">{{ knp_pagination_render(consumption_deliveries) }}</div>
 
 
 							</div>

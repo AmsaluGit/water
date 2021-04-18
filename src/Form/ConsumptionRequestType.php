@@ -13,12 +13,17 @@ class ConsumptionRequestType extends AbstractType
     {
         $builder
             // ->add('requestedDate')
-            ->add('quantity')
-            ->add('remark')
-            // ->add('requester')
-            // ->add('product')
-            ->add('unitOfMeasure')
-        ;
+            ->add('section',null, [
+                'required'=>true,
+                ]);
+            // ->add('remark')
+            // // ->add('requester')
+            // // ->add('product')
+            // ->add('unitOfMeasure')
+            // ->add('dueDate', DateType::class, [
+            //     'required'=> false
+            // ])
+        
     }
 
     public function configureOptions(OptionsResolver $resolver)

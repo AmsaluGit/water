@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ConsumptionRequestList{% endblock %}
+
+{% block body %}
+    <h1>ConsumptionRequestList</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ consumption_request_list.id }}</td>
+            </tr>
+            <tr>
+                <th>Quantity</th>
+                <td>{{ consumption_request_list.quantity }}</td>
+            </tr>
+            <tr>
+                <th>CodeNumber</th>
+                <td>{{ consumption_request_list.codeNumber }}</td>
+            </tr>
+            <tr>
+                <th>Available</th>
+                <td>{{ consumption_request_list.available }}</td>
+            </tr>
+            <tr>
+                <th>Issue</th>
+                <td>{{ consumption_request_list.issue }}</td>
+            </tr>
+            <tr>
+                <th>ApprovedQuantity</th>
+                <td>{{ consumption_request_list.approvedQuantity }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('consumption_request_list_index') }}">back to list</a>
+
+    <a href="{{ path('consumption_request_list_edit', {'id': consumption_request_list.id}) }}">edit</a>
+
+    {{ include('consumption_request_list/_delete_form.html.twig') }}
+{% endblock %}

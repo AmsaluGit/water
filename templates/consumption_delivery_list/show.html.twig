@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ConsumptionDeliveryList{% endblock %}
+
+{% block body %}
+    <h1>ConsumptionDeliveryList</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ consumption_delivery_list.id }}</td>
+            </tr>
+            <tr>
+                <th>CodeNumber</th>
+                <td>{{ consumption_delivery_list.codeNumber }}</td>
+            </tr>
+            <tr>
+                <th>Quantity</th>
+                <td>{{ consumption_delivery_list.quantity }}</td>
+            </tr>
+            <tr>
+                <th>UnitPrice</th>
+                <td>{{ consumption_delivery_list.unitPrice }}</td>
+            </tr>
+            <tr>
+                <th>Remark</th>
+                <td>{{ consumption_delivery_list.remark }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('consumption_delivery_list_index') }}">back to list</a>
+
+    <a href="{{ path('consumption_delivery_list_edit', {'id': consumption_delivery_list.id}) }}">edit</a>
+
+    {{ include('consumption_delivery_list/_delete_form.html.twig') }}
+{% endblock %}
