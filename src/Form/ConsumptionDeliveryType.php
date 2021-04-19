@@ -20,6 +20,7 @@ class ConsumptionDeliveryType extends AbstractType
             // ])
             ->add('deliveredBy', null, ['required'=>true])
             // ->add('approvedBy', null, ['required'=>true])
+            ->add('placeOfDelivery')
         ;
     }
 

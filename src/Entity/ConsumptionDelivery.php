@@ -61,6 +61,11 @@ class ConsumptionDelivery
      */
     private $note;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $placeOfDelivery;
+
     public function __construct()
     {
         $this->consumptionDeliveryLists = new ArrayCollection();
@@ -183,6 +188,18 @@ class ConsumptionDelivery
     public function setNote(?string $note): self
     {
         $this->note = $note;
+
+        return $this;
+    }
+
+    public function getPlaceOfDelivery(): ?string
+    {
+        return $this->placeOfDelivery;
+    }
+
+    public function setPlaceOfDelivery(?string $placeOfDelivery): self
+    {
+        $this->placeOfDelivery = $placeOfDelivery;
 
         return $this;
     }

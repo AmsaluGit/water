@@ -79,6 +79,7 @@
                                 {% set j = j+1 %}
                             </td>
                             <td>{{consumption_list.codeNumber}}</td>
+                            <td>{{consumption_list.product}}</td>
                             <td>{{consumption_list.remark}}</td>
                             <td>{{consumption_list.unitOfMeasure}}</td>
                             <td>{{consumption_list.approvedQuantity}}</td>
@@ -92,7 +93,7 @@
                             </tr> 
                     {% endfor %}
             </table>   
-            <p style="padding-left: 3%">NOTE:-</p>
+            <p style="padding-left: 3%">NOTE:-{{consumption_request.note}}</p>
             <p style="padding-left: 3%">Requested Name:- {{ consumption_request.requester }}<span style="padding-left: 50%">Sig:-_______________</span></p>
             <p style="padding-left: 3%">Approved Name:-  {{ consumption_request.approvedBy }}</p>
             <p><span style="padding-left:6.5%"><em>1st to store</em></span><span style="padding-left:8%">

@@ -94,19 +94,18 @@
                  {% set i = i +1 %}
                 <td id="td1">{{i}}</td>
                  <td id="td1">{{list.codeNumber}}</td>
-                  <td id="td1">{{"none"}}</td>
+                  <td id="td1">{{list.product}}</td>
                    <td id="td1">{{list.unitOfMeasure}}</td>
                     <td id="td1">{{list.approvedQuantity}}</td>
                      <td id="td1" style="width: 8%">{{list.unitPrice}}</td>
                       <td id="td1" style="width:3%"></td>
                       <td id="td1" style="width: 8%">{{list.unitPrice * list.approvedQuantity}}</td>
                        <td id="td1" style="width: 3%"></td>
-                       <td id="td1"></td>
-             {% else %}
-                 
-             {% endfor %}
-              
+                       <td id="td1"></td>    
              </tr>
+        {% else %}
+
+        {% endfor %}
         </table>
            <div>
             <p class="notice" style="width: 100%;">ማስታዎሻ:_____________________________________________________________<span class="end1">____________________________________________________________</span></p>
