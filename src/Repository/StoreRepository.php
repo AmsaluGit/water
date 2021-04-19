@@ -47,4 +47,24 @@ class StoreRepository extends ServiceEntityRepository
         ;
     }
     */
+
+
+    public function findStore($search = null)
+    {
+        $qb=$this->createQueryBuilder('s')
+                 ->select('s')
+                 ;
+                 
+
+        if($search)
+            $qb->andWhere("s.name  LIKE '%".$search."%'")
+              // ->andwhere("c.name  LIKE '%".$search2."%'")
+               ;
+
+               return 
+            $qb->orderBy('s.id', 'ASC')
+               ->getQuery()
+            
+        ;
+    }
 }

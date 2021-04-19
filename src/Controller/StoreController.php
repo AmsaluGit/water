@@ -32,11 +32,11 @@ class StoreController extends AbstractController
                 return $this->redirectToRoute('store_index');
             }
 
-            $queryBuilder=$storeRepository->findAll($request->query->get('name'));
+            $queryBuilder=$storeRepository->findStore($request->query->get('name'));
             $data=$paginator->paginate(
                 $queryBuilder,
                 $request->query->getInt('page',1),
-                2
+                5
             );
             return $this->render('store/index.html.twig', [
                 'stores' => $data,
@@ -58,11 +58,11 @@ class StoreController extends AbstractController
         
         $search = $request->query->get('search');
         
-        $queryBuilder=$storeRepository->findAll($search);
+        $queryBuilder=$storeRepository->findStore($search);
         $data=$paginator->paginate(
             $queryBuilder,
             $request->query->getInt('page',1),
-            2
+            5
         );
         return $this->render('store/index.html.twig', [
             'stores' => $data,
