@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit ProductionReport{% endblock %}
+
+{% block body %}
+    <h1>Edit ProductionReport</h1>
+
+    {{ include('production_report/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('production_report_index') }}">back to list</a>
+
+    {{ include('production_report/_delete_form.html.twig') }}
+{% endblock %}
