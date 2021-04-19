@@ -124,10 +124,10 @@
 
 						{% if not list_button_label is defined  %}
 						<div class="col-6">
-							<button class="form-control btn btn-success" >{{ list_button_label|default('Save') }}</button>
+							<button class="form-control btn btn-success btn-sm" >{{ list_button_label|default('Save') }}</button>
 						</div>
 						<div class="col-6">
-						<a type ="button" href="{{ path('edit_sells_index',{'id': id}) }}" class="form-control btn btn-primary" style = "float:right;">
+						<a href="{{ path('edit_sells_index',{'id': id}) }}" class="form-control btn btn-primary btn-sm" style = "float:right;">
 									Back
 								</a>
 						</div>

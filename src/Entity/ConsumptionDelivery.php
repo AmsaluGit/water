@@ -191,6 +191,7 @@ class ConsumptionDelivery
 
         return $this;
     }
+<<<<<<< HEAD
 
     public function getPlaceOfDelivery(): ?string
     {
@@ -203,4 +204,6 @@ class ConsumptionDelivery
 
         return $this;
     }
+=======
+>>>>>>> ABI
 }
