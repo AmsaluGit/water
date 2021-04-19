@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ProductionReport{% endblock %}
+
+{% block body %}
+    <h1>ProductionReport</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ production_report.id }}</td>
+            </tr>
+            <tr>
+                <th>PBR</th>
+                <td>{{ production_report.PBR }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ production_report.Date ? production_report.Date|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('production_report_index') }}">back to list</a>
+
+    <a href="{{ path('production_report_edit', {'id': production_report.id}) }}">edit</a>
+
+    {{ include('production_report/_delete_form.html.twig') }}
+{% endblock %}

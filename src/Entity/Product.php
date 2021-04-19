@@ -93,6 +93,11 @@ class Product
      */
     private $type;
 
+    /**
+     * @ORM\OneToOne(targetEntity=ProductionReport::class, mappedBy="product", cascade={"persist", "remove"})
+     */
+    private $productionReport;
+
     public function __construct()
     {
    
@@ -402,6 +407,23 @@ class Product
     public function setType(?int $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getProductionReport(): ?ProductionReport
+    {
+        return $this->productionReport;
+    }
+
+    public function setProductionReport(ProductionReport $productionReport): self
+    {
+        // set the owning side of the relation if necessary
+        if ($productionReport->getProduct() !== $this) {
+            $productionReport->setProduct($this);
+        }
+
+        $this->productionReport = $productionReport;
 
         return $this;
     }
