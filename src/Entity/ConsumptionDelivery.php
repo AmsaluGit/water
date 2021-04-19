@@ -42,9 +42,24 @@ class ConsumptionDelivery
     private $approvedBy;
 
     /**
-     * @ORM\OneToMany(targetEntity=ConsumptionDeliveryList::class, mappedBy="consumptionDelivery")
+     * @ORM\OneToMany(targetEntity=ConsumptionDeliveryList::class, mappedBy="consumptionDelivery", cascade={"remove"})
      */
     private $consumptionDeliveryLists;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $approvalStatus;
+ 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $deliveredDate;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $note;
 
     public function __construct()
     {
@@ -132,6 +147,42 @@ class ConsumptionDelivery
                 $consumptionDeliveryList->setConsumptionDelivery(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getApprovalStatus(): ?int
+    {
+        return $this->approvalStatus;
+    }
+
+    public function setApprovalStatus(?int $approvalStatus): self
+    {
+        $this->approvalStatus = $approvalStatus;
+
+        return $this;
+    }
+
+    public function getDeliveredDate(): ?\DateTimeInterface
+    {
+        return $this->deliveredDate;
+    }
+
+    public function setDeliveredDate(\DateTimeInterface $deliveredDate): self
+    {
+        $this->deliveredDate = $deliveredDate;
+
+        return $this;
+    }
+
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+
+    public function setNote(?string $note): self
+    {
+        $this->note = $note;
 
         return $this;
     }

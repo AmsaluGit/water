@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ConsumptionDeliveryList{% endblock %}
+
+{% block body %}
+    <h1>Create new ConsumptionDeliveryList</h1>
+
+    {{ include('consumption_delivery_list/_form.html.twig') }}
+
+    <a href="{{ path('consumption_delivery_list_index') }}">back to list</a>
+{% endblock %}

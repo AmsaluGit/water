@@ -1,53 +1,27 @@
-{% extends 'base.html.twig' %} {% block title %}ConsumptionRequest index {% endblock %} {% block maintitle %} ConsumptionRequest {% endblock %} {% block breadcrumb %}
-<li class="breadcrumb-item active">ConsumptionRequest</li>
-{% endblock %} {% block body %}
-{# <div class="row">
-    <div class="card col-md">
+{% extends 'base.html.twig' %}
 
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card card-info">
-                        <div class="card-header">
-                            <h3 class="card-title">ConsumptionRequest List</h3>
-                            <div class="card-tools">
-                                <form class="form-inline ml-3">
-                                    <div class="input-group ">
-                                        <input class="form-control" autocomplete="off" name="search" type="search" placeholder="Search" aria-label="Search">
-                                        <div class="input-group-append">
-                                            <button class=" input-group-text btn btn-navbar " type="submit">
-													<i class="fas fa-search"></i>
-											</button>
-                                        </div>
-                                    </div>
-                                </form>
+{% block title %}Consumption Request index
+{% endblock %}
+{% block maintitle %}
+	Consumption Request
+{% endblock %}
 
-                            </div>
-                        </div>
-                    </div> 
-                </div>        #}
-                	<div class="row">
+
+{% block breadcrumb %}
+
+	<li class="breadcrumb-item active">Consumption Request</li>
+{% endblock %}
+{% block body %}
+	<div class="row">
 		<div class="card col-md">
 
 			<div class="card-body">
 				<div class="row">
 					<div class="col-md-12">
-						<div class="card card-info">
+						<div class="card card">
 							<div class="card-header">
-								<h3 class="card-title">
-                                Consumption Request List
-								</h3>
-								<!-- /.card-tools -->
-							</div>
-							<!-- /.card-header -->
-						</div>
-					</div>
-
-					<div class="col-md-12">
-						<div class="card ">
-							<div class="card-header">
+								<h3 class="card-title">Consumption Request</h3>
 								<div class="card-tools">
-								
 									<form class="form-inline ml-3" >
 										<div class="input-group ">
 											<input class="form-control" autocomplete="off" name="search" type="search" placeholder="Search" aria-label="Search">
@@ -58,63 +32,549 @@
 											</div>
 										</div>
 									</form>
-
-									
 								</div>
 							</div>
 							<div class="card-body">
-                            <table class="table table-hover">
+								<a href="{{ path('new_consumption_request_index') }}" class="btn btn-success btn-sm" style = "float:;">
+									New Request
+								</a>
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th style="width: 10px">
+												#
+											</th>
+											<th>{{ knp_pagination_sortable(consumption_requests, 'Requester', 'u.username') }}</th>
+											<th>{{ knp_pagination_sortable(consumption_requests, 'Approver', 'u.username') }}</th>
+                                            <th>{{ knp_pagination_sortable(consumption_requests, 'Section', 's.name') }}</th>
+                                            <th>Status</th>
+                                            <th>{{ knp_pagination_sortable(consumption_requests, 'Date Of Request', 'c.requestedDate') }}</th>
+											<th>view </th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% set i = 1 %}
+										{% for consumption_request in consumption_requests %}
+											<tr>
+												<td style="width: 10px">
+													{{ i }}
+													{% set i = i+1 %}
+												</td>
+												<td>{{ consumption_request.requester }}</td>
+												<td>{{ consumption_request.approvedBy }}</td>
+												<td>{{ consumption_request.section }}</td>
+												<td>
+													{% if consumption_request.approvalStatus == 1 %}
+													<i style="color:green;" class="fa fa-check" aria-hidden="true"></i>
+													
+													{% elseif consumption_request.approvalStatus == 2 %}
+													<i style="color:red;" class="fa fa-times"></i>
+													{% else %}
+													<i class="fa fa-spinner fa-spin"></i>
+													{% endif %}
+												</td>
+                                                <td>{{ consumption_request.requestedDate | date('d-m-Y : h-m-s') }}</td>
+												<td>
+												 	<form class="d-inline" method="post" action="{{ path('consumption_index') }}">
+													 	<input type="hidden" name="view" value="{{consumption_request.id}}">
+														<button title="view" type = "button" class="btn btn-link " data-target="#demo{{ consumption_request.id }}" data-toggle="collapse">
+															View
+														</button>
+													</form>
+                                                </td>												
+												<td>
+												    
+												{% if consumption_request.approvalStatus == null %}
+												   
+													<form class="d-inline" method="post" action="{{ path('edit_consumption_request_index',{'id' : consumption_request.id}) }}">
+														<input type="hidden" name="edit" value="{{consumption_request.id}}">
+														<button class="btn btn-info btn-sm" title="Edit">
+															<i class="fa fa-edit"></i>
+														</button>
+													</form>
+													<button href="#modalCenter{{consumption_request.id}}" role="button" class="btn btn-danger btn-sm" data-toggle="modal"><i class="fa fa-trash"></i></button>
+													<div id="modalCenter{{consumption_request.id}}" class="modal fade" tabindex="-1">
+														<div class="modal-dialog modal-dialog-centered">
+															<div class="modal-content">
+																<div class="modal-header">
+																	<h5 class="modal-title">Delete</h5>
+																	<button type="button" class="close" data-dismiss="modal">&times;</button>
+																</div>
+																<div class="modal-body">
+																	<p>Are you sure you want to delete this entry?</p>
+																</div>
+																<div class="modal-footer">
+																	<form class="d-inline" method="post" action="{{ path('consumption_request_delete', {'id': consumption_request.id}) }}">
+																		<input type="hidden" name="_method" value="DELETE">
+																		<input
+																		type="hidden" name="_token" value="{{ csrf_token('delete' ~ consumption_request.id) }}">
+																		{#  <button type="button" data-type="confirm" class="btn btn-danger js-sweetalert" title="Delete">#}
+																		<button class="btn btn-danger" title="Delete">
+																			Delete
+																		</button>
+																	</form>
+																	<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+																	
+																</div>
+															</div>
+														</div>
+													</div>
+												{% endif %}
+												</td>
+
+												 													     							
+											</tr>
+											
+											<tr>
+												<td colspan="8">
+													<div class = "col-md-12" >
+														<div class="card collapse" id = "demo{{ consumption_request.id }}" >
+															<div class="card-header">
+															{# <form method="GET" action="{{ path('print_page_index')}}">
+																<input type="hidden" name="parent_id" value="{{consumption_request.id}}"> #}
+																<h4 class="card-title">Items List</h4>
+																	{% if consumption_request.approvalStatus ==1 %}
+																		<a target="_blank" href="{{ path('print_page_index', {'id': consumption_request.id}) }}" style="float:right;" class="btn btn-primary">Generate PDF</a>
+																	{% endif %}	
+															{# </form>															 #}
+															</div>
+															<div class="card-body">
+																<table class="table" >
+																
+																	<thead>
+																		<tr>
+																			<td>#</td>
+																			{# <th>{{ knp_pagination_sortable(sells, 'Name', 'p.name') }}</th>
+																			<th>{{ knp_pagination_sortable(sells, 'Code', 'p.code') }}</th> #}
+																			<th>Product</th>
+																			{% if consumption_request.approvalStatus != null %}
+																				<th>CodeNumber</th>
+																			{% endif %}
+																			
+																			<th>RequestedQuantity</th>
+																			{% if consumption_request.approvalStatus == 1 %}
+																				<th>ApprovedQuantity</th>
+																			{% endif %}	
+																			{% if consumption_request.approvalStatus == null %}
+																				<th>Available</th>
+																			{% endif %}
+																			
+																			{# <th>Total</th> #}
+																		</tr>
+																	</thead>
+																
+																	<tbody>
+																	
+																		{% set j = 1 %}{% set k = 0 %}
+																		{% for item in consumption_request.consumptionRequestLists %}								
+																		
+																			{% set k = 1 %}
+																			<tr>
+																				<td>
+																				{{ j }}
+																				{% set j = j+1 %}
+																				</td>
+																				<td>{{ item.product }}</td>
+																				{% if item.approvalStatus != null %}
+																					<td>{{ item.codeNumber }}</td>
+																				{% endif %}
+																				
+																				<td>{{ item.quantity }}</td>
+																				{% if item.approvalStatus == 1 %}
+																					<td>{{ item.approvedQuantity }}</td>
+																				{% endif %}
+																				{% if item.approvalStatus == null %}
+																					<td>{{ item.available (item.unitOfMeasure)}}</td> 
+																				{% endif %}
+                                                                                
+																				{#<td>{{ item.unitPrice }}</td>
+																				<td>{{ item.quantity * item.unitprice }}</td> #}
+																				{% if not consumption_request.approvalStatus %}
+																				<td>
+																					<form id = "approval" method="post">
+																					
+																						<div class="form-group" >
+																							
+																							<select class="form-control" name="mySelect{{item.id}}" onchange = "myFunction(this.value,{{item.id}})" >
+																							<option>Approve all</option>
+																							<option>Approve some</option>
+																							<option>Reject</option>
+																	
+																							</select>
+																						
+																							
+																							
+																						</div>
+																				
+																				
+																				
+																						<div class="form-group">
+																							<input class ="form-control" type= "text" name = "quantity{{item.id}}" id = "quantity{{item.id}}" placeholder="Approved Quantity" hidden>
+																						</div>
+																						<div class="form-group">
+																							<input class ="form-control" type= "text" name = "remark{{item.id}}" id = "remark{{item.id}}" placeholder="remark" hidden>
+																						</div>
+																						
+																				</td>
+																				
+																				{# <td>
+																					<form class="d-inline" method="post" action="{{ path('edit_sells_list_index',{'id': item.id}) }}">
+																						<input type="hidden" name="edit_list" value="{{item.id}}">
+																					
+																						<button class="btn btn-info btn-sm" title="Edit">
+																							<i class="fa fa-edit"></i>
+																						</button>
+																					</form>
+																					
+																					<button href="#modalCenter2{{item.id}}" id = "collapse" role="button" class="btn btn-danger btn-sm" data-toggle="modal"><i class="fa fa-trash"></i></button>
+																					<div id="modalCenter2{{item.id}}" class="modal fade" tabindex="-1">
+																						<div class="modal-dialog modal-dialog-centered">
+																							<div class="modal-content">
+																								<div class="modal-header">
+																									<h5 class="modal-title">Delete</h5>
+																									<button type="button" class="close" data-dismiss="modal">&times;</button>
+																								</div>
+																								<div class="modal-body">
+																									<p>Are you sure you want to delete this entry?</p>
+																								</div>
+																								<div class="modal-footer">
+																									<form class="d-inline" method="post" action="{{ path('sells_list_delete', {'id': item.id}) }}">
+
+																										<input type="hidden" name="_method" value="DELETE">
+																										<input
+																										type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.id) }}">
+																										<button class="btn btn-danger" title="Delete">
+																											Delete
+																										</button>
+																									</form>
+																									<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+																									
+																								</div>
+																							</div>
+																						</div>
+																					</div>															
+																					
+																				</td> #}
+																					
+																			</tr>
+																			
+																			{% endif %}
+																			{% else %}
+																			<tr>
+																				<td colspan="5">no records found</td>
+																			</tr>
+											
+																			{% endfor %}
+																			{% if k == 1 and not consumption_request.approvalStatus %}
+																			{# {% if not sell.approvalStatus %} #}
+																			<tr>
+																				<td colspan="8">
+																					{# <form id = "approval" method="post"> #}
+																						<div class="form" style = "margin: auto; width: 60%;">
+
+																							<div class="col-auto">
+																							<label>Remark</label>
+																							</div>
+
+																							<div class="col-auto">
+																								<textarea class="form-control " name="remark" form="approval"></textarea>
+																							{# <input type="textarea" class="form-control mb-2" id="inlineFormInput" placeholder=""> #}
+																							</div>
+																							<br>
+																
+																							<div class="d-inline col-auto" style="float:right;">
+																								{# <input type="hidden" name="approve" value="{{sell.id}}"> #}
+																								<button class="btn btn-success mb-2" value="{{consumption_request.id}}" name="approve" title="approve">Approve</button>													
+																								{# <input type="hidden" name="reject"  value="{{sell.id}}"> #}
+																								<button class="btn btn-danger mb-2" name="reject" value="{{consumption_request.id}}" title="Reject">Reject All</button>
+																							</div>
+																						</div>
+																					</form>
+																				</td>
+																			</tr>
+																			
+																			{# {% endif %}	 #}
+																			{% endif %}	
+																																																
+																	</tbody>
+																</table>
+																<br>
+																
+																
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											
+										{% else %}
+											<tr>
+												<td colspan="5">no records found</td>
+											</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+								<br>
+								{% do consumption_requests.setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') %} 
+								<div class="float-right">{{ knp_pagination_render(consumption_requests) }}</div>
+
+
+							</div>
+						</div>
+					</div>
+					<!-- /.card-body -->
+				</div>
+			</div>
+
+		</div>
+		<!-- /.card-body -->
+	</div>
+
+{% block javascripts %}
+<script>
+		{# {% if edit_list %}
+		document.getElementById('collapse').click();
+		{% endif %} #}
+		{# function openWindows(){
+			myWindow = window.open("", "myWindow", "width=200,height=100");
+  			myWindow.document.{{ include('page3.html.twig') }}
+			  
+		} #}
+		function myFunction(val,id) {
+  			
+
+			if(val == "Approve all"){
+				document.getElementById("quantity"+id).setAttribute('hidden',"true");
+				document.getElementById("remark"+id).setAttribute('hidden','true');
+			}
+			else if(val == "Approve some"){
+				document.getElementById("quantity"+id).removeAttribute('hidden',"true");
+				document.getElementById("remark"+id).removeAttribute('hidden', "true");
+			} 
+			else if(val == "Reject"){
+				document.getElementById("quantity"+id).setAttribute('hidden',"true");
+				document.getElementById("remark"+id).removeAttribute('hidden', "true");
+			}else{
+				document.getElementById("quantity"+id).setAttribute('hidden',"true");
+				document.getElementById("remark"+id).setAttribute('hidden','true');
+			} 
+
+			
+			
+			}
+    {# $(document).ready(function(){
+
+        $("#mySelect").on("change",function(){
+            alert($(this).val());
+        });
+    }); #}
+{#  
+			 $(function () {
+ $('#collapse').trigger('click');
+})  #}
+		</script>
+	
+{% endblock %}		
+
+{% endblock %}
+
+
+
+
+{# ------------------------------------------------------------------------------------------- #}
+{# {% extends 'base.html.twig' %} {% block title %}ConsumptionRequest index {% endblock %} {% block maintitle %} ConsumptionRequest {% endblock %} {% block breadcrumb %}
+<li class="breadcrumb-item active">ConsumptionRequest</li>
+<style>
+    .hiddenRow {
+        padding: 0 4px !important;
+        background-color: #eeeeee;
+        font-size: 13px;
+    }
+    
+    .accordian-body span {
+        color: #a2a2a2 !important;
+    }
+</style>
+{% endblock %} {% block body %}
+<div class="row">
+    <div class="card col-md">
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                Consumption Request List
+                            </h3>
+                            <!-- /.card-tools -->
+                        </div>
+                        <!-- /.card-header -->
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="card ">
+                        <div class="card-header">
+                            <div>
+                            <form action="{{ path('consumption_request_list_new') }}" method="post">
+                               <div class="form-group">
+                                    <input type="hidden" name="new-list" value="new_list" />
+                                    <button type="submit" class="btn btn-success ">
+                                        New Request
+                                    </button>
+                                </div>
+                            </form>    
+                            </div>
+                            <div class="card-tools">
+
+                                <form class="form-inline ml-3">
+                                    <div class="input-group ">
+                                        <input class="form-control" autocomplete="off" name="search" type="search" placeholder="Search" aria-label="Search">
+                                        <div class="input-group-append">
+                                            <button class=" input-group-text btn btn-navbar " type="submit">
+													    <i class="fas fa-search"></i>
+												    </button>
+                                </form>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-hover" style="border-collapse:collapse;">
                                 <thead>
                                     <tr>
-                                        <th>
-                                            #
-                                        </th>
-                                        <th>{{ knp_pagination_sortable(consumption_requests, 'RequestedBy', 'u.username') }} </th>
-                                        <th>{{ knp_pagination_sortable(consumption_requests, 'Date', 'c.requestedDate') }}</th>
-                                        <th>{{ knp_pagination_sortable(consumption_requests, 'Product', 'p.name') }}</th>
-                                        <th>{{ knp_pagination_sortable(consumption_requests, 'Quantity', 'c.quantity') }}</th>
-                                        <th>Approval Status</th>
-                                        <th>Remark</th>
-                                        <th>Action</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% set i = 1 %} {% for consumption_request in consumption_requests %}
+                                    {% set i = 1 %}{% for consumption_request in consumption_requests %}
                                     <tr>
                                         <td>
                                             {{ i }} {% set i = i+1 %}
                                         </td>
 
                                         <td>{{ consumption_request.requester }}</td>
+                                        <td>{{ consumption_request.approvedBy }}</td>
+                                        <td>{{ consumption_request.section }}</td>
                                         <td>{{ consumption_request.requestedDate | date('d-m-Y : h-m-s') }}</td>
-                                        <td>{{ consumption_request.product }}</td>
-                                        <td>{{ consumption_request.quantity }}</td>
-                                        {% if consumption_request.approvalStatus == 1 %}
-                                                    <td>Approved</td>
-                                        {% elseif consumption_request.approvalStatus == 2 %}
-                                            <td>Rejected</td>
-                                        {% else %}
-                                            <td>Waiting</td>
-                                        {% endif %}
-                                        <td>{{ consumption_request.remark }}</td>
                                         <td>
-                                        {% if applevel > consumption_request.consumptionApprovals|length and consumption_request.approvalStatus != 2 %}
-                                            <form class="d-inline" method="post" action="{{ path('consumption_approval_index') }}">
-                                                <input type="hidden" name="replay" value="{{ consumption_request.id }}" />
-                                                <input type="submit" class="btn btn-link" value="Approve" />
-                                            </form>
-                                            {% else %} 
-													<button class="btn btn-link" disabled>Closed</button>
-											{% endif %} 
-                                        </td>
 
+                                            <button class="btn btn-link accordion-toggle" data-toggle="collapse" data-target="#collapseRow{{consumption_request.id}}">
+                                                                ViewDetails
+                                                            </button>
+                                        </td>
+                                        <td>
+                                            <form class="d-inline" method="post" action="{{ path('consumption_request_list_index') }}">
+                                                                
+                                                <input type="hidden" name="p-edit" value="{{consumption_request.id}}">
+                                                                    <button class="btn btn-info btn-sm" title="Edit">
+                                                                        <i class="fa fa-edit"></i>
+                                                                    </button>
+
+                                            </form>
+                                            <form class="d-inline" method="post" action="{{ path('consumption_request_delete', {'id': consumption_request.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+
+                                                <input type="hidden" name="_method" value="DELETE">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ consumption_request.id) }}"> 
+                                                {# <button type="button" data-type="confirm" class="btn btn-danger js-sweetalert" title="Delete"> 
+                                                <button class="btn btn-danger btn-sm" title="Delete">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
                                     </tr>
+
+                                    <tr class="hiddenRow">
+                                        <td colspan="7">
+                                            <div class="card collapse" id="collapseRow{{consumption_request.id}}">
+
+                                                <table class="table table-striped table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>
+                                                                #
+                                                            </th>
+                                                            <th>Code No</th>
+                                                            <th>Product</th>
+                                                            <th>Unit Of Measure</th>
+                                                            <th>Quantity</th>
+                                                            <th>
+                                                                <div style="text-align:center;">By Store</div>
+                                                                <div style="display:inline-block;width:100%;text-align:center;">Available</span>
+                                                                <div style="display:inline-block;width:50%;text-align:center;">Issue</span>
+                                                            </th>
+                                                            
+                                                           
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% set j = 1 %} 
+                                                        {% set  checker = 1 %}
+                                                        {% for consumption_request_list in consumption_list %}
+                                                            {% if consumption_request_list.consumptionRequest.id == consumption_request.id %}
+                                                                 {% set checker = null %}
+                                                        <tr>
+                                                            <td>
+                                                                {{ j }} {% set j = j+1 %}
+                                                            </td>
+                                                            <td>{{ consumption_request_list.codeNumber }}</td>
+                                                            <td>{{ consumption_request_list.product }}</td>
+                                                            <td>{{ consumption_request_list.unitOfMeasure }}</td>
+                                                            <td>{{ consumption_request_list.quantity }}</td>
+                                                            <td>
+                                                                <div style="display:inline-block;width:50%;text-align:center;">{{ consumption_request_list.available }}</div>
+                                                                <div style="display:inline-block;width:25%;text-align:center;">{{ consumption_request_list.issue }}</div>
+                                                            </td>
+                                                            
+                                                        </tr>
+                                                        
+                                                        {% endif %} 
+                                                                                                                {% else %}
+                                                        <tr>
+                                                            <td style="text-align:center;" colspan="7">no records found</td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                        {% if not checker %}
+                                                            <tr>
+                                                            <td colspan="7">
+                                                                {# approve form 
+                                                                    <div>
+                                                                        <form action="{{path('consumption_approval_index')}}" method="post" class="d-block">
+                                                                            <div class="form-group">
+                                                                                <input type="hidden" name="reject" value="{{ 1 }}">
+                                                                                <label class="control-label" >Remark</label>
+                                                                                <textarea class="form-control" style="display:inline;" type="text" name="remark" id=""></textarea>
+                                                                                <input type="hidden" name="approve" value="{{ 2 }}">                            
+                                                                            </div>
+                                                                            <div style="text-align:right;">
+                                                                            <button type="submit" class="btn btn-success">Approve</button>
+                                                            
+                                                                            <button type="submit" class="btn btn-warning">Reject</button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                            </td>        
+
+                                                            </tr>
+                                                        {% endif %}
+
+                                                        {% if checker %}
+                                                        <tr>
+                                                            <td style="text-align:center;" colspan="7">no records found</td>
+                                                        </tr>
+                                                        {% endif %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    <tr>
                                     {% else %}
                                     <tr>
-                                        <td colspan="5">no records found</td>
+                                        <td style="text-align:center;" colspan="7">no records found</td>
                                     </tr>
                                     {% endfor %}
-
                                 </tbody>
                             </table>
                             <div style="margin-top:20px;">
@@ -134,5 +594,4 @@
     </div>
     <!-- /.card-body -->
 </div>
-
-{% endblock %}
+{% endblock %} #}

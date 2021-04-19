@@ -79,6 +79,7 @@
 											</th>
 											<th>{{ knp_pagination_sortable(products, 'Name', 'p.name') }}</th>
 											<th>{{ knp_pagination_sortable(products, 'Category', 'c.name') }}</th> 
+											<th>product type</th>
 											<th>description</th>
 											<th>Action</th>
 										</tr>
@@ -93,6 +94,12 @@
 												</td>
 												<td>{{ product.name }}</td>
 												<td>{{ product.category }}</td>
+												{% if product.type == 1 %}
+													<td>Raw Material</td>
+												{% else %}
+													<td>End Product</td>
+												{% endif %}
+												
 												<td>{{ product.description }}</td>
 												<td>
 

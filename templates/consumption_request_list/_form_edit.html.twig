@@ -1,0 +1,29 @@
+{{ form_start(form_edit,{'attr': {'role':'form'}}) }}
+
+<div class="form-group ">
+    <label class="control-label no-padding-right">{{ form_label(form_edit.product) }}</label> {{ form_widget(form_edit.product,{'attr':{'class':'form-control'}}) }}
+    <div class="help-block with-errors"></div>
+</div>
+<div class="form-group ">
+    <label class="control-label no-padding-right">{{ form_label(form_edit.codeNumber) }}</label> {{ form_widget(form_edit.codeNumber,{'attr':{'class':'form-control'}}) }}
+    <div class="help-block with-errors"></div>
+</div>
+
+<div class="form-group ">
+    <label class="control-label no-padding-right">{{ form_label(form_edit.unitOfMeasure) }}</label> {{ form_widget(form_edit.unitOfMeasure,{'attr':{'class':'form-control'}}) }}
+    <div class="help-block with-errors"></div>
+</div>
+
+<div class="form-group ">
+    <label class="control-label no-padding-right">{{ form_label(form_edit.quantity) }}</label> {{ form_widget(form_edit.quantity,{'attr':{'class':'form-control'}}) }}
+    <div class="help-block with-errors"></div>
+</div>
+
+<div style="width:120px;">
+    <input type="hidden" name="context" value="{{context}}" />
+    <input type="hidden" name="parent-id" value="{{parentid}}" />
+    <button type="submit" class="btn btn-success btn-outline-light">{{ button_label|default('Save') }}</button>
+    {# style="margin-left:130px;" #}
+
+</div>
+{{ form_end(form_edit) }}

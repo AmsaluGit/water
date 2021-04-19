@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ConsumptionRequestList{% endblock %}
+
+{% block body %}
+    <h1>Create new ConsumptionRequestList</h1>
+
+    {{ include('consumption_request_list/_form.html.twig') }}
+
+    <a href="{{ path('consumption_request_list_index') }}">back to list</a>
+{% endblock %}

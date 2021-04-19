@@ -3,9 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\ConsumptionRequest;
+use App\Entity\ConsumptionRequestList;
+use App\Entity\ConsumptionDelivery;
+
+use App\Entity\ConsumptionDeliveryList;
+
 use App\Form\ConsumptionRequestType;
+use App\Form\ConsumptionRequestListType;
 use App\Repository\ConsumptionRequestRepository;
+use App\Repository\ConsumptionRequestListRepository;
 use App\Repository\SettingRepository;
+use App\Form\ConsumptionApprovalForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,21 +26,279 @@ use Knp\Component\Pager\PaginatorInterface;
 class ConsumptionRequestController extends AbstractController
 {
     /**
-     * @Route("/", name="consumption_index", methods={"GET"})
+     * @Route("/", name="consumption_index", methods={"GET","POST"})
      */
-    public function index(ConsumptionRequestRepository $consumptionRequestRepository,SettingRepository $settingRepository, Request $request, PaginatorInterface $paginator): Response
+    public function index(ConsumptionRequestListRepository $consumptionRequestListRepository, ConsumptionRequestRepository $consumptionRequestRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        $settingApprovalLevel = $settingRepository->findOneBy(['id'=>1])->getValue();
+        if($request->request->get('approve')){
+            $note = $request->request->get('remark');
+            $id = $request->request->get('approve');
+            $consumptionRequest =$consumptionRequestRepository->find($id);
+
+            // $consumptionDelivery = new ConsumptionDelivery();        //new
+            // $consumptionDelivery->setRequestNo($consumptionRequest);
+            // $entityManager = $this->getDoctrine()->getManager();
+            // $entityManager->persist($consumptionDelivery);
+            // $entityManager->flush();                                 //new
+
+            // $consumptionDeliveryList =new ConsumptionDeliveryList();
+
+
+            foreach($consumptionRequest->getConsumptionRequestLists() as $list){
+                $listId = $list->getId();
+                $var = $request->request->get("quantity$listId");
+
+                if($var > $list->getQuantity()){
+                    $this->addFlash('error', 'please make sure the approved quantity is less than the quantity!');
+                    return $this->redirectToRoute('consumption_index');
+                }
+                else{
+                    if($request->request->get("quantity$listId") and $request->get("mySelect$listId") == "Approve some"){
+                        $list->setApprovedQuantity($request->request->get("quantity$listId"))
+                             ->setRemark($request->request->get("remark$listId"))
+                             ->setApprovalStatus(1);
+                        // $consumptionDeliveryList->setProduct($list->getProduct())
+                        //                         ->setUnitOfMeasure($list->getUnitOfMeasure())
+                        //                         ->setCodeNumber($list->codeNumber();
+                    }
+
+                    if($request->request->get("mySelect$listId") == "Approve all"){
+                        $list->setApprovedQuantity($list->getQuantity())
+                             ->setApprovalStatus(1);
+                    }
+                    if($request->request->get("mySelect$listId") == "Reject" and $request->request->get("remark$listId")){
+                        $list->setApprovalStatus(2)
+                             ->setRemark($request->request->get("remark$listId"));
+                    }
+
+                }
+            }
+
+            $user = $this->getUser();
+            $consumptionRequest->setApprovedBy($user)
+                               ->setNote($note)
+                               ->setApprovalStatus(1);
+
+            $this->addFlash('save', 'The Consumption request has been approved!');
+
+        }
+        elseif ($request->request->get("reject")){
+            $user = $this->getUser();
+            $id = $request->request->get('reject');
+            $consumptionRequest = $consumptionRequestRepository->find($id);
+            $consumptionRequestList = $consumptionRequest->getConsumptionRequestLists();
+
+            foreach($consumptionRequestList as $list){
+                $listId =$list->getId();
+                $list->setApprovalStatus(2);
+            }
+
+            $consumptionRequest->setApprovedBy($user)
+                               ->setNote($request->request->get('remark'))
+                               ->setApprovalStatus(2);
+
+            $this->addFlash('save', 'The Consumption request has been  Rejected!');
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->flush();
+
         $queryBuilder=$consumptionRequestRepository->findRequester($request->query->get('search'));
                  $data=$paginator->paginate(
                  $queryBuilder,
                  $request->query->getInt('page',1),
                18
             );
+
+            $dp = $consumptionRequestListRepository->findAll();
             return $this->render('consumption_request/index.html.twig', [
                 'consumption_requests' => $data,
-                'applevel' => $settingApprovalLevel
+                'consumption_list' => $dp,
+                'edit' =>false
             ]);
     }
+    /**
+     * @Route("/new", name="new_consumption_request_index", methods={"GET","POST"})
+     */
+    public function newConsumptionRequest(ConsumptionRequestListRepository $consumptionRequestListRepository, Request $request, ConsumptionRequestRepository $consumptionRequestRepository): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $consumptionRequest = new ConsumptionRequest();
+        $form_consumption = $this->createForm(ConsumptionRequestType::class, $consumptionRequest);
+        $form_consumption->handleRequest($request);
+
+        $user = $this->getUser();
+        $consumptionRequest->setRequester($user);
+
+        if($form_consumption->isSubmitted() && $form_consumption->isValid()){
+            $consumptionRequest->setRequestedDate(new \DateTime());//here
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($consumptionRequest);
+            $entityManager->flush();
+            $this->addFlash("save",'New Consumption Request Added');
+
+            $consumptionRequestId = $consumptionRequest->getId();
+            return $this->redirectToRoute('edit_consumption_request_index',['id'=>$consumptionRequestId]);
+        }
+
+        if($consumptionRequest){
+            $qb = $consumptionRequestListRepository->findBy(['consumptionRequest'=>$consumptionRequest]);
+        }
+        else{
+            $qb = null;
+        }
+
+        return $this->render('consumption_request/newRequest_form.html.twig', [
+            'consumption_list' => $qb,
+            'consumption_lists'=>$consumptionRequest->getId(),
+            'add_item'=>false,
+            'form_consumption'=> $form_consumption->createView(),
+            'edit'=>false,
+            'edit_list'=>false,
+            'id'=>$consumptionRequest->getId(),
+
+        ]);
+    }
+    /**
+     * @Route("/editconsumption/{id}", name="edit_consumption_request_index", methods={"GET","POST"})
+     */
+
+     public function editConsumptionRequest(ConsumptionRequestListRepository $consumptionRequestListRepository, Request $request, ConsumptionRequestRepository $consumptionRequestRepository, $id): Response
+     {
+         $entityManager = $this->getDoctrine()->getManager();
+
+         if($request->request->get('edit')){
+             $consumptionRequestId = $request->request->get('edit');
+             $consumptionRequest = $consumptionRequestRepository->find($consumptionRequestId);
+         }
+         elseif($request->request->get('parentId')){
+             $consumptionRequest =$entityManager->getRepository(ConsumptionRequest::class)->find($request->request->get("parentId"));
+         }
+         else{
+             $consumptionRequest = $consumptionRequestRepository->find($id);
+         }
+
+          $form_consumption= $this->createForm(ConsumptionRequestType::class, $consumptionRequest);
+          $form_consumption->handleRequest($request);
+
+          $consumptionRequestList = new ConsumptionRequestList();
+          $form_consumption_list = $this->createForm(ConsumptionRequestListType::class, $consumptionRequestList);
+          $form_consumption_list->handleRequest($request);
+
+
+          //edit info on Consumption Request
+          if($form_consumption->isSubmitted() && $form_consumption->isValid()){
+
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash("save",'Consumptin Request Updated');
+            return $this->redirectToRoute('edit_consumption_request_index',['id'=>$consumptionRequestId]);
+          }
+
+          //add new item on the ConsumptionRequest to ConsumptionRequestList
+          if($form_consumption_list->isSubmitted() && $form_consumption_list->isValid()){
+              $consumptionRequest = $entityManager->getRepository(ConsumptionRequest::class)->find($request->request->get("parentId"));
+              $consumptionRequestList->setConsumptionRequest($consumptionRequest);
+              $consumptionRequestList->setAvailable(4);
+
+          // $consumptionRequestList->setIssue(4);
+              $entityManager->persist($consumptionRequestList);
+              $entityManager->flush();
+              $this->addFlash("save",'ConsumptionList Added');
+              return $this->redirectToRoute('edit_consumption_request_index',['id'=>$consumptionRequest->getId()]);
+          }
+
+
+          $qb = $consumptionRequestListRepository->findBy(['consumptionRequest'=>$consumptionRequest]);
+          return $this->render('consumption_request/newRequest_form.html.twig', [
+            'consumption_list' => $qb,
+            'form_consumption' => $form_consumption->createView(),
+            'form_consumption_list' => $form_consumption_list->createView(),
+            'add_item'=>true,
+            'edit'=>$consumptionRequest->getId(),
+            'edit_list'=>false,
+            'consumption_lists'=>$consumptionRequestList,
+            'id'=>$consumptionRequest->getId(),
+        ]);
 
     }
+    /**
+     * @Route("/editconsumptionlist/{id}", name="edit_consumption_request_list_index", methods={"GET","POST"})
+     */
+    public function editConsumptionRequestList(ConsumptionRequestListRepository $consumptionRequestListRepository, Request $request, ConsumptionRequestRepository $consumptionRequestRepository,$id ): Response
+    {
+
+        $consumptionRequestList = $consumptionRequestListRepository->find($id);
+
+        $consumptionRequest = $consumptionRequestList->getConsumptionRequest();
+        $form_consumption_list = $this->createForm(ConsumptionRequestListType::class, $consumptionRequestList);
+        $form_consumption_list->handleRequest($request);
+
+        $form_consumption = $this->createForm(ConsumptionRequestType::class,$consumptionRequest);
+        $form_consumption->handleRequest($request);
+
+        if ($form_consumption_list->isSubmitted() && $form_consumption_list->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash("save",'Item Updated');
+            return $this->redirectToRoute('edit_consumption_request_index',['id'=>$consumptionRequest->getId()]);
+        }
+
+        $qb=$consumptionRequestListRepository->findBy(['consumptionRequest'=>$consumptionRequest]);
+        return $this->render('consumption_request/newRequest_form.html.twig', [
+            'consumption_list' => $qb,
+            'form_consumption' => $form_consumption->createView(),
+            'form_consumption_list' => $form_consumption_list->createView(),
+            'add_item'=>true,
+            'edit'=>false,
+            'edit_list'=>true,
+            'consumption_lists'=>$consumptionRequestList,
+            'id'=>$consumptionRequest->getId(),
+        ]);
+
+    }
+
+      /**
+     * @Route("/{id}", name="consumption_request_delete", methods={"DELETE"})
+     */
+    public function parentDelete(Request $request, ConsumptionRequest $consumptionRequest): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$consumptionRequest->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($consumptionRequest);
+            $entityManager->flush();
+        }
+        return $this->redirect($request->headers->get('referer'));
+    }
+    /**
+     * @Route("/child/{id}", name="consumption_request_list_delete", methods={"DELETE"})
+     */
+    public function deleteChild(Request $request, ConsumptionRequestList $consumptionRequestList): Response
+    {
+
+        if ($this->isCsrfTokenValid('delete'.$consumptionRequestList->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($consumptionRequestList);
+            $entityManager->flush();
+        }
+
+        return $this->redirect($request->headers->get('referer'));
+    }
+
+    /**
+     * @Route("/print{id}", name="print_page_index", methods={"GET", "POST"})
+     */
+    public function printPage(Request $request, ConsumptionRequestListRepository $consumptionRequestListRepository ,ConsumptionRequestRepository $consumptionRequestRepository, $id): Response
+    {
+        $consumptionRequestId = $id;
+        $consumptionRequest = $consumptionRequestRepository->find($consumptionRequestId);
+        $consumptionRequestList=$consumptionRequestListRepository->findBy(['consumptionRequest'=>$consumptionRequest]);
+        return $this->render('consumption_request/page3.html.twig', [
+           'consumption_request'=>$consumptionRequest,
+           'consumption_lists' =>$consumptionRequestList
+       ]);
+    }
+
+
+
+}
+

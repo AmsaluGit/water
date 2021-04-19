@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ConsumptionDeliveryList index{% endblock %}
+
+{% block body %}
+    <h1>ConsumptionDeliveryList index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>CodeNumber</th>
+                <th>Quantity</th>
+                <th>UnitPrice</th>
+                <th>Remark</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for consumption_delivery_list in consumption_delivery_lists %}
+            <tr>
+                <td>{{ consumption_delivery_list.id }}</td>
+                <td>{{ consumption_delivery_list.codeNumber }}</td>
+                <td>{{ consumption_delivery_list.quantity }}</td>
+                <td>{{ consumption_delivery_list.unitPrice }}</td>
+                <td>{{ consumption_delivery_list.remark }}</td>
+                <td>
+                    <a href="{{ path('consumption_delivery_list_show', {'id': consumption_delivery_list.id}) }}">show</a>
+                    <a href="{{ path('consumption_delivery_list_edit', {'id': consumption_delivery_list.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('consumption_delivery_list_new') }}">Create new</a>
+{% endblock %}

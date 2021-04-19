@@ -39,9 +39,15 @@ class Section
      */
     private $stockRequests;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ConsumptionRequest::class, mappedBy="section")
+     */
+    private $consumptionRequests;
+
     public function __construct()
     {
         $this->stockRequests = new ArrayCollection();
+        $this->consumptionRequests = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -118,5 +124,35 @@ class Section
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection|ConsumptionRequest[]
+     */
+    public function getConsumptionRequests(): Collection
+    {
+        return $this->consumptionRequests;
+    }
+
+    public function addConsumptionRequest(ConsumptionRequest $consumptionRequest): self
+    {
+        if (!$this->consumptionRequests->contains($consumptionRequest)) {
+            $this->consumptionRequests[] = $consumptionRequest;
+            $consumptionRequest->setSection($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConsumptionRequest(ConsumptionRequest $consumptionRequest): self
+    {
+        if ($this->consumptionRequests->removeElement($consumptionRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($consumptionRequest->getSection() === $this) {
+                $consumptionRequest->setSection(null);
+            }
+        }
+
+        return $this;
     }
 }

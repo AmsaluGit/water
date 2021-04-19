@@ -13,8 +13,9 @@ class SectionType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('department', null, ['required'=>true])
             ->add('description')
-            ->add('department')
+            
         ;
     }
 

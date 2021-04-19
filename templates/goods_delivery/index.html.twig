@@ -175,6 +175,7 @@
 																			{# <th>Approved Quantity</th>
 																			<th>Remark</th> #}
 																			{% if sell.approvalStatus %}
+																			<th>approved quantity</th>
 																			<th>weight</th>
 																			<th>unitprice</th>
 																			<th>Total</th>
@@ -198,6 +199,7 @@
 																				<td>{{ item.quantity }}</td>
 
 																				{% if sell.approvalStatus %}
+																				<td>{{ item.approvedQuantity }}</td>
 																				<td>{{ item.weight }}</td>
 																				<td>{{ item.unitPrice }}</td>
 																				<td>{{ item.approvedQuantity * item.unitprice }}</td>

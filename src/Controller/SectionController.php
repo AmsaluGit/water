@@ -9,27 +9,45 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @Route("/section")
  */
 class SectionController extends AbstractController
 {
+ 
     /**
-     * @Route("/", name="section_index", methods={"GET"})
+     * @Route("/", name="section_index", methods={"GET","POST"})
      */
-    public function index(SectionRepository $sectionRepository): Response
+    public function index(SectionRepository $sectionRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        return $this->render('section/index.html.twig', [
-            'sections' => $sectionRepository->findAll(),
-        ]);
-    }
 
-    /**
-     * @Route("/new", name="section_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
+        if($request->request->get('edit')){
+            $id=$request->request->get('edit');
+            $section=$sectionRepository->findOneBy(['id'=>$id]);
+            $form = $this->createForm(SectionType::class, $section);
+            $form->handleRequest($request);
+    
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->getDoctrine()->getManager()->flush();
+    
+                return $this->redirectToRoute('section_index');
+            }
+
+            $queryBuilder=$sectionRepository->findSection($request->query->get('search'));
+            $data=$paginator->paginate(
+                $queryBuilder,
+                $request->query->getInt('page',1),
+                2
+            );
+            return $this->render('section/index.html.twig', [
+                'sections' => $data,
+                'form' => $form->createView(),
+                'edit'=>$id
+            ]);
+
+        }
         $section = new Section();
         $form = $this->createForm(SectionType::class, $section);
         $form->handleRequest($request);
@@ -42,39 +60,18 @@ class SectionController extends AbstractController
             return $this->redirectToRoute('section_index');
         }
 
-        return $this->render('section/new.html.twig', [
-            'section' => $section,
+        $search = $request->query->get('search');
+        
+        $queryBuilder=$sectionRepository->findSection($search);
+        $data=$paginator->paginate(
+            $queryBuilder,
+            $request->query->getInt('page',1),
+            2
+        );
+        return $this->render('section/index.html.twig', [
+            'sections' => $data,
             'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="section_show", methods={"GET"})
-     */
-    public function show(Section $section): Response
-    {
-        return $this->render('section/show.html.twig', [
-            'section' => $section,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="section_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Section $section): Response
-    {
-        $form = $this->createForm(SectionType::class, $section);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('section_index');
-        }
-
-        return $this->render('section/edit.html.twig', [
-            'section' => $section,
-            'form' => $form->createView(),
+            'edit'=>false
         ]);
     }
 

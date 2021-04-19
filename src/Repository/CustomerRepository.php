@@ -18,6 +18,36 @@ class CustomerRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Customer::class);
     }
+    public function findCustomer($search=null)
+    {
+        $qb=$this->createQueryBuilder('p');
+
+        if($search)
+            $qb->andWhere("p.name  LIKE '%".$search."%'");
+            return 
+            $qb->orderBy('p.id', 'ASC')
+            ->getQuery()
+            
+        ;
+    }
+    public function findForUserGroup($usergroup=null)
+    {
+        $qb=$this->createQueryBuilder('p');
+        
+        if (sizeof($usergroup)) {
+
+            $qb->andWhere('p.id not in ( :usergroup )')
+                ->setParameter('usergroup', $usergroup);
+        }
+       
+
+             
+            return $qb->orderBy('p.id', 'ASC')
+            ->getQuery()->getResult()
+     
+        ;
+      
+    }
 
     // /**
     //  * @return Customer[] Returns an array of Customer objects
