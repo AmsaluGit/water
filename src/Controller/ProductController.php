@@ -27,8 +27,10 @@ class ProductController extends AbstractController
             $form->handleRequest($request);
     
             if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
-    
+                $entityManager = $this->getDoctrine()->getManager();
+                $product->setType($request->request->get('product_type'));
+                $entityManager->persist($product);
+                $entityManager->flush();
                 return $this->redirectToRoute('product_index');
             }
 
@@ -50,6 +52,7 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            $product->setType($request->request->get('product_type'));
             $entityManager->persist($product);
             $entityManager->flush();
 

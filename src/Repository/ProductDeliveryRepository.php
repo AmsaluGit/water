@@ -84,8 +84,8 @@ class ProductDeliveryRepository extends ServiceEntityRepository
                  ->setParameter('val',$val)
                  ->setParameter('start',$start)
                  ->setParameter('last', $last);
-        return $qb->orderBy('m.id', 'ASC')
-                  ->getQuery()->getResult();
+        dd( $qb->orderBy('m.id', 'ASC')
+                  ->getQuery()->getResult());
 
 
     }

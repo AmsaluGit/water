@@ -71,6 +71,11 @@ class StockRequest
      */
     private $dateOfRequest;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $serialNumber;
+
  
 
     public function __construct()
@@ -224,6 +229,18 @@ class StockRequest
     public function setDateOfRequest(?\DateTimeInterface $dateOfRequest): self
     {
         $this->dateOfRequest = $dateOfRequest;
+
+        return $this;
+    }
+
+    public function getSerialNumber(): ?int
+    {
+        return $this->serialNumber;
+    }
+
+    public function setSerialNumber(?int $serialNumber): self
+    {
+        $this->serialNumber = $serialNumber;
 
         return $this;
     }

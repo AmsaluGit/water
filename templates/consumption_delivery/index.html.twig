@@ -48,7 +48,8 @@
 											<th>{{ knp_pagination_sortable(consumption_deliveries, 'DeliveredBy', 'u.username') }}</th>
                                             <th>{{ knp_pagination_sortable(consumption_deliveries, 'Approver', 'u.username') }}</th>
                                             <th>Status</th>
-                                            <th>{{ knp_pagination_sortable(consumption_deliveries, 'Date', 'c.requestedDate') }}</th>
+                                            <th>{{ knp_pagination_sortable(consumption_deliveries, 'Date', 'cd.deliveredDate') }}</th>
+                                            {# <th>{{ knp_pagination_sortable(consumption_deliveries, 'Date', 'c.requestedDate') }}</th> #}
 											<th>view </th>
 											<th>Action</th>
 										</tr>
