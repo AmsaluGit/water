@@ -74,7 +74,7 @@
 													<i class="fa fa-spinner fa-spin"></i>
 													{% endif %}
 												</td>
-                                                <td>{{ consumption_request.requestedDate | date('d-m-Y : h-m-s') }}</td>
+                                                <td>{{ consumption_request.requestedDate | date('d-m-Y  h:i:s') }}</td>
 												<td>
 												 	<form class="d-inline" method="post" action="{{ path('consumption_index') }}">
 													 	<input type="hidden" name="view" value="{{consumption_request.id}}">
@@ -213,6 +213,9 @@
 																							<input class ="form-control" type= "text" name = "quantity{{item.id}}" id = "quantity{{item.id}}" placeholder="Approved Quantity" hidden>
 																						</div>
 																						<div class="form-group">
+																							<input class ="form-control" type= "text" name = "unit{{item.id}}" id = "unit{{item.id}}" placeholder="Unit Price" >
+																						</div>
+																						<div class="form-group">
 																							<input class ="form-control" type= "text" name = "remark{{item.id}}" id = "remark{{item.id}}" placeholder="remark" hidden>
 																						</div>
 																						
@@ -347,14 +350,19 @@
 			if(val == "Approve all"){
 				document.getElementById("quantity"+id).setAttribute('hidden',"true");
 				document.getElementById("remark"+id).setAttribute('hidden','true');
+				document.getElementById("unit"+id).removeAttribute('hidden', "true");
 			}
 			else if(val == "Approve some"){
 				document.getElementById("quantity"+id).removeAttribute('hidden',"true");
 				document.getElementById("remark"+id).removeAttribute('hidden', "true");
+				document.getElementById("unit"+id).removeAttribute('hidden', "true");
+
 			} 
 			else if(val == "Reject"){
 				document.getElementById("quantity"+id).setAttribute('hidden',"true");
 				document.getElementById("remark"+id).removeAttribute('hidden', "true");
+				document.getElementById("unit"+id).setAttribute('hidden','true');
+
 			}else{
 				document.getElementById("quantity"+id).setAttribute('hidden',"true");
 				document.getElementById("remark"+id).setAttribute('hidden','true');

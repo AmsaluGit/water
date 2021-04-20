@@ -5,9 +5,7 @@ namespace App\Controller;
 use App\Entity\ConsumptionRequest;
 use App\Entity\ConsumptionRequestList;
 use App\Entity\ConsumptionDelivery;
-
 use App\Entity\ConsumptionDeliveryList;
-
 use App\Form\ConsumptionRequestType;
 use App\Form\ConsumptionRequestListType;
 use App\Repository\ConsumptionRequestRepository;
@@ -35,14 +33,11 @@ class ConsumptionRequestController extends AbstractController
             $id = $request->request->get('approve');
             $consumptionRequest =$consumptionRequestRepository->find($id);
 
-            // $consumptionDelivery = new ConsumptionDelivery();        //new
-            // $consumptionDelivery->setRequestNo($consumptionRequest);
-            // $entityManager = $this->getDoctrine()->getManager();
-            // $entityManager->persist($consumptionDelivery);
-            // $entityManager->flush();                                 //new
-
-            // $consumptionDeliveryList =new ConsumptionDeliveryList();
-
+            $consumptionDelivery = new ConsumptionDelivery();        //new
+            $consumptionDelivery->setRequestNo($consumptionRequest);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($consumptionDelivery);
+            $entityManager->flush();
 
             foreach($consumptionRequest->getConsumptionRequestLists() as $list){
                 $listId = $list->getId();
@@ -57,14 +52,31 @@ class ConsumptionRequestController extends AbstractController
                         $list->setApprovedQuantity($request->request->get("quantity$listId"))
                              ->setRemark($request->request->get("remark$listId"))
                              ->setApprovalStatus(1);
-                        // $consumptionDeliveryList->setProduct($list->getProduct())
-                        //                         ->setUnitOfMeasure($list->getUnitOfMeasure())
-                        //                         ->setCodeNumber($list->codeNumber();
+
+                        $consumptionDeliveryList =new ConsumptionDeliveryList();
+                        $consumptionDeliveryList->setProduct($list->getProduct())
+                                                ->setUnitOfMeasure($list->getUnitOfMeasure())
+                                                ->setCodeNumber($list->getCodeNumber())
+                                                ->setQuantity($request->request->get("quantity$listId"))
+                                                ->setUnitPrice($request->request->get("unit$listId"));
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $entityManager->persist($consumptionDeliveryList);
+                        $consumptionDelivery->addConsumptionDeliveryList($consumptionDeliveryList);
                     }
 
                     if($request->request->get("mySelect$listId") == "Approve all"){
                         $list->setApprovedQuantity($list->getQuantity())
                              ->setApprovalStatus(1);
+
+                        $consumptionDeliveryList =new ConsumptionDeliveryList();
+                        $consumptionDeliveryList->setProduct($list->getProduct())
+                                                ->setUnitOfMeasure($list->getUnitOfMeasure())
+                                                ->setCodeNumber($list->getCodeNumber())
+                                                ->setQuantity($list->getQuantity())
+                                                ->setUnitPrice($request->request->get("unit$listId"));
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $entityManager->persist($consumptionDeliveryList);
+                        $consumptionDelivery->addConsumptionDeliveryList($consumptionDeliveryList);
                     }
                     if($request->request->get("mySelect$listId") == "Reject" and $request->request->get("remark$listId")){
                         $list->setApprovalStatus(2)
@@ -103,6 +115,7 @@ class ConsumptionRequestController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->flush();
 
+          
         $queryBuilder=$consumptionRequestRepository->findRequester($request->query->get('search'));
                  $data=$paginator->paginate(
                  $queryBuilder,

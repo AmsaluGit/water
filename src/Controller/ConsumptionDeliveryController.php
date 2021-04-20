@@ -86,7 +86,9 @@ class ConsumptionDeliveryController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->flush();
 
-        $queryBuilder=$consumptionDeliveryRepository->findDelivery($request->query->get('search'));
+        // $queryBuilder=$consumptionDeliveryRepository->findDelivery($request->query->get('search'));
+        $queryBuilder=$consumptionDeliveryRepository->findAll();
+
                  $data=$paginator->paginate(
                  $queryBuilder,
                  $request->query->getInt('page',1),
@@ -155,6 +157,12 @@ class ConsumptionDeliveryController extends AbstractController
          if($request->request->get('edit')){
              $consumptionDeliveryId = $request->request->get('edit');
              $consumptionDelivery = $consumptionDeliveryRepository->find($consumptionDeliveryId);
+             if($consumptionDelivery->getReceiver() == null ){
+                $consumptionDelivery->setDeliveredDate(new \DateTime);
+             }
+             $consumptionDelivery->setReceiver($this->getUser());
+             
+                                 
          }
          elseif($request->request->get('parentId')){
              $consumptionDelivery =$entityManager->getRepository(ConsumptionDelivery::class)->find($request->request->get("parentId"));
@@ -175,8 +183,8 @@ class ConsumptionDeliveryController extends AbstractController
           if($form_consumption->isSubmitted() && $form_consumption->isValid()){
 
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash("save",'Consumptin Delivery Updated');
-            return $this->redirectToRoute('edit_consumption_Delivery_index',['id'=>$consumptionDeliveryId]);
+            $this->addFlash("save",'Consumption Delivery Updated');
+            // return $this->redirectToRoute('edit_consumption_Delivery_index',['id'=>$consumptionDelivery->getId()]);
           }
 
           //add new item on the ConsumptionRequest to ConsumptionRequestList

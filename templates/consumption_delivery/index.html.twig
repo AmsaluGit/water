@@ -269,7 +269,7 @@
 																			</tr>
 											
 																			{% endfor %}
-																			{% if k == 1 and not consumption_delivery.approvalStatus %}
+																			{% if k == 1 and not consumption_delivery.approvalStatus and consumption_delivery.receiver %}
 																			{# {% if not sell.approvalStatus %} #}
 																			<tr>
 																				<td colspan="8">
