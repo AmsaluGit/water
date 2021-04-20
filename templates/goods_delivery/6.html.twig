@@ -99,6 +99,7 @@
             </tr>
             
             {% set j = 1 %}
+            {% set total = 0 %}
 			{% for item in sellslist %}
             <tr>
                 <td id="td1">{{j}} {% set j = j+1 %}</td>
@@ -107,13 +108,19 @@
                    <td id="td1">{{ item.approvedQuantity }}</td>
                     <td id="td1" >{{ item.weight }}</td>
                      <td id="td1" >{{ item.unitPrice }}</td>
+                     {% set total = total + item.unitPrice * item.approvedQuantity %}
+                      
                       <td id="td1" >{{ item.approvedQuantity * item.unitprice }}</td>
                        
             </tr>
             {% endfor %}
-             
+            <tr>
+             <td colspan="6" style="text-align:left"> Total </td>
+                {# <td> </td> #}
+                <td>{{total }}</td>
+            </tr>
         </table>
-        <p>ማስታዎሻ:</p>
+        <p>ማስታዎሻ:  {{ sell.note }}</p>
          <table width=100% class="j">
              <tr>
                 <th style="text-align:left ;text-decoration: underline;width:25% " id="th2">ያዘጋጀዉ</th>
@@ -123,9 +130,9 @@
              </tr>
             <tr>
                 <th style="text-align:left" id="th2">ስም</th>
-                <th style="text-align:left" id="th2"><b style="padding-right=3px>ስም </b> {{ sell.receivedBy }}</th>
-                <th  style="text-align:left" id="th2">ስም {{ sell.receivedBy }}</th>
                 <th style="text-align:left" id="th2">ስም {{ sell.receivedBy }}</th>
+                <th  style="text-align:left" id="th2">ስም {{ sell.deliveredBy }}</th>
+                <th style="text-align:left" id="th2">ስም {{ sell.approvedBy }}</th>
              </tr>
              <tr>
                 <th style="text-align:left" id="th2">ፊርማ</th>
@@ -134,9 +141,9 @@
                 <th style="text-align:left" id="th2">ፊርማ</th>
              </tr>
             </table>                                                                   
-         <p><span style="text-decoration: underline">ያዘጋጀዉ</span> <span style="padding-left: 19%;text-decoration: underline">ተረካቢ  </span><span style="padding-left: 22%;text-decoration: underline"> አስረካቢ</span><span style="padding-left: 23%;text-decoration: underline">ያጠደቀ</span></p>
+         {# <p><span style="text-decoration: underline">ያዘጋጀዉ</span> <span style="padding-left: 19%;text-decoration: underline">ተረካቢ  </span><span style="padding-left: 22%;text-decoration: underline"> አስረካቢ</span><span style="padding-left: 23%;text-decoration: underline">ያጠደቀ</span></p>
          <p>ስም <span style="padding-left: 22%">ስም  {{ sell.receivedBy }}</span><span style="padding-left: 24%">ስም  {{ sell.deliveredBy }}</span> </span><span style="padding-left: 25%">ስም  {{ sell.approvedBy }}</span></p>
-         <p>ፊርማ<span style="padding-left: 21%">ፊርማ</span><span style="padding-left: 22%">ፊርማ</span> </span><span style="padding-left: 25%">ፊርማ </span></p>
+         <p>ፊርማ<span style="padding-left: 21%">ፊርማ</span><span style="padding-left: 22%">ፊርማ</span> </span><span style="padding-left: 25%">ፊርማ </span></p> #}
         <p><span style="text-decoration: underline"><b>ስርጭት</b>፡</span>1ኛ ኦርጅናል ነጭ ለሂሳብ ክፍል 2ተኛ ኮፒ ቢጫ ለአስረካቢ 3ተኛ ኮፒ ቀይ ለተረካቢ 4ተኛ ኮፒ ሰበር መዉጫ 5ተኛ ኮፒ ከጥራዝ ጋር ቀሪ</p>
      
      
