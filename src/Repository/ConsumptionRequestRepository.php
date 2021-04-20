@@ -44,6 +44,18 @@ class ConsumptionRequestRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findByApprovalStatus()
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.approvalStatus != :1')
+            ->andWhere('c.approvalStatus != :2')
+            // ->setParameter('val', 2)
+            // ->orderBy('c.id', 'ASC')
+            // ->setMaxResults(10)
+            ->getQuery()
+            // ->getResult()
+        ;
+    }
 
     // /**
     //  * @return ConsumptionRequest[] Returns an array of ConsumptionRequest objects

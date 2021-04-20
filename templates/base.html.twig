@@ -154,7 +154,38 @@
 			<script src="node_modules/bootstrap/js/dist/util.js"></script> #}
 			<script>$('.toast').toast('show')</script>
 			{% block javascripts %}
-			 <script src="{{ asset('/bundles/troopersalertify/toastr/js/toastr.js') }}"></script>
-			{% endblock %}
+			 {# <script src="{{ asset('/bundles/troopersalertify/toastr/js/toastr.js') }}"></script> #}
+		 
+   
+{% endblock %}
+
+<button class="ajax">click me!</button>
+    <div id="ajax-results">here comes the result</div>
+    <script>
+        $(document).on('click', 'button.ajax', function(){
+            that = $(this);
+            $.ajax({
+                url:'{{ (path('notification')) }}',
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "some_var_name": "some_var_value"
+                },
+                async: true,
+                success: function (data)
+                {
+                    console.log(data)
+                    $('div#ajax-results').html(data.output);
+
+                },
+				error : function(xhr, textStatus, errorThrown) {  
+                  alert('Ajax request failed.');  
+               }
+            });
+            return false;
+
+        });
+    </script>
+   
 		</body>
 	</html>
