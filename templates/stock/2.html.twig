@@ -1,15 +1,17 @@
 <html>
     <head>
         <style>
-            body{
-            
-            }
+          
         #table1,#th,#td{
+            
             border: 1px solid black;
             border-collapse: collapse;
             padding-bottom: 1%;
             padding-top: 1%;
             text-align: left;
+            font-size:12px;
+           
+            
             
         }
        
@@ -20,6 +22,15 @@
             padding-bottom:1%;
             padding-top: 1%;
             text-align:center;
+            font-size:12px;
+           }
+           .j,#th2,#td2{
+            
+            border-collapse: collapse;
+            padding-bottom:1%;
+            padding-top: 1%;
+            text-align:left;
+            font-size:12px;
             
            }
            .g{
@@ -40,11 +51,11 @@
     </head>
     <body>
     <button id="printPageButton" onClick="window.print();" style = "float:right;" >Print</button>
-        <p style="padding-left: 30%" ><b>የንብረት መረከቢያ ደረሰኝ</b><span style="margin-left: 7.5%">ቀን </span></p> 
+        <p style="padding-left: 30%" font-size:14px ><b>የንብረት መረከቢያ ደረሰኝ</b><span style="margin-left: 7.5%">ቀን </span></p> 
         <p style="padding-left: 30%"><b style="text-decoration: underline">Goods Receiveds Voicher</b><span style="margin-left: 4%">Date {{date}}</span></p>
         <table width=50%; id="table1">
             <tr>
-                <th id="th">የርክክብ ቦታ<br>place of delivery</th>
+                <th id="th" >የርክክብ ቦታ<br>place of delivery</th>
                 <td style="width: 60%;" id="td"> {{ stock.placeOfDelivery }} </td> 
             </tr>
             <tr>
@@ -73,34 +84,61 @@
         <br>
         <table width=100% class="k">
              <tr>
-                <th style="text-align:center" id="th1">ተቁ<br>No</th>
+                <th style="text-align:center" id="th1">ተቁ <br>No</th>
                 <th style="text-align:center" id="th1">የንብረት<br> መለያ ቁትር<br>Code No</th>
                 <th  style="text-align:center" id="th1">የንብረት አይነት<br>Supplies</th>
                 <th style="text-align:center" id="th1">መስፈርት<br>U/M</th>
-                <td style="text-align:center" id="th1"><b>ብዛት</b><br>Quantity</td>
-                <th style="text-align:center" colspan="2" id="th1">የአንዱ ዋጋ<br>unite price</th>
-                <th  style="text-align:center" colspan="2" id="th1">ጠቅላላ ዋጋ<br>Total price</th>
+                <td style="text-align:center" id="th1"><b>ብዛት<br>Quantity</b></td>
+                <th style="text-align:center"  id="th1">የአንዱ ዋጋ<br>unite price</th>
+                <th  style="text-align:center"  id="th1">ጠቅላላ ዋጋ<br>Total price</th>
             </tr>
             {% set i=0 %}
+            {% set total = 0%}
             {% for item in stock.stockLists %}
             {% set i = i+1 %}
+            
              <tr>
                 <td id="td1">{{ i }}</td>
                  <td id="td1">{{ item.codeNumber }}</td>
                   <td id="td1">{{ item.product }}</td>
                    <td id="td1"> {{ item.unitOfMeasure }} </td>
                     <td id="td1">{{ item.approvedQuantity }}</td>
-                     <td id="td1" style="width: 8%">{{ item.unitPrice }}</td>
-                      <td id="td1" style="width:3%"> </td>
-                      <td id="td1" style="width: 8%">{{ item.unitPrice * item.approvedQuantity }}</td>
-                       <td id="td1" style="width: 3%"></td>
+                     <td id="td1" >{{ item.unitPrice }}</td>
+                      {# <td id="td1" style="width:3%"> </td> #}
+                      {% set total = total + item.unitPrice * item.approvedQuantity %}
+                      <td id="td1">{{ item.unitPrice * item.approvedQuantity }}</td>
+                      
+                       {# <td id="td1" style="width: 3%"></td> #}
              </tr>
              {% endfor %}
+             <tr>
+                <td colspan="6" style="text-align:left"> Total </td>
+                {# <td> </td> #}
+                <td>{{total }}</td>
+             </tr>
         </table>
-        <p>Remarks:</p>
-         <p><span style="text-decoration: underline">ያዘጋጀዉ</span><span style="padding-left: 19%;text-decoration: underline">ተረካቢ  </span><span style="padding-left: 22%;text-decoration: underline"> አስረካቢ</span><span style="padding-left: 23%;text-decoration: underline">ያጠደቀ</span></p>
-         <p>ስም<span style="padding-left: 22%">ስም</span><span style="padding-left: 24%">ስም</span> </span><span style="padding-left: 25%">ስም</span></p>
-         <p>ፊርማ<span style="padding-left: 21%">ፊርማ</span><span style="padding-left: 22%">ፊርማ</span> </span><span style="padding-left: 25%">ፊርማ </span></p>
-          <p><span style="text-decoration: underline"><b>ስርጭት</b>፡</span>ኦርጅናል ለአስረካቢ<span style="padding-left: 1%">2ተኛ ኮፒ ለሂሳብ ክፍል</span><span style="padding-left: 1%"> 3ተኛ ለተረካቢ</span><span style="padding-left: 1%">4ተኛ ኮፒ ከጥራዙ ጋር ይቀመጥ<span></span> </p>
+        
+         <p>Remarks:</p>
+        <table width=100% class="j">
+             <tr>
+                <th style="text-align:left ;text-decoration: underline;width:25% " id="th2">ያዘጋጀዉ</th>
+                <th style="text-align:left;text-decoration: underline;width:25%" id="th2">ተረካቢ </th>
+                <th  style="text-align:left;text-decoration: underline;width:25%" id="th2">አስረካቢ</th>
+                <th style="text-align:left;text-decoration: underline;width:25%" id="th2">ያጠደቀ</th>
+             </tr>
+            <tr>
+                <th style="text-align:left" id="th2">ስም</th>
+                <th style="text-align:left" id="th2">ስም {{ stock.receivedBy }}</th>
+                <th  style="text-align:left" id="th2">ስም {{ stock.receivedBy }}</th>
+                <th style="text-align:left" id="th2">ስም {{ stock.receivedBy }}</th>
+             </tr>
+             <tr>
+                <th style="text-align:left" id="th2">ፊርማ</th>
+                <th style="text-align:left" id="th2">ፊርማ</th>
+                <th  style="text-align:left" id="th2">ፊርማ</th>
+                <th style="text-align:left" id="th2">ፊርማ</th>
+             </tr>
+            </table>
+      <p style="font-size:12px"><span style="text-decoration: underline"><b>ስርጭት</b>፡</span>ኦርጅናል ለአስረካቢ<span style="padding-left: 1%">2ተኛ ኮፒ ለሂሳብ ክፍል</span><span style="padding-left: 1%"> 3ተኛ ለተረካቢ</span><span style="padding-left: 1%">4ተኛ ኮፒ ከጥራዙ ጋር ይቀመጥ<span></span> </p>
      </body>
 </html>
