@@ -35,24 +35,18 @@ class Section
     private $description;
 
     /**
-<<<<<<< HEAD
      * @ORM\OneToMany(targetEntity=StockRequest::class, mappedBy="section")
      */
     private $stockRequests;
 
     /**
-=======
->>>>>>> ABI
      * @ORM\OneToMany(targetEntity=ConsumptionRequest::class, mappedBy="section")
      */
     private $consumptionRequests;
 
     public function __construct()
     {
-<<<<<<< HEAD
         $this->stockRequests = new ArrayCollection();
-=======
->>>>>>> ABI
         $this->consumptionRequests = new ArrayCollection();
     }
 
@@ -98,7 +92,6 @@ class Section
     }
 
     /**
-<<<<<<< HEAD
      * @return Collection|StockRequest[]
      */
     public function getStockRequests(): Collection
@@ -134,8 +127,6 @@ class Section
     }
 
     /**
-=======
->>>>>>> ABI
      * @return Collection|ConsumptionRequest[]
      */
     public function getConsumptionRequests(): Collection
@@ -164,11 +155,5 @@ class Section
 
         return $this;
     }
-<<<<<<< HEAD
-=======
-    public function __toString()
-    {
-        return $this->name;
-    }
->>>>>>> ABI
+
 }
