@@ -104,6 +104,11 @@ class Stock
      */
     private $stockLists;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $note;
+
     public function __construct()
     {
         $this->stockApprovals = new ArrayCollection();
@@ -352,6 +357,18 @@ class Stock
                 $stockList->setStock(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+
+    public function setNote(?string $note): self
+    {
+        $this->note = $note;
 
         return $this;
     }
