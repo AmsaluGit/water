@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ProductionReport index{% endblock %}
+
+{% block body %}
+    <h1>ProductionReport index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>PBR</th>
+                <th>Date</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for production_report in production_reports %}
+            <tr>
+                <td>{{ production_report.id }}</td>
+                <td>{{ production_report.PBR }}</td>
+                <td>{{ production_report.Date ? production_report.Date|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('production_report_show', {'id': production_report.id}) }}">show</a>
+                    <a href="{{ path('production_report_edit', {'id': production_report.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('production_report_new') }}">Create new</a>
+{% endblock %}

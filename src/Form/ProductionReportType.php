@@ -2,28 +2,26 @@
 
 namespace App\Form;
 
-use App\Entity\Stock;
+use App\Entity\ProductionReport;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class StockType extends AbstractType
+class ProductionReportType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            // ->add('quantity')
-            // ->add('totalPrice')
-            // ->add('product')
-            ->add('store')
-            
+            ->add('PBR')
+            ->add('Date')
+            ->add('product')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Stock::class,
+            'data_class' => ProductionReport::class,
         ]);
     }
 }

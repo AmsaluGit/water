@@ -61,6 +61,11 @@ class ConsumptionDelivery
      */
     private $note;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $placeOfDelivery;
+
     public function __construct()
     {
         $this->consumptionDeliveryLists = new ArrayCollection();
@@ -186,4 +191,19 @@ class ConsumptionDelivery
 
         return $this;
     }
+<<<<<<< HEAD
+
+    public function getPlaceOfDelivery(): ?string
+    {
+        return $this->placeOfDelivery;
+    }
+
+    public function setPlaceOfDelivery(?string $placeOfDelivery): self
+    {
+        $this->placeOfDelivery = $placeOfDelivery;
+
+        return $this;
+    }
+=======
+>>>>>>> ABI
 }

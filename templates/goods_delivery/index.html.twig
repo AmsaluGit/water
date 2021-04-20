@@ -44,15 +44,15 @@
 											<th style="width: 10px">
 												#
 											</th>
-											<th>{{ knp_pagination_sortable(sells, 'delivered By', 'u.id') }}</th>
-											{# <th>{{ knp_pagination_sortable(sells, 'Place Of Delivery', 'c.placeOfDelivery') }}</th>  #}
+											<th>{{ knp_pagination_sortable(sells, 'Reciever', 'u.id') }}</th>
+											<th>{{ knp_pagination_sortable(sells, 'Place Of Delivery', 'c.placeOfDelivery') }}</th> 
                                             {# <th>Reciever</th> #}
                                             {# <th>place of delivery</th> #}
-                                            {# <th>driver</th> #}
+                                            <th>driver</th>
 											<th>Status</th>
-											<th>Total</th>
+											
 											<th>approved by</th>
-											<th>Details</th>
+											<th>view </th>
 											<th>Action</th>
                                             
 											
@@ -61,39 +61,23 @@
 									<tbody>
 										{% set i = 1 %}
 										{% for sell in sells %}
-										
 											<tr>
 												<td style="width: 10px">
 													{{ i }}
 													{% set i = i+1 %}
 												</td>
-												<td>{{ sell.deliveredBy }}</td>
-												{# <td>{{ sell.placeOfDelivery }}</td>
-												<td>{{ sell.driver }}</td> #}
-												
+												<td>{{ sell.receivedBy }}</td>
+												<td>{{ sell.placeOfDelivery }}</td>
+												<td>{{ sell.driver }}</td>
 												<td>
 													{% if sell.approvalStatus == 1 %}
-													<i class="fa fa-check" aria-hidden="true" style="color:green"></i>
+													<i class="fa fa-check" aria-hidden="true"></i>
 													
 													{% elseif sell.approvalStatus == 2 %}
-													<i class="fa fa-times" style="color:red"></i>
+													<i class="fa fa-times"></i>
 													{% else %}
 													<i class="fa fa-spinner fa-spin"></i>
 													{% endif %}
-												</td>
-												<td>
-												{% set T = 0 %}
-												{% if sell.approvalStatus == 1 %}
-													{% for item in sell.sellsLists %}
-														{% set T = T + item.unitPrice * item.approvedQuantity %}
-													{% endfor %}
-												{% else %}
-													{% for item in sell.sellsLists %}
-														{% set T = T + item.unitPrice * item.quantity %}
-													{% endfor %}
-												{% endif %}
-
-												{{ T }}
 												</td>
                                                 <td>{{ sell.approvedBy }}</td>
 												<td>
@@ -103,8 +87,7 @@
 															View
 														</button>
 													</form>
-                                                </td>
-												{% if not sell.approvalStatus %}												
+                                                </td>												
 												<td>
 
 													<form class="d-inline" method="post" action="{{ path('edit_sells_index',{'id' : sell.id}) }}">
@@ -142,7 +125,7 @@
 													</div>
 													
 												</td>
-												{% endif %}
+
 												 													     							
 											</tr>
 											
@@ -151,14 +134,7 @@
 													<div class = "col-md-12" >
 														<div class="card collapse" id = "demo{{ sell.id }}" >
 															<div class="card-header">
-																<h4 class="card-title">Items List</h4>
-																<div class="card-tools">
-																{% if  sell.approvalStatus == 1 %}
-																	<a type = "button" class="btn btn-success btn-sm" target="_blank" href = "{{ path('download_goods_delivery_index',{'id' : sell.id}) }}">
-																		Download
-																	</a>
-																</div>
-																{% endif %}
+															<h4 class="card-title">Items List</h4>
 															</div>
 															<div class="card-body">
 																<table class="table" >
@@ -171,15 +147,18 @@
 																			<th>Product</th>
 																			<th>Spec</th>
 																			<th>quantity</th>
-																			{# <th></th> #}
+																			<th></th>
 																			{# <th>Approved Quantity</th>
 																			<th>Remark</th> #}
+<<<<<<< HEAD
 																			{% if sell.approvalStatus %}
 																			<th>approved quantity</th>
 																			<th>weight</th>
+=======
+																			{# <th>weight</th>
+>>>>>>> ABI
 																			<th>unitprice</th>
-																			<th>Total</th>
-																			{% endif %}
+																			<th>Total</th> #}
 																		</tr>
 																	</thead>
 																
@@ -197,13 +176,16 @@
 																				<td>{{ item.product }}</td>
 																				<td>{{ item.specification }}</td>
 																				<td>{{ item.quantity }}</td>
+<<<<<<< HEAD
 
 																				{% if sell.approvalStatus %}
 																				<td>{{ item.approvedQuantity }}</td>
 																				<td>{{ item.weight }}</td>
+=======
+																				{# <td>{{ item.weight }}</td>
+>>>>>>> ABI
 																				<td>{{ item.unitPrice }}</td>
-																				<td>{{ item.approvedQuantity * item.unitprice }}</td>
-																				{% endif %}
+																				<td>{{ item.quantity * item.unitprice }}</td> #}
 																				{% if not sell.approvalStatus %}
 																				<td>
 																					<form id = "approval" method="post">
@@ -211,9 +193,11 @@
 																						<div class="form-group" >
 																							
 																							<select class="form-control" name="mySelect{{item.id}}" onchange = "myFunction(this.value,{{item.id}})" >
-																								<option>Approve all</option>
-																								<option>Approve some</option>
-																								<option>Reject</option>
+																							<option selected = "selected" disabled>Select</option>
+																							<option>Approve all</option>
+																							<option>Approve some</option>
+																							<option>Reject</option>
+																	
 																							</select>
 																						
 																							
@@ -316,13 +300,6 @@
 																
 																
 															</div>
-															<div class = "card-footer">
-																<div class ="row">
-																	<h6 class="col-2"> Recieved By: </h6>
-																	<h6 class="col-3">{{sell.receivedBy}}</h6>
-																	<h6 class="col-2"> Driver: </h6>
-																	<h6 class="col-3">{{sell.driver}}</h6>
-															</div>
 														</div>
 													</div>
 												</td>
@@ -363,21 +340,17 @@
 			if(val == "Approve all"){
 				document.getElementById("quantity"+id).setAttribute('hidden',"true");
 				document.getElementById("remark"+id).setAttribute('hidden','true');
-				document.getElementById("quantity"+id).removeAttribute('required',"true");
 			}
 			else if(val == "Approve some"){
 				document.getElementById("quantity"+id).removeAttribute('hidden',"true");
-				document.getElementById("quantity"+id).setAttribute('required','true');
 				document.getElementById("remark"+id).removeAttribute('hidden', "true");
 			} 
 			else if(val == "Reject"){
 				document.getElementById("quantity"+id).setAttribute('hidden',"true");
 				document.getElementById("remark"+id).removeAttribute('hidden', "true");
-				document.getElementById("quantity"+id).removeAttribute('required',"true");
 			}else{
 				document.getElementById("quantity"+id).setAttribute('hidden',"true");
 				document.getElementById("remark"+id).setAttribute('hidden','true');
-				document.getElementById("quantity"+id).removeAttribute('required',"true");
 			} 
 
 			
