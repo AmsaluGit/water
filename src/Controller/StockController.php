@@ -43,7 +43,7 @@ class StockController extends AbstractController
                 $var = $request->request->get("quantity$listId");
                 if($var > $list->getQuantity()){
                     $this->addFlash('error', 'please make sure the approved quantity is less than the quantity!');
-                    return $this->redirectToRoute('goods_delivery_index');
+                    return $this->redirectToRoute('stock_index');
                 }else{
                 if($request->request->get("quantity$listId") and $request->request->get("mySelect$listId") == "Approve some"){
                     $list->setApprovedQuantity($request->request->get("quantity$listId"))
@@ -67,7 +67,7 @@ class StockController extends AbstractController
             $user = $this->getUser();
             if ($count == count($stock->getStockLists())){
                 $stock->setApprovedBy($user)
-                //   ->setNote($note)
+                  ->setNote($note)
                   ->setApprovalStatus(2);
             $this->addFlash('save', 'The Stock has been rejected!');
             }else{
@@ -91,7 +91,7 @@ class StockController extends AbstractController
                 
             }
             $stock->setApprovedBy($user)
-                //   ->setNote($request->request->get('remark'))
+                  ->setNote($request->request->get('remark'))
                   ->setApprovalStatus(2);
             $this->addFlash('save', 'The Stock Delivery has been  Rejected!');
         }
