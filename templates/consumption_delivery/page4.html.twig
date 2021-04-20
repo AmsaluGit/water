@@ -88,37 +88,24 @@
                 <th  style="text-align:center" colspan="2" id="th1">ጠቅላላ ዋጋ</th>
                 <th style="text-align:center" id="th1">ምርመራ</th>
             </tr>
-             <tr>
+            {% set i = 0%}
              {% for list in consumption_lists %}
-                 {% set i = 0%}
+             <tr>
                  {% set i = i +1 %}
                 <td id="td1">{{i}}</td>
                  <td id="td1">{{list.codeNumber}}</td>
-<<<<<<< HEAD
                   <td id="td1">{{list.product}}</td>
-=======
-                  <td id="td1">{{"none"}}</td>
->>>>>>> ABI
                    <td id="td1">{{list.unitOfMeasure}}</td>
                     <td id="td1">{{list.approvedQuantity}}</td>
                      <td id="td1" style="width: 8%">{{list.unitPrice}}</td>
                       <td id="td1" style="width:3%"></td>
                       <td id="td1" style="width: 8%">{{list.unitPrice * list.approvedQuantity}}</td>
                        <td id="td1" style="width: 3%"></td>
-<<<<<<< HEAD
                        <td id="td1"></td>    
              </tr>
         {% else %}
 
         {% endfor %}
-=======
-                       <td id="td1"></td>
-             {% else %}
-                 
-             {% endfor %}
-              
-             </tr>
->>>>>>> ABI
         </table>
            <div>
             <p class="notice" style="width: 100%;">ማስታዎሻ:_____________________________________________________________<span class="end1">____________________________________________________________</span></p>
