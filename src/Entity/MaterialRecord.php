@@ -23,6 +23,7 @@ class MaterialRecord
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $date;
+    
 
     /**
      * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="materialRecords")
