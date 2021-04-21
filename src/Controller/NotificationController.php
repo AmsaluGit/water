@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\ConsumptionRequestRepository;
@@ -13,7 +14,7 @@ use App\Repository\StockRequestRepository;
 class NotificationController extends AbstractController
 {
     /**
-     * @Route("/notification", name="notification")
+     * @Route("/notification", name="notification", methods={"POST", "GET"})
      */
     public function index(ConsumptionRequestRepository $consumptionRequestRepository, Request $request, StockRequestRepository $stockRequestRepository, SellsRepository $sellsRepository): Response
     {
@@ -32,7 +33,7 @@ class NotificationController extends AbstractController
     //                    ->getRepository('AppBundle:Department') 
     //                    ->findAll();
 
-        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {  
+        if ( $request->request->get('some_var_name')) {  
             $jsonData = array(
                 'consumption' => $totalConsumption,
                 'stock' =>  $totalStock,
@@ -41,7 +42,13 @@ class NotificationController extends AbstractController
             
             return new JsonResponse($jsonData); 
         }
-
+        // if (!$request->isXmlHttpRequest()) {
+        //     return new JsonResponse(array(
+        //         'status' => 'Error',
+        //         'message' => 'Error'),
+        //     400);
+        // }
+    
         if($request->request->get('some_var_name')){
             //make something curious, get some unbelieveable data
             $arrData = ['output' => 'here the result which will appear in div'];

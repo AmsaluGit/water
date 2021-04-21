@@ -165,7 +165,7 @@
         $(document).on('click', 'button.ajax', function(){
             that = $(this);
             $.ajax({
-                url:'{{ (path('notification')) }}',
+                url:'{{ (path("notification")) }}',
                 type: "POST",
                 dataType: "json",
                 data: {
@@ -176,12 +176,15 @@
                 {
                     console.log(data)
                     $('div#ajax-results').html(data.output);
-
+					$('i#stockRequest').html(data["stock"]);
+					$('i#consumptionRequest').html(data["consumption"]);
+					
                 },
 				error : function(xhr, textStatus, errorThrown) {  
                   alert('Ajax request failed.');  
                }
             });
+			
             return false;
 
         });
