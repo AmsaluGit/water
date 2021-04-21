@@ -15,6 +15,7 @@ class ProductionReportType extends AbstractType
             ->add('PBR')
             ->add('Date')
             ->add('product')
+            ->add('quantity')
         ;
     }
 
