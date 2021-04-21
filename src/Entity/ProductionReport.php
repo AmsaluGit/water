@@ -20,16 +20,15 @@ class ProductionReport
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $PBR;
+    private $PVR;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      */
-    private $Date;
+    private $date;
 
     /**
-     * @ORM\OneToOne(targetEntity=Product::class, inversedBy="productionReport", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="productionReport")
      */
     private $product;
 
@@ -43,26 +42,26 @@ class ProductionReport
         return $this->id;
     }
 
-    public function getPBR(): ?string
+    public function getPVR(): ?string
     {
-        return $this->PBR;
+        return $this->PVR;
     }
 
-    public function setPBR(?string $PBR): self
+    public function setPVR(?string $PVR): self
     {
-        $this->PBR = $PBR;
+        $this->PVR = $PVR;
 
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getdate(): ?\dateTimeInterface
     {
-        return $this->Date;
+        return $this->date;
     }
 
-    public function setDate(?\DateTimeInterface $Date): self
+    public function setdate(?\dateTimeInterface $date): self
     {
-        $this->Date = $Date;
+        $this->date = $date;
 
         return $this;
     }

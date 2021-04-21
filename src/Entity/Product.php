@@ -94,7 +94,7 @@ class Product
     private $type;
 
     /**
-     * @ORM\OneToOne(targetEntity=ProductionReport::class, mappedBy="product", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity=ProductionReport::class, mappedBy="product", cascade={ "remove"})
      */
     private $productionReport;
 

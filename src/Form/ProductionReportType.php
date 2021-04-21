@@ -12,8 +12,7 @@ class ProductionReportType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('PBR')
-            ->add('Date')
+            ->add('PVR')
             ->add('product')
             ->add('quantity')
         ;
