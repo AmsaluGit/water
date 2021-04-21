@@ -51,6 +51,7 @@ class MaterialRecordController extends AbstractController
         }
 
         $qb = $materialRecordRepository->findAll();
+        // $qb=$materialRecordRepository->findBy(['materialRecord'=>$materialRecord]);
 
         return $this->render('material_record/index1.html.twig', [
            'materialRecord' => $qb,
@@ -107,12 +108,12 @@ class MaterialRecordController extends AbstractController
                 $stock->setApprovedBy($user)
                 //   ->setNote($note)
                   ->setApprovalStatus(2);
-            $this->addFlash('save', 'The Stock has been rejected!');
+            $this->addFlash('save', 'The Record has been rejected!');
             }else{
                 $stock->setApprovedBy($user)
                    ->setNote($note)
                   ->setApprovalStatus(1);
-            $this->addFlash('save', 'The Stock has been approved!');
+            $this->addFlash('save', 'The Record has been approved!');
             }
             
         }
@@ -131,7 +132,7 @@ class MaterialRecordController extends AbstractController
             $stock->setApprovedBy($user)
                 //   ->setNote($request->request->get('remark'))
                   ->setApprovalStatus(2);
-            $this->addFlash('save', 'The Stock Delivery has been  Rejected!');
+            $this->addFlash('save', 'The Record has been  Rejected!');
         }
 
         
@@ -211,7 +212,7 @@ class MaterialRecordController extends AbstractController
         
         $qb = $materialRecordRepository->findAll();
         return $this->render('material_record/index1.html.twig', [
-            'material_list' => $qb,
+            'materialRecord' => $qb,
             'form' => $form->createView(),
             'add_item'=>true,
             'edit'=>$materialRecord->getId(),
