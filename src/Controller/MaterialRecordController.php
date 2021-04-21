@@ -209,14 +209,14 @@ class MaterialRecordController extends AbstractController
             
         }
         
-        $qb=$materialRecordRepository->findBy(['materialRecord'=>$materialRecord]);
+        $qb = $materialRecordRepository->findAll();
         return $this->render('material_record/index1.html.twig', [
             'material_list' => $qb,
             'form' => $form->createView(),
             'add_item'=>true,
             'edit'=>$materialRecord->getId(),
             'edit_list'=>false,
-            'material_lists'=>$List,
+            // 'material_lists'=>$List,
             'id'=>$materialRecord->getId(),
         ]);
     
