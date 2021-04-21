@@ -1,0 +1,110 @@
+{{ form_start(form_stock,{'attr': {'role':'form'}}) }}
+
+	{# <div class="form-group ">
+		<label class="control-label no-padding-right">{{ form_label(form.store) }}</label>
+		{{ form_widget(form.store,{'attr':{'class':'form-control'}}) }}
+		<div class="help-block with-errors"></div>
+	</div> #}
+
+	<div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+					<label class="control-label no-padding-right">{{ form_label(form_stock.placeOfDelivery) }}</label>
+					{{ form_widget(form_stock.placeOfDelivery,{'attr':{'class':'form-control'}}) }}
+					<div class="help-block with-errors"></div>
+				</div>
+				<div class="form-group ">
+					<label class="control-label no-padding-right">{{ form_label(form_stock.deliveredBy) }}</label>
+					{{ form_widget(form_stock.deliveredBy,{'attr':{'class':'form-control'}}) }}
+					<div class="help-block with-errors"></div>
+				</div>
+	
+				<div class="form-group ">
+					<label class="control-label no-padding-right">{{ form_label(form_stock.store) }}</label>
+					{{ form_widget(form_stock.store,{'attr':{'class':'form-control'}}) }}
+					<div class="help-block with-errors"></div>
+				</div>
+				<div class="form-group ">
+					<label class="control-label no-padding-right">{{ form_label(form_stock.driver) }}</label>
+					{{ form_widget(form_stock.driver,{'attr':{'class':'form-control'}}) }}
+					<div class="help-block with-errors"></div>
+				</div>
+				<div class="form-group ">
+					<label class="control-label no-padding-right">{{ form_label(form_stock.receivedBy) }}</label>
+					{{ form_widget(form_stock.receivedBy,{'attr':{'class':'form-control'}}) }}
+					<div class="help-block with-errors"></div>
+				</div>
+
+				
+			</div>
+			<div class="col-md-6">
+
+				<div class="form-group ">
+					<label class="control-label no-padding-right">{{ form_label(form_stock.typeOfDocAndNum) }}</label>
+					{{ form_widget(form_stock.typeOfDocAndNum,{'attr':{'class':'form-control'}}) }}
+					<div class="help-block with-errors"></div>
+				</div>
+	
+				<div class="form-group ">
+					<label class="control-label no-padding-right">{{ form_label(form_stock.trackPlateNum) }}</label>
+					{{ form_widget(form_stock.trackPlateNum,{'attr':{'class':'form-control'}}) }}
+					<div class="help-block with-errors"></div>
+				</div>
+
+				<div class="form-group ">
+					<label class="control-label no-padding-right">{{ form_label(form_stock.trailerNum) }}</label>
+					{{ form_widget(form_stock.trailerNum,{'attr':{'class':'form-control'}}) }}
+					<div class="help-block with-errors"></div>
+				</div>
+
+				<div class="form-group ">
+					<label class="control-label no-padding-right">Driver {{ form_label(form_stock.mobile) }}</label>
+					{{ form_widget(form_stock.mobile,{'attr':{'class':'form-control'}}) }}
+					<div class="help-block with-errors"></div>
+				</div>
+				
+				<div class="form-group ">
+					<label class="control-label no-padding-right"></label>
+					
+				</div>
+
+				<div class="form-group row">
+					
+					{% if not button_label is defined  %}
+						
+						<div class="col-4">
+							<button class="form-control btn btn-success" >{{ button_label|default('Save') }}</button>
+						</div>
+						{# <div class="col-4">
+							<button class="form-control btn  btn-warning " style="margin-right:20px;" type="reset">Reset</button>
+						</div> #}
+						<div class="col-4">
+							<a href="{{ path('stock_index') }}" class="form-control btn btn-primary" style = "float:right;">
+								Back
+							</a>
+						</div>
+						
+					{% else %}
+						<input type="hidden" name="edit" value="{{edit}}">
+						<div class="col-4">
+							<button class="form-control btn btn-success mr-2" >{{ button_label|default('Save') }}</button>
+						</div>
+						<div class="col-4">
+							<a href="{{ path('stock_index') }}" class="form-control btn btn-primary" style = "float:right;">
+								Back
+							</a>
+						</div>
+					{% endif %}
+					<div class="help-block with-errors"></div>
+				 
+				</div>
+
+				
+	  		</div>		
+		</div>
+	</div>
+
+
+
+{{ form_end(form_stock) }}

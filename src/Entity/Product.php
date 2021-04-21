@@ -93,6 +93,11 @@ class Product
      */
     private $type;
 
+    /**
+     * @ORM\OneToMany(targetEntity=MaterialRecord::class, mappedBy="product")
+     */
+    private $materialRecords;
+
     public function __construct()
     {
    
@@ -105,6 +110,7 @@ class Product
         $this->sellsLists = new ArrayCollection();
         $this->stockBalances = new ArrayCollection();
         $this->consumptionBalances = new ArrayCollection();
+        $this->materialRecords = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -402,6 +408,36 @@ class Product
     public function setType(?int $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|MaterialRecord[]
+     */
+    public function getMaterialRecords(): Collection
+    {
+        return $this->materialRecords;
+    }
+
+    public function addMaterialRecord(MaterialRecord $materialRecord): self
+    {
+        if (!$this->materialRecords->contains($materialRecord)) {
+            $this->materialRecords[] = $materialRecord;
+            $materialRecord->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMaterialRecord(MaterialRecord $materialRecord): self
+    {
+        if ($this->materialRecords->removeElement($materialRecord)) {
+            // set the owning side to null (unless already changed)
+            if ($materialRecord->getProduct() === $this) {
+                $materialRecord->setProduct(null);
+            }
+        }
 
         return $this;
     }

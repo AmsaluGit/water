@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MaterialRecord index{% endblock %}
+
+{% block body %}
+    <h1>MaterialRecord index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>Quantity</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for material_record in material_records %}
+            <tr>
+                <td>{{ material_record.id }}</td>
+                <td>{{ material_record.date ? material_record.date|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ material_record.quantity }}</td>
+                <td>
+                    <a href="{{ path('material_record_show', {'id': material_record.id}) }}">show</a>
+                    <a href="{{ path('material_record_edit', {'id': material_record.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('material_record_new') }}">Create new</a>
+{% endblock %}
