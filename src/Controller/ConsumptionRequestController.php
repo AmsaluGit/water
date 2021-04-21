@@ -38,7 +38,7 @@ class ConsumptionRequestController extends AbstractController
                                 ->setApprovalStatus(3);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($consumptionDelivery);
-            $entityManager->flush();
+            // $entityManager->flush();
 
             foreach($consumptionRequest->getConsumptionRequestLists() as $list){
                 $listId = $list->getId();
