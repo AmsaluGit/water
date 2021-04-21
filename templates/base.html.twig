@@ -158,27 +158,29 @@
 		 
    
 {% endblock %}
-
-<button class="ajax">click me!</button>
-    <div id="ajax-results">here comes the result</div>
+{# 
+<button class="ajax">click me!</button> #}
+  
     <script>
-        $(document).on('click', 'button.ajax', function(){
+{# $(document).on('click', 'button.ajax', function(){ #}
+
+	setInterval(function(){
+		
             that = $(this);
             $.ajax({
                 url:'{{ (path("notification")) }}',
                 type: "POST",
                 dataType: "json",
-                data: {
-                    "some_var_name": "some_var_value"
-                },
                 async: true,
                 success: function (data)
                 {
                     console.log(data)
-                    $('div#ajax-results').html(data.output);
-					$('i#stockRequest').html(data["stock"]);
-					$('i#consumptionRequest').html(data["consumption"]);
 					
+                    $('#consumptionRequest').html(data.consumptionRequest);
+					$('#consumptionDelivery').html(data.consumptionDelivery);
+					$('#stock').html(data.stock);
+					$('#stockRequest').html(data.stockRequest);
+					$('#total').html(data.total);					
                 },
 				error : function(xhr, textStatus, errorThrown) {  
                   alert('Ajax request failed.');  
@@ -187,7 +189,7 @@
 			
             return false;
 
-        });
+        }, 5000);
     </script>
    
 		</body>
