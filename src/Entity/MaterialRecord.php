@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MaterialRecordRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +33,15 @@ class MaterialRecord
      * @ORM\Column(type="integer", nullable=true)
      */
     private $quantity;
+
+
+    public function __construct()
+    {
+        $this->materialRecords = new ArrayCollection();
+    }
+
+    
+
 
     public function getId(): ?int
     {
@@ -72,4 +83,17 @@ class MaterialRecord
 
         return $this;
     }
+
+    
+
+    
+
+    
+    
+
+    
+
+   
+
+    
 }

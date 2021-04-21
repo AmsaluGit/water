@@ -12,9 +12,10 @@ class MaterialRecordType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('date')
-            ->add('quantity')
+            // ->add('date')
             ->add('product')
+            ->add('quantity')
+            
         ;
     }
 

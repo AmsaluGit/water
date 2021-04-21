@@ -26,6 +26,46 @@ class MaterialRecordController extends AbstractController
      */
     public function index(MaterialRecordRepository $materialRecordRepository, SettingRepository $settingRepository, Request $request, PaginatorInterface $paginator): Response
     {
+          
+
+        $entityManager = $this->getDoctrine()->getManager();
+       
+        $materialRecord = new MaterialRecord();
+        $form = $this->createForm(MaterialRecordType::class, $materialRecord);
+        $form->handleRequest($request);
+        $user = $this->getUser();
+        // $materialRecord->setRegisteredBy($user)
+        //       ->setDatePurchased(new \DateTime());
+
+        if ($form->isSubmitted() && $form->isValid()) {    
+               
+            $entityManager = $this->getDoctrine()->getManager();
+            
+            $entityManager->persist($materialRecord);
+            $entityManager->flush();
+            $this->addFlash("save",'New Stock Delivery Added');
+
+            $materialRecordId = $materialRecord->getId();
+            return $this->redirectToRoute('edit_material_index',['id'=>$materialRecordId]);
+               
+        }
+
+        $qb = $materialRecordRepository->findAll();
+
+        return $this->render('material_record/index1.html.twig', [
+           'materialRecord' => $qb,
+            'material_lists'=>$materialRecord->getId(),
+            'add_item'=>false,
+            'form'=> $form->createView(),
+            'edit'=>false,
+            'edit_list'=>false,
+            'id'=>$materialRecord->getId(),
+            
+        ]);
+
+
+
+
     
         $stockApprovalLevel = $settingRepository->findOneBy(['code'=>'stock_approval_level'])->getValue();
         
@@ -41,7 +81,7 @@ class MaterialRecordController extends AbstractController
                 $var = $request->request->get("quantity$listId");
                 if($var > $list->getQuantity()){
                     $this->addFlash('error', 'please make sure the approved quantity is less than the quantity!');
-                    return $this->redirectToRoute('materialR_index1');
+                    return $this->redirectToRoute('materialRecord_index');
                 }else{
                 if($request->request->get("quantity$listId") and $request->request->get("mySelect$listId") == "Approve some"){
                     $list->setApprovedQuantity($request->request->get("quantity$listId"))
@@ -49,16 +89,16 @@ class MaterialRecordController extends AbstractController
                          ->setApprovalStatus(1);
                 }
                 
-                if($request->request->get("mySelect$listId") == "Approve all"){
-                    $list->setApprovedQuantity($list->getQuantity())
-                         ->setApprovalStatus(1);
-                }
+                // if($request->request->get("mySelect$listId") == "Approve all"){
+                //     $list->setApprovedQuantity($list->getQuantity())
+                //          ->setApprovalStatus(1);
+                // }
                 
-                if($request->request->get("mySelect$listId") == "Reject"){
-                    $list->setApprovalStatus(2)
-                         ->setRemark($request->request->get("remark$listId"));
-                    $count = $count+1;
-                }
+                // if($request->request->get("mySelect$listId") == "Reject"){
+                //     $list->setApprovalStatus(2)
+                //          ->setRemark($request->request->get("remark$listId"));
+                //     $count = $count+1;
+                
              }
              
             } 
@@ -99,6 +139,7 @@ class MaterialRecordController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
     
+            
       
         $queryBuilder=$materialRecordRepository->findMaterialRecord($request->query->get('search'));
                  $data=$paginator->paginate(
@@ -116,54 +157,13 @@ class MaterialRecordController extends AbstractController
             'edit'=>false,
 
         ]);
-    }
-    
-    /**
-     * @Route("/new", name="new_material_index", methods={"GET","POST"})
-     */
-     public function newMaterialRecord(StockApprovalRepository $stockApprovalRepository,settingRepository $settingRepository, StockRepository $stockRepository, MaterialRecordRepository $materialRecordRepository, Request $request): Response
-     {  
+
+
+
+    }  
 
     
-    $entityManager = $this->getDoctrine()->getManager();
-       
-        $materialRecord = new MaterialRecord();
-        $form = $this->createForm(MaterialRecordType::class, $materialRecord);
-        $form->handleRequest($request);
-        $user = $this->getUser();
-        $materialRecord->setRegisteredBy($user)
-              ->setDatePurchased(new \DateTime());
-
-        if ($form->isSubmitted() && $form->isValid()) {    
-               
-            $entityManager = $this->getDoctrine()->getManager();
-            
-            $entityManager->persist($materialRecord);
-            $entityManager->flush();
-            $this->addFlash("save",'New Stock Delivery Added');
-
-            $materialRecordId = $materialRecord->getId();
-            return $this->redirectToRoute('edit_material_index',['id'=>$materialRecordId]);
-               
-        }
-
-        if($materialRecord){
-            $qb=$materialRecordRepository->findBy(['materialRecord'=>$materialRecord]);
-        }else{
-            $qb=null;
-        }
-
-        return $this->render('material_record/index1.html.twig', [
-            'material_list' => $qb,
-            'material_lists'=>$materialRecord->getId(),
-            'add_item'=>false,
-            'form'=> $form->createView(),
-            'edit'=>false,
-            'edit_list'=>false,
-            'id'=>$stock->getId(),
-            
-        ]);
-       }
+    
      
     /**
      * @Route("/editmaterial/{id}", name="edit_material_index", methods={"GET","POST"})

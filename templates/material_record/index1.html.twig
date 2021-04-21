@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}stock index
+{% block title %}materialRecord
 {% endblock %}
 {% block maintitle %}
-	Stock Delivery
+	MaterialRecord
 {% endblock %}
 
 
 {% block breadcrumb %}
 
-	<li class="breadcrumb-item active">Stock Delivery</li>
+	<li class="breadcrumb-item active">MaterialRecord</li>
 {% endblock %}
 {% block body %}
 	<div class="row">
@@ -28,7 +28,7 @@
 									{% if edit  %}
                                     Edit
 									{% else %}
-										Stock Delivery
+										MaterialRecord
 									{% endif %}	
 								</h3>
 
@@ -128,20 +128,19 @@
 									</thead>
 									<tbody>
 										{% set i = 1 %}
-										{% for item in material_list %}
+										{% for item in materialRecord %}
 											<tr>
                                                 <td>
 													{{ i }}
 													{% set i = i+1 %}
 												</td>
                                                 <td>{{ item.product }}</td>
-                                                {# <td>{{ item.specification }}</td> #}
-                                                <td>{{ item.quantity }} {{ item.unitOfMeasure }}</td>
-                                                {# <td>{{ item.weight }}</td> #}
+                                               <td>{{ item.quantity }}</td>
+
                                                 
                                                 <td>
 
-                                                <form class="d-inline" method="post" action="{{ path('edit_material_list_index',{'id' : item.id}) }}">
+                                                <form class="d-inline" method="post" action="{{ path('edit_material_index',{'id' : item.id}) }}">
                                                     <input type="hidden" name="edit_list" value="{{item.id}}">
                                                     <button  class="btn btn-info btn-sm" title="Edit">
                                                         <i class="fa fa-edit"></i>
