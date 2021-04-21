@@ -49,37 +49,15 @@
 				{% if add_item and not edit_list %}
                 
 				
-			 	<button href="#modalCenter" role="button" class="btn btn-info btn-sm" data-toggle="modal">Add Items</i></button> 
+			 	{# <button href="#modalCenter" role="button" class="btn btn-info btn-sm" data-toggle="modal">Add Items</i></button>  #}
 
-				<div id="modalCenter" class="modal fade" tabindex="-1">
-					<div class="modal-dialog modal-dialog-centered">
-						<div class="modal-content">
-							<div class="modal-header">
-								 {# <h5 class="modal-title">Add Item</h5>  #}
-								<button type="button" class="close" data-dismiss="modal">&times;</button> 
-							</div>
-							<div class="modal-body">
-						
-								{{ include('material_record/_form2.html.twig') }}
-							</div>
-							
-							<div class="modal-footer">
-								
-																
-							</div>
-						</div>
-					</div>
-				</div>
-				</div>
-				</div>
+				
 				{% else %}
 				{% endif %}
 				{% if edit  %}
                     {% set new_button_label = 'Update' %}
 					<div class="row">
-                    <div class="col-md-12">
-                        
-                    </div>
+                    
                    
                     <div class="col-md-12">
                         <div id="demo" class="card card-info">
@@ -95,7 +73,7 @@
 							</div>
 							<!-- /.card-header -->
 								
-								{# {{ include('material_record/_form2.html.twig') }} #}
+								{{ include('material_record/_form2.html.twig') }}
 
 
 							
@@ -106,14 +84,16 @@
                                 
                 {% endif %}
 				{% if not edit_list %}
+											<div class="card-body">
+
                 <div class="row">
 					<div class="col-md-12">
 						<div class="card ">
 							<div class="card-header">
-								<h3 class="card-title">Material Record</h3>
+								<h3 class="card-title">Material Record List</h3>
 								
 							</div>
-							<div class="card-body">
+							
 								<table class="table table-hover">
 									<thead>
 										<tr>

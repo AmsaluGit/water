@@ -194,7 +194,7 @@ class MaterialRecordController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash("save",'Stock Updated');
-            return $this->redirectToRoute('edit_material_index',['id'=>$materialRecordId]);
+            return $this->redirectToRoute('edit_material_index',['id'=>$materialRecord->getId()]);
             
         }
 
