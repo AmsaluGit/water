@@ -133,7 +133,8 @@ class StockController extends AbstractController
         $form_stock->handleRequest($request);
         $user = $this->getUser();
         $stock->setRegisteredBy($user)
-              ->setDatePurchased(new \DateTime());
+              ->setDatePurchased(new \DateTime())
+              ->setApprovalStatus(3);
 
         if ($form_stock->isSubmitted() && $form_stock->isValid()) {    
                

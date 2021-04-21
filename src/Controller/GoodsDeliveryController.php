@@ -159,7 +159,8 @@ class GoodsDeliveryController extends AbstractController
         $form_sells = $this->createForm(SellsType::class, $sell);
         $form_sells->handleRequest($request);
         $user = $this->getUser();
-        $sell->setDeliveredBy($user);
+        $sell->setDeliveredBy($user)
+             ->setApprovalStatus(3);
 
         if ($form_sells->isSubmitted() && $form_sells->isValid()) {    
                

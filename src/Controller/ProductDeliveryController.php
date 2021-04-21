@@ -129,7 +129,8 @@ public function NewProductDelivery(ProductDeliveryListRepository $ProductDeliver
     $form_ProductDelivery = $this->createForm(ProductDeliveryType::class, $ProductDelivery);
     $form_ProductDelivery->handleRequest($request);
     $user = $this->getUser();
-    $ProductDelivery->setReceivedBy($user);
+    $ProductDelivery->setReceivedBy($user)
+                    ->setApprovalStatus(3);
     
 
     if ($form_ProductDelivery->isSubmitted() && $form_ProductDelivery->isValid()) {    

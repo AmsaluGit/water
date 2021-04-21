@@ -114,7 +114,8 @@ class ConsumptionDeliveryController extends AbstractController
         $form_consumption->handleRequest($request);
 
         $user = $this->getUser();
-        $consumptionDelivery->setReceiver($user);
+        $consumptionDelivery->setReceiver($user)
+                            ->setApprovalStatus(3);
 
         if($form_consumption->isSubmitted() && $form_consumption->isValid()){
             $consumptionDelivery->setDeliveredDate(new \DateTime());//here

@@ -34,7 +34,8 @@ class ConsumptionRequestController extends AbstractController
             $consumptionRequest =$consumptionRequestRepository->find($id);
 
             $consumptionDelivery = new ConsumptionDelivery();        //new
-            $consumptionDelivery->setRequestNo($consumptionRequest);
+            $consumptionDelivery->setRequestNo($consumptionRequest)
+                                ->setApprovalStatus(3);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($consumptionDelivery);
             $entityManager->flush();
@@ -142,7 +143,8 @@ class ConsumptionRequestController extends AbstractController
         $form_consumption->handleRequest($request);
 
         $user = $this->getUser();
-        $consumptionRequest->setRequester($user);
+        $consumptionRequest->setRequester($user)
+                           ->setApprovalStatus(3);
 
         if($form_consumption->isSubmitted() && $form_consumption->isValid()){
             $consumptionRequest->setRequestedDate(new \DateTime());//here

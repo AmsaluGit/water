@@ -89,7 +89,7 @@
                                                 </td>												
 												<td>
 												    
-												{% if consumption_delivery.approvalStatus == null %}
+												{% if consumption_delivery.approvalStatus == 3 %}
 												   
 													<form class="d-inline" method="post" action="{{ path('edit_consumption_delivery_index',{'id' : consumption_delivery.id}) }}">
 														<input type="hidden" name="edit" value="{{consumption_delivery.id}}">
@@ -152,7 +152,7 @@
 																			{# <th>{{ knp_pagination_sortable(sells, 'Name', 'p.name') }}</th>
 																			<th>{{ knp_pagination_sortable(sells, 'Code', 'p.code') }}</th> #}
 																			<th>Product</th>
-																			{% if consumption_delivery.approvalStatus != null %}
+																			{% if consumption_delivery.approvalStatus != 3 %}
 																				<th>CodeNumber</th>
 																			{% endif %}
 																			<th>DeliveredQuantity</th>
@@ -193,7 +193,7 @@
 																				<td>{{ item.unitPrice }}</td>
 																				<td>{{ item.quantity * item.unitprice }}</td>
 
-																				{% if not consumption_delivery.approvalStatus %}
+																				{% if  consumption_delivery.approvalStatus == 3 %}
 																				<td>
 																					<form id = "approval" method="post">
 																					
@@ -269,7 +269,7 @@
 																			</tr>
 											
 																			{% endfor %}
-																			{% if k == 1 and not consumption_delivery.approvalStatus and consumption_delivery.receiver %}
+																			{% if k == 1 and consumption_delivery.approvalStatus == 3 and consumption_delivery.receiver %}
 																			{# {% if not sell.approvalStatus %} #}
 																			<tr>
 																				<td colspan="8">

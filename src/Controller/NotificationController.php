@@ -23,16 +23,16 @@ class NotificationController extends AbstractController
       
 
     //   $consumptionRequest =$consumptionRequestRepository->findBy('approvalStatus',null);
-      $consumptionRequest = $consumptionRequestRepository->findBy(['approvalStatus' => 1]);
+      $consumptionRequest = $consumptionRequestRepository->findBy(['approvalStatus' => 3]);
       $newConsumptionRequest = count($consumptionRequest);
       
-      $stockRequest = $stockRequestRepository->findBy(['approvalStatus' => 1]);
+      $stockRequest = $stockRequestRepository->findBy(['approvalStatus' => 3]);
       $newStockRequest = count($stockRequest);
 
-      $stock = $stockRepository->findBy(['approvalStatus' => 1]);
+      $stock = $stockRepository->findBy(['approvalStatus' => 3]);
       $newStock = count($stock);
 
-      $consumptionDelivery = $consumptionDeliveryRepository->findBy(['approvalStatus' => 1]);
+      $consumptionDelivery = $consumptionDeliveryRepository->findBy(['approvalStatus' => 3]);
       $newConsumptionDelivery = count($consumptionDelivery);
 
     //   $sells = $sellsRepository->findBy(['approvalStatus' => 1]);

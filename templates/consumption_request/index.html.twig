@@ -85,7 +85,7 @@
                                                 </td>												
 												<td>
 												    
-												{% if consumption_request.approvalStatus == null %}
+												{% if consumption_request.approvalStatus == 3 %}
 												   
 													<form class="d-inline" method="post" action="{{ path('edit_consumption_request_index',{'id' : consumption_request.id}) }}">
 														<input type="hidden" name="edit" value="{{consumption_request.id}}">
@@ -190,7 +190,7 @@
                                                                                 
 																				{#<td>{{ item.unitPrice }}</td>
 																				<td>{{ item.quantity * item.unitprice }}</td> #}
-																				{% if not consumption_request.approvalStatus %}
+																				{% if  consumption_request.approvalStatus == 3 %}
 																				<td>
 																					<form id = "approval" method="post">
 																					
@@ -269,7 +269,7 @@
 																			</tr>
 											
 																			{% endfor %}
-																			{% if k == 1 and not consumption_request.approvalStatus %}
+																			{% if k == 1 and consumption_request.approvalStatus == 3 %}
 																			{# {% if not sell.approvalStatus %} #}
 																			<tr>
 																				<td colspan="8">
