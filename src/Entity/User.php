@@ -102,6 +102,11 @@ class User implements UserInterface
      */
     private $sells;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ProductDelivery::class, mappedBy="receiver")
+     */
+    private $productDeliveriesReceiver;
+
     public function __construct()
     {
         $this->stocks = new ArrayCollection();
@@ -113,6 +118,7 @@ class User implements UserInterface
         $this->consumptionDeliveries = new ArrayCollection();
         $this->productDeliveries = new ArrayCollection();
         $this->sells = new ArrayCollection();
+        $this->productDeliveriesReceiver = new ArrayCollection();
     }
 
  
@@ -521,6 +527,36 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($sell->getReceivedBy() === $this) {
                 $sell->setReceivedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProductDelivery[]
+     */
+    public function getProductDeliveriesReceiver(): Collection
+    {
+        return $this->productDeliveriesReceiver;
+    }
+
+    public function addProductDeliveriesReceiver(ProductDelivery $productDeliveriesReceiver): self
+    {
+        if (!$this->productDeliveriesReceiver->contains($productDeliveriesReceiver)) {
+            $this->productDeliveriesReceiver[] = $productDeliveriesReceiver;
+            $productDeliveriesReceiver->setReceiver($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductDeliveriesReceiver(ProductDelivery $productDeliveriesReceiver): self
+    {
+        if ($this->productDeliveriesReceiver->removeElement($productDeliveriesReceiver)) {
+            // set the owning side to null (unless already changed)
+            if ($productDeliveriesReceiver->getReceiver() === $this) {
+                $productDeliveriesReceiver->setReceiver(null);
             }
         }
 

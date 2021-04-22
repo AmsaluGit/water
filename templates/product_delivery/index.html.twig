@@ -90,7 +90,7 @@
 													</form>
                                                 </td>												
 												<td>
-									{% if product.approvalStatus == null %}
+									{% if product.approvalStatus == 3 %}
 													<form class="d-inline" method="post" action="{{ path('edit_ProductDelivery_index',{'id' : product.id}) }}">
 														<input type="hidden" name="edit" value="{{product.id}}">
 														<button  class="btn btn-info btn-sm" title="Edit">
@@ -137,7 +137,7 @@
 															<div class="card-header">
 															<h4 class="card-title">Items List</h4>
 
-																{% if not product.approvalStatus == null %}
+																{% if  product.approvalStatus == 1 %}
 																<form class="d-inline" method="post" target="_blank" action="{{ path('ProductDelivery_list_print') }}">
 																		<input type="hidden" name="id" value="{{product.id}}">
 																		<button title="view" style="float:right" type = "submit" class="btn btn-link " >
@@ -182,11 +182,17 @@
 																				</td>
 																				<td>{{ item.product }}</td>
 																				<td>{{ item.specification }}</td>
-																				<td>{{ item.quantity }}</td>
+																				{% if product.approvalStatus == 1 %}
+																				<td>{{ item.approvedQuantity }}</td>
+																				{% elseif product.approvalStatus == 2 	  %}
+																				<td>{{ 0 }}</td>
+																				{% endif %}
+
 																				{# <td>{{ item.weight }}</td>
 																				<td>{{ item.unitPrice }}</td>
 																				<td>{{ item.quantity * item.unitprice }}</td> #}
-																				{% if not product.approvalStatus %}
+																				{% if product.approvalStatus == 3 %}
+																				<td>{{ item.quantity }}</td>
 																				<td>
 																					<form id = "approval" method="post">
 																					
@@ -226,7 +232,7 @@
 																			</tr>
 											
 																			{% endfor %}
-																			{% if k == 1 and not product.approvalStatus %}
+																			{% if k == 1 and product.approvalStatus == 3 %}
 																			{# {% if not product.approvalStatus %} #}
 																			<tr>
 																				<td colspan="8">

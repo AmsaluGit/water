@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Permission index
+{% endblock %}
+{% block maintitle %}
+	Permission
+{% endblock %}
+
+
+{% block breadcrumb %}
+
+	<li class="breadcrumb-item active">Production Report</li>
+{% endblock %}
+{% block body %}
+	<div class="row">
+		<div class="card col-md">
+
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card card">
+							<div class="card-header">
+								<h3 class="card-title">Product Delivery Report</h3>
+								
+							</div>
+							<div class="card-body">
+								
+                            
+								{{ dump(ProductionReport) }}
+								{# {% do product.setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') %}  #}
+								{# <div class="float-right">{{ knp_pagination_render(products) }}</div> #}
+
+                            
+							</div>
+						</div>
+					</div>
+					<!-- /.card-body -->
+				</div>
+			</div>
+
+		</div>
+		<!-- /.card-body -->
+	</div>
+
+{% block javascripts %}
+<script>
+		{# {% if edit_list %}
+		document.getElementById('collapse').click();
+		{% endif %} #}
+		
+		{# function myFunction(val,id) {
+  			
+
+			if(val == "Approve all"){
+				document.getElementById("quantity"+id).setAttribute('hidden',"true");
+				document.getElementById("remark"+id).setAttribute('hidden','true');
+			}
+			else if(val == "Approve some"){
+				document.getElementById("quantity"+id).removeAttribute('hidden',"true");
+				document.getElementById("remark"+id).removeAttribute('hidden', "true");
+			} 
+			else if(val == "Reject"){
+				document.getElementById("quantity"+id).setAttribute('hidden',"true");
+				document.getElementById("remark"+id).removeAttribute('hidden', "true");
+			}else{
+				document.getElementById("quantity"+id).setAttribute('hidden',"true");
+				document.getElementById("remark"+id).setAttribute('hidden','true');
+			} 
+
+			
+			
+			} #}
+
+
+    {# $(document).ready(function(){
+
+        $("#mySelect").on("change",function(){
+            alert($(this).val());
+        });
+    }); #}
+{#  
+			 $(function () {
+ $('#collapse').trigger('click');
+})  #}
+		</script>
+	
+{% endblock %}		
+
+{% endblock %}
+

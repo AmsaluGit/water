@@ -31,17 +31,15 @@ class ProductionReportRepository extends ServiceEntityRepository
             
         ;
     }
-    public function findDateRangeResultProduction($start,$last, $val){
+    public function findDateRangeResultProduction($start,$last){
       
     $entityManager = $this->getEntityManager();
 
     $qb = $entityManager->createQueryBuilder();
         $qb->select('m')
-                 ->where("p.type = :val")
-                 
-                 ->andWhere('m.deliveryDate < :last')
-                 ->andWhere('m.deliveryDate > :start')
-                 ->setParameter('val',$val)
+                 ->from('App\Entity\ProductionReport', 'm')
+                 ->where('m.date <= :last')
+                 ->andWhere('m.date >= :start')
                  ->setParameter('start',$start)
                  ->setParameter('last', $last);
         return( $qb->orderBy('m.id', 'ASC')
@@ -49,18 +47,13 @@ class ProductionReportRepository extends ServiceEntityRepository
 
 
     }
-    public function findDateIntervalProduction($today, $range,$val){
+    public function findDateIntervalProduction($range){
         $entityManager = $this->getEntityManager();
 
         $qb = $entityManager->createQueryBuilder();
         $qb->select('m')
-                //  ->from('App\Entity\ProductDelivery', 'm')
-                //  ->from('App\Entity\Product', 'p')
-                //  ->from('App\Entity\ProductDeliveryList', 'p_list')
-                 ->where("p.type = :val")
-                //  ->join('p_list.product', 'p')
-                 ->andWhere('m.deliveryDate > :last')
-                 ->setParameter('val',$val)
+                 ->from('App\Entity\ProductionReport', 'm')
+                 ->where('m.date >= :last')
                  ->setParameter('last', new \DateTime('-'.$range.' month'));
         return $qb->orderBy('m.id', 'ASC')
                   ->getQuery()->getResult();

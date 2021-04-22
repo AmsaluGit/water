@@ -59,10 +59,6 @@
 		
         <table width=50%; id="table1">
             <tr>
-                <th id="th">የርክክብ ቦታ<br>Place of delivery</th>
-                <td style="width: 60%;" id="td">   </td>
-            </tr>
-            <tr>
                 <th id="th">አቅራቢ<br>Name of Hand Over </th>
                 <td id="td" >  {{ product.handOveredBy }}</td> 
               
@@ -91,26 +87,25 @@
                 <th style="text-align:center" id="th1">የሸቀጥ አይነት</th>
                 <th  style="text-align:center" id="th1">መስፈርት</th>
                 <th style="text-align:center" id="th1">ብዛት</th>
-                <th style="text-align:center" colspan="2" id="th1">የተጣራ ክብደት</th>
-                <th style="text-align:center" colspan="2" id="th1">የአንዱ ዋጋ</th>
-                <th  style="text-align:center" colspan="2" id="th1">ጠቅላላ ዋጋ</th>
+                <th style="text-align:center"  id="th1">የተጣራ ክብደት</th>
+                <th style="text-align:center"  id="th1">የአንዱ ዋጋ</th>
+                <th  style="text-align:center" id="th1">ጠቅላላ ዋጋ</th>
             </tr>
             {% set i = 1 %}
             {% for item in ProductDelivery_list %}
+            {% if not item.approvedQuantity == null %}
              <tr>
                 <td id="td1">{{ i }}</td>
                 {%  set i = i + 1  %}
                  <td id="td1">{{ item.product  }}</td>
                   <td id="td1">{{ item.specification }}</td>
-                   <td id="td1">{{ item.quantity }}</td>
-                    <td id="td1" style="width: 8%">{{ item.weight }}</td>
-                      <td id="td1" style="width:3%">  </td>
-                     <td id="td1" style="width: 8%">{% set price = item.unitPrice   %}
-                    {{ price }}</td>
-                      <td id="td1" style="width:3%"> {{ item.unitPrice - price }}</td>
-                      <td id="td1" style="width: 8%">{{ item.unitPrice * item.quantity }}</td>
-                       <td id="td1" style="width: 3%"></td>
+                   <td id="td1">{{ item.approvedQuantity }}</td>
+                    <td id="td1" >{{ item.weight }}</td>
+                     <td id="td1" >{{ item.unitPrice }}</td>
+                     <td id="td1" style="width: 8%">{{ item.unitPrice * item.quantity }}</td>
+                      
              </tr>
+             {% endif %}
              {% endfor %}   
         </table>
         <div>
@@ -120,12 +115,12 @@
          <div class="col1andcol2">
              <div class"col1">
                 <p>ያዘጋጀዉ<span style="padding-left: 250px">  ተረካቢ  </span></p>
-                <p>ስም _______________________ <span style="padding-left: 40px">ስም _______________________ </span></p>
+                <p>ስም ________________________ <span style="padding-left: 40px">ስም <u> _____{{ product.receivedBy }}</u>___  </span></p>
                 <p>ፊርማ_______________________ <span style="padding-left: 40px">ፊርማ_______________________ </span></p>
          </div>
          <div class="col2">
                 <p> አስረካቢ<span style="padding-left: 250px">  ያፀደቀ</span></p>
-                <p>ስም _______________________ <span style="padding-left: 60px">ስም _______________________ </span></p>
+                <p>ስም <u> _____{{ product.handOveredBy }}</u>____ <span style="padding-left: 60px">ስም ___<u>{{ product.approvedBy }}</u>____  </span></p>
                 <p>ፊርማ_______________________ <span style="padding-left: 60px">ፊርማ_______________________ </span></p>
                 <!--style="padding-left: 300px"style="padding-left: 300px"
                 style="padding-left: 180px"

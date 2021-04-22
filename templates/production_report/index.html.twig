@@ -48,7 +48,7 @@
 					<div class="col-md-12">
 						<div class="card ">
 							<div class="card-header">
-								<h3 class="card-title">Permission List</h3>
+								<h3 class="card-title">Total Production Report</h3>
 								
 							</div>
 							<div class="card-body">
@@ -66,6 +66,7 @@
 											<th>Product</th>
 											<th>PVR</th>
 											<th>quantity </th>
+											<th>Production Date </th>
 										</tr>
 									</thead>
 									<tbody>
@@ -79,6 +80,7 @@
 												<td>{{ production.product }}</td>
 												<td>{{ production.PVR }}</td>
 												<td>{{ production.quantity }}</td>
+												<td>{{ production.date | date('Y  M  d') }}</td>
 												<td>
 
 													<form class="d-inline" method="post">

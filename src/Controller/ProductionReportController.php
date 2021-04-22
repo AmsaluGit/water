@@ -105,7 +105,7 @@ class ProductionReportController extends AbstractController
             $form->handleRequest($request);
     
             if ($form->isSubmitted() && $form->isValid()) {
-                $productionReport->setDate(new \DateTime);
+                $productionReport->setDate(new \DateTime());
                 $this->getDoctrine()->getManager()->flush();
     
                 return $this->redirectToRoute('production_report_index');
@@ -165,4 +165,67 @@ class ProductionReportController extends AbstractController
 
         return $this->redirectToRoute('production_report_index');
     }
+/**
+ * @Route("/report", name="Production_report", methods={"POST","GET"})
+ */
+public function report(Request $request, ProductionReportRepository $ProductReportRepository): Response
+{   
+
+   
+        if($request->request->get('range_generate')){
+            $start = $request ->request->get('start');
+            $end = $request ->request->get('end');
+
+            $productReport = $ProductReportRepository->findDateRangeResultProduction($start, $end);
+
+            return $this->render('production_report/report.html.twig', [
+                'ProductionReport' => $productReport,
+               ]);
+    
+              }
+         else {
+            if($request->request->get('one_month')){
+
+                
+                $productReport = $ProductReportRepository->findDateIntervalProduction(1);
+                return $this->render('production_report/report.html.twig', [
+                    'ProductionReport' => $productReport,
+                   ]);
+        
+            }
+            elseif($request->request->get('three_month')){
+                
+                $productReport = $ProductReportRepository->findDateIntervalProduction(3);
+                return $this->render('production_report/report.html.twig', [
+                    'ProductionReport' => $productReport,
+                   ]);
+        
+            }
+            elseif($request->request->get('six_month')){
+                $productReport = $ProductReportRepository->findDateIntervalProduction(6);
+                return $this->render('production_report/report.html.twig', [
+                    'ProductionReport' => $productReport,
+                   ]);
+        
+            }
+            elseif($request->request->get('one_year')){
+                $productReport = $ProductReportRepository->findDateIntervalProduction(12);
+                return $this->render('production_report/report.html.twig', [
+                    'ProductionReport' => $productReport,
+                   ]);
+        
+            
+            }
+        
+            
+         }
+        
+    
+         
+    
+         return $this->render('production_report/report_initial.html.twig', [
+           ]);
+}
+
+ 
 }

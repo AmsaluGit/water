@@ -54,12 +54,12 @@ class ProductionReport
         return $this;
     }
 
-    public function getdate(): ?\dateTimeInterface
+    public function getdate(): ?\DateTimeInterface
     {
         return $this->date;
     }
 
-    public function setdate(?\dateTimeInterface $date): self
+    public function setdate(?\DateTimeInterface $date): self
     {
         $this->date = $date;
 

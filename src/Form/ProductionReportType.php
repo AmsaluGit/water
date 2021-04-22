@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\ProductionReport;
+use phpDocumentor\Reflection\Types\Nullable;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,7 +14,9 @@ class ProductionReportType extends AbstractType
     {
         $builder
             ->add('PVR')
-            ->add('product')
+            ->add('product', null, [
+                'required'   => true
+            ])
             ->add('quantity')
         ;
     }
