@@ -176,7 +176,7 @@
 																				{% set j = j+1 %}
 																				</td>
 																				<td>{{ item.product }}</td>
-																				{% if item.approvalStatus != null %}
+																				{% if item.approvalStatus != 3 %}
 																					<td>{{ item.codeNumber }}</td>
 																				{% endif %}
 																				
@@ -184,7 +184,7 @@
 																				{% if item.approvalStatus == 1 %}
 																					<td>{{ item.approvedQuantity }}</td>
 																				{% endif %}
-																				{% if item.approvalStatus == null %}
+																				{% if item.approvalStatus == 3 %}
 																					<td>{{ item.available (item.unitOfMeasure)}}</td> 
 																				{% endif %}
                                                                                 
