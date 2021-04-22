@@ -42,7 +42,7 @@ class ProductionReportRepository extends ServiceEntityRepository
                  ->andWhere('m.date >= :start')
                  ->setParameter('start',$start)
                  ->setParameter('last', $last);
-        return( $qb->orderBy('m.id', 'ASC')
+        return( $qb->orderBy('m.date', 'ASC')
                   ->getQuery()->getResult());
 
 
@@ -55,10 +55,10 @@ class ProductionReportRepository extends ServiceEntityRepository
                  ->from('App\Entity\ProductionReport', 'm')
                  ->where('m.date >= :last')
                  ->setParameter('last', new \DateTime('-'.$range.' month'));
-        return $qb->orderBy('m.id', 'ASC')
+        return $qb->orderBy('m.date', 'ASC')
                   ->getQuery()->getResult();
         }
-    public function intervalSum($range,$val){
+    public function IntervalSum($range,$val){
         $entityManager = $this->getEntityManager();
 
         $qb = $entityManager->createQueryBuilder();
@@ -71,6 +71,26 @@ class ProductionReportRepository extends ServiceEntityRepository
                  ->setParameter('last', new \DateTime('-'.$range.' month'));
         return $qb->orderBy('m.id', 'ASC')
                   ->getQuery()->getResult();
+
+        }
+    public function RangeSum($start, $last ,$val){
+
+    $entityManager = $this->getEntityManager();
+
+    $qb = $entityManager->createQueryBuilder();
+        $qb->select('m')
+                ->select('SUM(m.quantity) as totalSum')
+                 ->from('App\Entity\ProductionReport', 'm')
+                 ->where('m.date <= :last')
+                 ->andWhere('m.date >= :start')
+                 ->andWhere('m.product =:val')
+                 ->setParameter('val',$val)
+                 ->setParameter('start',$start)
+                 ->setParameter('last', $last);
+        return( $qb->orderBy('m.id', 'ASC')
+                  ->getQuery()->getResult());
+
+
 
     }
     // /**

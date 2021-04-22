@@ -33,17 +33,24 @@
       </style>
     </head>
     <body>
-       
+    <p style="text-align:center; font-size:30px;"> Raw Materials Record Summary </p>
+   {% if not from_ == null and not to_ == null  %}
+    <p style=" font-size:20px;">Record From {{ from_ | date ('Y M d') }} to {{ to_ | date ('Y M d') }} </p>
+      {% else %}
+    <p style=" font-size:20px;">Record of the total {{ size }} Month  </p>
+      {% endif %}
        <table style="width:100%">
         <tr>
+          <th></th>
           <th></th>
           <th colspan="4">perform/pcs</th> 
           <th colspan="4">B/label/Roll/kg</th>
           
         </tr>
          <tr>
+          <th>#</th>
           <th>Date</th>
-          <th>0.6lLi</th> 
+          <th>0.6 Liter</th> 
           <th>1 Liter</th>
           <th>2 Liter</th>
           <th>20 liter/jar</th>
@@ -53,12 +60,46 @@
           <th>20 liter/jar</th>
           
         </tr>
+        {% set i = 1 %}
+        {% for material in materialReport %}
          <tr>
-          <th>Total</th>
+         <th>{{ i }}</th>
+         {% set i = i + 1 %}
+          <th>{{ material.date | date('Y-m-d') }}</th>
+            {% if material.product.id == 1 %}
+          <th>{{ material.quantity }}</th> 
+          {% else %}
           <th></th> 
+          {% endif %}
+            {% if material.product.id == 2 %}
+          <th>{{ material.quantity }}</th> 
+          {% else %}
+          <th></th> 
+          {% endif %}
+            {% if material.product.id == 3 %}
+          <th>{{ material.quantity }}</th> 
+          {% else %}
+          <th></th> 
+          {% endif %}
+            {% if material.product.id == 4 %}
+          <th>{{ material.quantity }}</th> 
+          {% else %}
+          <th></th> 
+          {% endif %}
+          <th></th>
+ 
           <th></th>
           <th></th>
           <th></th>
+        </tr>
+        {% endfor %}
+         <tr>
+          <th>Total</th>        
+          <th></th>
+          <th>{{ p1.0.totalSum }}</th>
+          <th>{{ p2.0.totalSum }}</th>
+          <th>{{ p3.0.totalSum }}</th>
+          <th>{{ p4.0.totalSum }}</th>
           <th></th>
           <th></th>
           <th></th>
@@ -66,6 +107,7 @@
         </tr>
          <tr>
           <th>unit price</th>
+          <th></th>
           <th></th> 
           <th></th>
           <th></th>
@@ -87,7 +129,7 @@
         {# <td id="td1">{{item.unitOfMeasure}}</td> 
        <td id="td1">{{item.approvedQuantity}}</td> 
 
-        <td></td>  #} #}
+        <td></td>  #} 
         
 
         

@@ -18,7 +18,81 @@ class MaterialRecordRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, MaterialRecord::class);
     }
+    public function findMaterialReport($search=null)
+    {
+        $qb=$this->createQueryBuilder('p');
 
+        if($search)
+            $qb->andWhere("p.product  LIKE '%".$search."%'");
+            return 
+            $qb->orderBy('p.id', 'ASC')
+            ->getQuery()
+            
+        ;
+    }
+    public function findDateRangeResultMaterial($start,$last){
+      
+    $entityManager = $this->getEntityManager();
+
+    $qb = $entityManager->createQueryBuilder();
+        $qb->select('m')
+                 ->from('App\Entity\MaterialRecord', 'm')
+                 ->where('m.date <= :last')
+                 ->andWhere('m.date >= :start')
+                 ->setParameter('start',$start)
+                 ->setParameter('last', $last);
+        return( $qb->orderBy('m.date', 'ASC')
+                  ->getQuery()->getResult());
+
+
+    }
+    public function findDateIntervalMaterial($range){
+        $entityManager = $this->getEntityManager();
+
+        $qb = $entityManager->createQueryBuilder();
+        $qb->select('m')
+                 ->from('App\Entity\MaterialRecord', 'm')
+                 ->where('m.date >= :last')
+                 ->setParameter('last', new \DateTime('-'.$range.' month'));
+        return $qb->orderBy('m.date', 'ASC')
+                  ->getQuery()->getResult();
+        }
+    public function IntervalSumMaterial($range,$val){
+        $entityManager = $this->getEntityManager();
+
+        $qb = $entityManager->createQueryBuilder();
+        $qb->select('m')
+               ->select('SUM(m.quantity) as totalSum')
+                 ->from('App\Entity\MaterialRecord', 'm')
+                 ->where('m.date >= :last')
+                 ->andWhere('m.product = :val')
+                 ->setParameter('val',$val)
+                 ->setParameter('last', new \DateTime('-'.$range.' month'));
+        return $qb->orderBy('m.id', 'ASC')
+                  ->getQuery()->getResult();
+
+        }
+    public function RangeSumMaterial($start, $last ,$val){
+
+    $entityManager = $this->getEntityManager();
+
+    $qb = $entityManager->createQueryBuilder();
+        $qb->select('m')
+                ->select('SUM(m.quantity) as totalSum')
+                 ->from('App\Entity\MaterialRecord', 'm')
+                 ->where('m.date <= :last')
+                 ->andWhere('m.date >= :start')
+                 ->andWhere('m.product =:val')
+                 ->setParameter('val',$val)
+                 ->setParameter('start',$start)
+                 ->setParameter('last', $last);
+        return( $qb->orderBy('m.id', 'ASC')
+                  ->getQuery()->getResult());
+
+
+
+    }
+    
     // /**
     //  * @return MaterialRecord[] Returns an array of MaterialRecord objects
     //  */

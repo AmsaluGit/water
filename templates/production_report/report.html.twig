@@ -1,90 +1,122 @@
-{% extends 'base.html.twig' %}
+<html>
+   <head>
+      <style>
+        body{
+          margin-left: 10%;
+          margin-right: 10%;
+        }
+         table, th, td {
+         border: 1px solid black;
+        border-collapse: collapse;
+        }
+        td {
+         padding: 15;
+        }
+        #center{
+        text-align: center;
+        }
+        .distrb{
+          text-decoration: underline;
+        }
+        #orginal{
+          padding-left: 60px;
+        }
+          @media print {
+            #printPageButton {
+            display: none;
+            }
+         }
+         @media print {
+             @page { margin: 0; }
+            body { margin: 1.6cm; }
+        }
+      </style>
+    </head>
+    <body>
+       <p style="text-align:center; font-size:30px;" >Production Report</p>
+       <table style="width:100%">
+        <tr>
+          <th colspan="8">perform/pcs</th> 
+         
+          
+        </tr>
+         <tr>
+          <th>#</th>
+          <th>Date</th>
+          <th>PRV</th>
+          <th>0.6 Liter pack</th> 
+          <th>1 Liter pack</th>
+          <th>2 Liter pack</th>
+          <th>20 Liter/jar</th>
+          <th>Remark</th>
 
-{% block title %}Permission index
-{% endblock %}
-{% block maintitle %}
-	Permission
-{% endblock %}
+         
+          
+        </tr>
+        {% set i = 1 %}
+        {% for product in ProductionReport %}
+      
+         <tr>
+         <th>{{ i }}</th>
+         {% set i = i + 1 %}
+          <th>{{ product.date | date('Y-m-d') }}</th>
+          <th>{{ product.PVR }}</th>
+            {% if product.product.id == 1 %}
+          <th>{{ product.quantity }}</th> 
+          {% else %}
+          <th></th> 
+          {% endif %}
+            {% if product.product.id == 2 %}
+          <th>{{ product.quantity }}</th> 
+          {% else %}
+          <th></th> 
+          {% endif %}
+            {% if product.product.id == 3 %}
+          <th>{{ product.quantity }}</th> 
+          {% else %}
+          <th></th> 
+          {% endif %}
+            {% if product.product.id == 4 %}
+          <th>{{ product.quantity }}</th> 
+          {% else %}
+          <th></th> 
+          {% endif %}
+          <th></th>
+ 
+        </tr>
+        {% endfor %}
 
 
-{% block breadcrumb %}
+         <tr>
+          <th>Total</th>
+          <th></th>
+          <th></th> 
+          <th>{{ p1.0.totalSum }}</th>
+          <th>{{ p2.0.totalSum }}</th>
+          <th>{{ p3.0.totalSum }}</th>
+          <th>{{ p4.0.totalSum }}</th>
+          <th></th>
+ 
+        </tr>
+         <tr>
+          <th>unit price</th>
+          <th></th>
+          <th></th> 
+          <th></th> 
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
 
-	<li class="breadcrumb-item active">Production Report</li>
-{% endblock %}
-{% block body %}
-	<div class="row">
-		<div class="card col-md">
+        </tr>
 
-			<div class="card-body">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="card card">
-							<div class="card-header">
-								<h3 class="card-title">Product Delivery Report</h3>
-								
-							</div>
-							<div class="card-body">
-								
-                            
-								{# {{ dump(ProductionReport) }} #}
-								{# {% do product.setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') %}  #}
-								{# <div class="float-right">{{ knp_pagination_render(products) }}</div> #}
+       </table>
+      
+       <br>
+          
+<button id="printPageButton" onclick="window.print();" style="float:right">Print</button>
+<script></script>
 
-                            
-							</div>
-						</div>
-					</div>
-					<!-- /.card-body -->
-				</div>
-			</div>
-
-		</div>
-		<!-- /.card-body -->
-	</div>
-
-{% block javascripts %}
-<script>
-		{# {% if edit_list %}
-		document.getElementById('collapse').click();
-		{% endif %} #}
-		
-		{# function myFunction(val,id) {
-  			
-
-			if(val == "Approve all"){
-				document.getElementById("quantity"+id).setAttribute('hidden',"true");
-				document.getElementById("remark"+id).setAttribute('hidden','true');
-			}
-			else if(val == "Approve some"){
-				document.getElementById("quantity"+id).removeAttribute('hidden',"true");
-				document.getElementById("remark"+id).removeAttribute('hidden', "true");
-			} 
-			else if(val == "Reject"){
-				document.getElementById("quantity"+id).setAttribute('hidden',"true");
-				document.getElementById("remark"+id).removeAttribute('hidden', "true");
-			}else{
-				document.getElementById("quantity"+id).setAttribute('hidden',"true");
-				document.getElementById("remark"+id).setAttribute('hidden','true');
-			} 
-
-			
-			
-			} #}
-
-
-    {# $(document).ready(function(){
-
-        $("#mySelect").on("change",function(){
-            alert($(this).val());
-        });
-    }); #}
-{#  
-			 $(function () {
- $('#collapse').trigger('click');
-})  #}
-		</script>
-	
-{% endblock %}		
-
-{% endblock %}
-
+  </body>
+  
+</html>

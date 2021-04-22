@@ -34,8 +34,8 @@ class MaterialRecordController extends AbstractController
         $form = $this->createForm(MaterialRecordType::class, $materialRecord);
         $form->handleRequest($request);
         $user = $this->getUser();
-        // $materialRecord->setRegisteredBy($user)
-        //       ->setDatePurchased(new \DateTime());
+        $materialRecord
+              ->setDate(new \DateTime());
 
         if ($form->isSubmitted() && $form->isValid()) {    
                

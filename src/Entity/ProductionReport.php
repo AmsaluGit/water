@@ -23,7 +23,7 @@ class ProductionReport
     private $PVR;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $date;
 
