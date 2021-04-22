@@ -49,11 +49,11 @@
 <body>
     <div>
 
-            <p style="padding-left: 22%">Material Requestion Form<em style="padding-left:49%;">NO</em>
+            <p style="padding-left: 22%">Material Requestion Form<em style="padding-left:49%;">NO <em style=" padding-left:2px; color: red">0144</em></em>
                 <button style="float:right;" id="printpagebutton" onclick="printpage()">
                     Print
                 </button></p> 
-            <p style="padding-left: 24%">የእቃ መጠየቂያ ሰነድ<em style="padding-left:58%;color: red">0144</em></p>
+            <p style="padding-left: 24%">የእቃ መጠየቂያ ሰነድ</p>
             <p style="padding-left: 22%">Requested by:- {{consumption_request.requester}}<em style="padding-left: 41%">Section:-{{consumption_request.section}}</em></p>
             <p style="text-align: center"><b>_________________________________________________________________________________________________________________________________</b></p>
             <p style="padding-left: 18%">Requested Material / ወጭ የሚደረጉ እቃዎች ዝርዝር</p>
@@ -83,7 +83,7 @@
                             {# <td>{{consumption_list.remark}}</td> #}
                             <td>{{consumption_list.unitOfMeasure}}</td>
                             <td>{{consumption_list.approvedQuantity}}</td>
-                            <td>{{consumption_list.available}}</td>
+                            <td>{{available}}</td>
                             <td>{{consumption_list.issue}}</td>
                         </tr>
  
@@ -99,7 +99,6 @@
             <p><span style="padding-left:6.5%"><em>1st to store</em></span><span style="padding-left:8%">
             <em>2nd to Finance</em></span><span style="padding-left:8%"><em>3rd Requested</em> </span> <span style="padding-left: 8%">4th pad</em>
             </span></p>
-
             <script>
                 function printpage() {
                     //Get the print button and put it into a variable
