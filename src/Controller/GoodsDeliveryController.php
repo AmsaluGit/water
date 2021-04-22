@@ -29,7 +29,7 @@ class GoodsDeliveryController extends AbstractController
      */
     public function index(SellsRepository $sellsRepository,SettingRepository $settingRepository, Request $request, PaginatorInterface $paginator, SellsListRepository $sellsListRepository): Response
     {
-        $stockApprovalLevel = $settingRepository->findOneBy(['code'=>'stock_approval_level'])->getValue();
+        // $stockApprovalLevel = $settingRepository->findOneBy(['code'=>'stock_approval_level'])->getValue();
         // dd($request->request->all());
         // $sellsList = $sellsListRepository->find($request->request->get('child_id'));
         // $form_sells_list = $this->createForm(SellsListType::class, $sellsList);
