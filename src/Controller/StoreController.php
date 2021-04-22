@@ -9,31 +9,45 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Knp\Component\Pager\PaginatorInterface;
 /**
  * @Route("/store")
  */
 class StoreController extends AbstractController
 {
     /**
-     * @Route("/", name="store_index", methods={"GET"})
+     * @Route("/", name="store_index", methods={"GET","POST"})
      */
-    public function index(StoreRepository $storeRepository): Response
+    public function index(StoreRepository $storeRepository, Request $request,PaginatorInterface $paginator): Response
     {
-        return $this->render('store/index.html.twig', [
-            'stores' => $storeRepository->findAll(),
-        ]);
-    }
+        if($request->request->get('edit')){
+            $id=$request->request->get('edit');
+            $store=$storeRepository->findOneBy(['id'=>$id]);
+            $form = $this->createForm(StoreType::class, $store);
+            $form->handleRequest($request);
+    
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->getDoctrine()->getManager()->flush();
+    
+                return $this->redirectToRoute('store_index');
+            }
 
-    /**
-     * @Route("/new", name="store_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $store = new Store();
+            $queryBuilder=$storeRepository->findStore($request->query->get('name'));
+            $data=$paginator->paginate(
+                $queryBuilder,
+                $request->query->getInt('page',1),
+                5
+            );
+            return $this->render('store/index.html.twig', [
+                'stores' => $data,
+                'form' => $form->createView(),
+                'edit'=>$id
+            ]);
+
+        }
+        $store = new Store;
         $form = $this->createForm(StoreType::class, $store);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($store);
@@ -41,40 +55,19 @@ class StoreController extends AbstractController
 
             return $this->redirectToRoute('store_index');
         }
-
-        return $this->render('store/new.html.twig', [
-            'store' => $store,
+        
+        $search = $request->query->get('search');
+        
+        $queryBuilder=$storeRepository->findStore($search);
+        $data=$paginator->paginate(
+            $queryBuilder,
+            $request->query->getInt('page',1),
+            5
+        );
+        return $this->render('store/index.html.twig', [
+            'stores' => $data,
             'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="store_show", methods={"GET"})
-     */
-    public function show(Store $store): Response
-    {
-        return $this->render('store/show.html.twig', [
-            'store' => $store,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="store_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Store $store): Response
-    {
-        $form = $this->createForm(StoreType::class, $store);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('store_index');
-        }
-
-        return $this->render('store/edit.html.twig', [
-            'store' => $store,
-            'form' => $form->createView(),
+            'edit' => false
         ]);
     }
 

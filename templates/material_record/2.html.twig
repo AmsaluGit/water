@@ -1,0 +1,105 @@
+<html>
+   <head>
+      <style>
+        body{
+          margin-left: 10%;
+          margin-right: 10%;
+        }
+         table, th, td {
+         border: 1px solid black;
+        border-collapse: collapse;
+        }
+        td {
+         padding: 15px;
+        }
+        #center{
+        text-align: center;
+        }
+        .distrb{
+          text-decoration: underline;
+        }
+        #orginal{
+          padding-left: 60px;
+        }
+          @media print {
+            #printPageButton {
+            display: none;
+            }
+         }
+         @media print {
+             @page { margin: 0; }
+            body { margin: 1.6cm; }
+        }
+      </style>
+    </head>
+    <body>
+       
+       <table style="width:100%">
+        <tr>
+          <th></th>
+          <th colspan="4">perform/pcs</th> 
+          <th colspan="4">B/label/Roll/kg</th>
+          
+        </tr>
+         <tr>
+          <th>Date</th>
+          <th>0.6lLi</th> 
+          <th>1 Liter</th>
+          <th>2 Liter</th>
+          <th>20 liter/jar</th>
+          <th>0.6lLi</th> 
+          <th>1 Liter</th>
+          <th>2 Liter</th>
+          <th>20 liter/jar</th>
+          
+        </tr>
+         <tr>
+          <th>Total</th>
+          <th></th> 
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+         <tr>
+          <th>unit price</th>
+          <th></th> 
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+        {# {% set i=1 %}
+        {% for item in stockRequestList  %}' #}
+        {# <tr>
+
+        <td id="td1">{{i}}</td> 
+         {% set i = i + 1%} 
+        <td id="td1">{{item.product}}</td> 
+        <td id="td1">{{item.spcicification}}</td> 
+        {# <td id="td1">{{item.unitOfMeasure}}</td>  #}
+        {# <td id="td1">{{item.unitOfMeasure}}</td> 
+       <td id="td1">{{item.approvedQuantity}}</td> 
+
+        <td></td>  #} #}
+        
+
+        
+        {# </tr>
+        {% endfor %} #}
+       </table>
+      
+       <br>
+          
+<button id="printPageButton" onclick="window.print();">Print</button>
+<script></script>
+
+  </body>
+  
+</html>
