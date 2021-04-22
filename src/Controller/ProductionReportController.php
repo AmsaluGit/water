@@ -170,10 +170,9 @@ class ProductionReportController extends AbstractController
  */
 public function report(Request $request, ProductionReportRepository $ProductReportRepository): Response
 {   
-    $productReport = $ProductReportRepository->intervalSum(13,1);
 
 
-
+    if($request->request->get('radio')== 1){
         if($request->request->get('range_generate')){
             $start = $request ->request->get('start');
             $end = $request ->request->get('end');
@@ -221,8 +220,15 @@ public function report(Request $request, ProductionReportRepository $ProductRepo
         
             
          }
-        
-    
+    }
+
+        elseif($request->request->get('radio')==2){
+            //////////////////////  
+
+
+
+
+        } 
          
     
          return $this->render('production_report/report_initial.html.twig', [

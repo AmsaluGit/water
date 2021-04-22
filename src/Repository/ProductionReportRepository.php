@@ -69,8 +69,8 @@ class ProductionReportRepository extends ServiceEntityRepository
                  ->andWhere('m.product = :val')
                  ->setParameter('val',$val)
                  ->setParameter('last', new \DateTime('-'.$range.' month'));
-        dd( $qb->orderBy('m.id', 'ASC')
-                  ->getQuery()->getResult());
+        return $qb->orderBy('m.id', 'ASC')
+                  ->getQuery()->getResult();
 
     }
     // /**
