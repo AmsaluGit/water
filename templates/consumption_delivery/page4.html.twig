@@ -1,31 +1,35 @@
 <html>
     <head>
         <style>
+        body{
+            width:90%;
+            padding:2.5px;
+        }
         #table1,#th,#td{
             border: 1px solid black;
             border-collapse: collapse;
             padding-bottom: 10px;
             padding-top: 10px;
             text-align: left;
-            
-            
+
+
         }
-       
-    
+
+
            .k,#th1,#td1{
             border: 1px solid black;
             border-collapse: collapse;
             padding-bottom: 10px;
             padding-top: 10px;
             text-align:center;
-            
+
            }
            .g{
             border: 1px solid black;
             border-collapse: collapse;
-            
+
            }
-           
+
            .col1andcol2{
             display: flex;
             flex-direction: row;
@@ -37,7 +41,7 @@
                     flex-direction: column;
                     justify-content: space-between;
                     /*text-align: center;*/
-                    
+
               }
               .end1{
                 display: none;
@@ -49,33 +53,34 @@
            .endblock{
             display: none;
            }
-        </style> 
+        </style>
     </head>
     <body>
         <p style="padding-left: 45%"><b style="text-decoration: underline">የጥሬ እቃ መረከቢያ ደረሰኝ</b><em style="padding-left: 10%">N0.</em><em style="padding-left: 3%;color:red">0086</em></p>
          <button style="float:right;" id="printpagebutton" onclick="printpage()">
                     Print
-                </button></p>  
-        <p style="padding-left: 45%"><b>Goods Receiveds Voicher</b></p>
+                </button></p>
+        <p style="padding-left: 45%"><b>Raw Material Voicher</b></p>
         <table width=100%; id="table1"; style="margin-left: 4%">
             <tr>
                 <th id="th">የርክክብ ቦታ<br>(place of delivery)</th>
-                <td style="width: 30%;" id="td"> </td>
-                 <td style="width: 30%;" id="td"> ተረካቢ ክፍል </td> 
+                    {# <td style="width: 30%;" id="td"> </td> #}
+                 <td style="width: 20%;" id="td">{{consumption_delivery.placeOfDelivery}}</td>
+                 <td style="width: 20%;" id="td">ተረካቢ ክፍል</td>
             </tr>
             <tr>
                 <th id="th">የተረካቢ ስም<br>(Receiver)</th>
                  <td style="width: 30%;" id="td">{{consumption_delivery.receiver}}</td>
-                  <td style="width: 30%;" id="td">  </td>
+                  <td style="width: 30%;" id="td">{{ dep }}</td>
             </tr>
               <tr>
                 <th id="th"><br>የመጠየቂያ ሰነድ ቁጥር(Request Do.No)</th>
-                 <td style="width: 30%;" id="td">  </td>
+                 <td style="width: 30%;" id="td">{{consumption_delivery.requestNo}}</td>
                   <td style="width: 30%;" id="td">  </td>
             </tr>
-            
+
         </table>
-       
+
         <br>
         <table width=100% class="k">
              <tr>
@@ -101,7 +106,7 @@
                       <td id="td1" style="width:3%"></td>
                       <td id="td1" style="width: 8%">{{list.unitPrice * list.approvedQuantity}}</td>
                        <td id="td1" style="width: 3%"></td>
-                       <td id="td1"></td>    
+                       <td id="td1"></td>
              </tr>
         {% else %}
 
@@ -114,12 +119,12 @@
          <div class="col1andcol2">
              <div class"col1">
                 <p><span style="text-decoration: underline">ያዘጋጀዉ</span><span style="padding-left: 250px;text-decoration: underline">  ተረካቢ  </span></p>
-                <p>ስም_________________ <span style="padding-left: 60px">ስም_________________ </span></p>
+                <p>ስም:_________________ <span style="padding-left: 60px">ስም: {{consumption_delivery.receiver}} </span></p>
                 <p>ፊርማ________________ <span style="padding-left: 60px">ፊርማ________________ </span></p>
          </div>
          <div class="col2">
                 <p><span style="text-decoration: underline">አስረካቢ</span> <span style="padding-left: 250px;text-decoration: underline">ያጠደቀ</span></p>
-                <p>ስም_________________ <span style="padding-left: 60px">ስም_________________ </span></p>
+                <p>ስም: {{consumption_delivery.deliveredBy}} <span style="padding-left: 60px">ስም: {{consumption_delivery.approvedBy}} </span></p>
                 <p>ፊርማ________________ <span style="padding-left: 60px">ፊርማ________________ </span></p>
                 <!--style="padding-left: 300px"style="padding-left: 300px"
                 style="padding-left: 180px"
@@ -136,17 +141,17 @@
                 <p>3ተኛ ኮፒ ቀይ <span style="padding-left: 100px">4ተኛ ኮፒ ሰማያዊ </span></p>
                 <p>ለተረካቢ<span style="padding-left: 150px"> ከጥራዝ ጋር ይቀራል </span></p>
             </div>
-            
-         </div> 
+
+         </div>
            <script>
                 function printpage() {
                     //Get the print button and put it into a variable
                     var printButton = document.getElementById("printpagebutton");
-                    //Set the print button visibility to 'hidden' 
+                    //Set the print button visibility to 'hidden'
                     printButton.style.visibility = 'hidden';
                     //Print the page content
                     window.print()
-                        //Set the print button to 'visible' again 
+                        //Set the print button to 'visible' again
                         //[Delete this line if you want it to stay hidden after printing]
                     printButton.style.visibility = 'visible';
                 }
