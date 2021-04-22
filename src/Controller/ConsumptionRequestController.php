@@ -10,6 +10,7 @@ use App\Form\ConsumptionRequestType;
 use App\Form\ConsumptionRequestListType;
 use App\Repository\ConsumptionRequestRepository;
 use App\Repository\ConsumptionRequestListRepository;
+use App\Repository\StockListRepository;
 use App\Repository\SettingRepository;
 use App\Form\ConsumptionApprovalForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,7 +27,7 @@ class ConsumptionRequestController extends AbstractController
     /**
      * @Route("/", name="consumption_index", methods={"GET","POST"})
      */
-    public function index(ConsumptionRequestListRepository $consumptionRequestListRepository, ConsumptionRequestRepository $consumptionRequestRepository, Request $request, PaginatorInterface $paginator): Response
+    public function index(ConsumptionRequestListRepository $consumptionRequestListRepository, ConsumptionRequestRepository $consumptionRequestRepository, StockListRepository $stockListRepository, Request $request, PaginatorInterface $paginator): Response
     {
         if($request->request->get('approve')){
             $note = $request->request->get('remark');
@@ -113,6 +114,24 @@ class ConsumptionRequestController extends AbstractController
             $this->addFlash('save', 'The Consumption request has been  Rejected!');
         }
 
+        $dp = $consumptionRequestListRepository->findAll();
+
+        foreach($dp as $ls){
+            $tot = 0;
+            if($ls->getConsumptionRequest()->getApprovalStatus()== 3){
+            $product=$ls->getProduct();
+            $avail = $stockListRepository->findBy(["product" => $product]);
+            
+            foreach($avail as $av){
+                if($av->getApprovalStatus()==1 ){
+                    $tot = $tot + $av->getApprovedQuantity();
+                }            
+            }
+        }
+            $ls->setAvailable($tot);    
+        
+          }
+
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->flush();
 
@@ -124,7 +143,7 @@ class ConsumptionRequestController extends AbstractController
                18
             );
 
-            $dp = $consumptionRequestListRepository->findAll();
+            
             return $this->render('consumption_request/index.html.twig', [
                 'consumption_requests' => $data,
                 'consumption_list' => $dp,
