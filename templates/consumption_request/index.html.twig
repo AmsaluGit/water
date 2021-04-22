@@ -148,7 +148,7 @@
 																			{# <th>{{ knp_pagination_sortable(sells, 'Name', 'p.name') }}</th>
 																			<th>{{ knp_pagination_sortable(sells, 'Code', 'p.code') }}</th> #}
 																			<th>Product</th>
-																			{% if consumption_request.approvalStatus != null %}
+																			{% if consumption_request.approvalStatus != 3 %}
 																				<th>CodeNumber</th>
 																			{% endif %}
 																			
@@ -156,7 +156,7 @@
 																			{% if consumption_request.approvalStatus == 1 %}
 																				<th>ApprovedQuantity</th>
 																			{% endif %}	
-																			{% if consumption_request.approvalStatus == null %}
+																			{% if consumption_request.approvalStatus == 3 %}
 																				<th>Available</th>
 																			{% endif %}
 																			
@@ -176,16 +176,16 @@
 																				{% set j = j+1 %}
 																				</td>
 																				<td>{{ item.product }}</td>
-																				{% if item.approvalStatus != 3 %}
+																				{% if consumption_request.approvalStatus != 3 %}
 																					<td>{{ item.codeNumber }}</td>
 																				{% endif %}
 																				
 																				<td>{{ item.quantity }}</td>
-																				{% if item.approvalStatus == 1 %}
+																				{% if consumption_request.approvalStatus == 1 %}
 																					<td>{{ item.approvedQuantity }}</td>
 																				{% endif %}
-																				{% if item.approvalStatus == 3 %}
-																					<td>{{ item.available (item.unitOfMeasure)}}</td> 
+																				{% if consumption_request.approvalStatus == 3 %}
+																					<td>{{ item.available (item.unitOfMeasure)}}</td>
 																				{% endif %}
                                                                                 
 																				{#<td>{{ item.unitPrice }}</td>
