@@ -83,7 +83,7 @@
                             {# <td>{{consumption_list.remark}}</td> #}
                             <td>{{consumption_list.unitOfMeasure}}</td>
                             <td>{{consumption_list.approvedQuantity}}</td>
-                            <td>{{available}}</td>
+                            <td>{{consumption_list.available}}</td>
                             <td>{{consumption_list.issue}}</td>
                         </tr>
  
@@ -94,8 +94,8 @@
                     {% endfor %}
             </table>   
             <p style="padding-left: 3%">NOTE:-{{consumption_request.note}}</p>
-            <p style="padding-left: 3%">Requested Name:- {{ consumption_request.requester }}<span style="padding-left: 50%">Sig:-_______________</span></p>
-            <p style="padding-left: 3%">Approved Name:-  {{ consumption_request.approvedBy }}</p>
+            <p style="padding-left: 3%">Requested Name:- {{ consumption_request.requester }}<span style="padding-left: 20%">Sig:-_______________</span></p>
+            <p style="padding-left: 3%">Approved Name:-  {{ consumption_request.approvedBy }}<span style="padding-left: 20%">Sig:-_______________</span></p>
             <p><span style="padding-left:6.5%"><em>1st to store</em></span><span style="padding-left:8%">
             <em>2nd to Finance</em></span><span style="padding-left:8%"><em>3rd Requested</em> </span> <span style="padding-left: 8%">4th pad</em>
             </span></p>
