@@ -57,7 +57,22 @@ class ProductionReportRepository extends ServiceEntityRepository
                  ->setParameter('last', new \DateTime('-'.$range.' month'));
         return $qb->orderBy('m.id', 'ASC')
                   ->getQuery()->getResult();
-}
+        }
+    public function intervalSum($range,$val){
+        $entityManager = $this->getEntityManager();
+
+        $qb = $entityManager->createQueryBuilder();
+        $qb->select('m')
+               ->select('SUM(m.quantity) as totalSum')
+                 ->from('App\Entity\ProductionReport', 'm')
+                 ->where('m.date >= :last')
+                 ->andWhere('m.product = :val')
+                 ->setParameter('val',$val)
+                 ->setParameter('last', new \DateTime('-'.$range.' month'));
+        dd( $qb->orderBy('m.id', 'ASC')
+                  ->getQuery()->getResult());
+
+    }
     // /**
     //  * @return ProductionReport[] Returns an array of ProductionReport objects
     //  */
