@@ -143,7 +143,29 @@ class ConsumptionRequestController extends AbstractController
                18
             );
 
+            $dp = $consumptionRequestListRepository->findAll();
+
+            //Available
             
+            foreach($dp as $ls){
+                $product=$ls->getProduct();
+                $avail = $stockListRepository->findBy(["product" => $product]);
+                $tot = 0;
+                if($ls->getConsumptionRequest()->getApprovalStatus() == 3){
+                foreach($avail as $av){
+                    if($av->getApprovalStatus() == 1){
+                        $tot = $tot + $av->getApprovedQuantity();
+                    }
+                    $ls->setAvailable($tot); 
+                }
+                
+                }
+                   
+
+              }
+
+              $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->flush();
             return $this->render('consumption_request/index.html.twig', [
                 'consumption_requests' => $data,
                 'consumption_list' => $dp,
