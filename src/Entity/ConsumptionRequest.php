@@ -299,8 +299,8 @@ class ConsumptionRequest
         return $this;
     }
 
-    // public function __toString(){
-    //     return $this->;
-    // }
+    public function __toString(){
+        return strval($this->id);
+    }
  
 }

@@ -89,8 +89,8 @@
                 <th  style="text-align:center" id="th1">የንብረት አይነት</th>
                 <th style="text-align:center" id="th1">መለኪያ</th>
                 <td style="text-align:center" id="th1"><b>ብዛት</b></td>
-                <th style="text-align:center" colspan="2" id="th1">የአንዱ ዋጋ</th>
-                <th  style="text-align:center" colspan="2" id="th1">ጠቅላላ ዋጋ</th>
+                <th style="text-align:center" id="th1">የአንዱ ዋጋ</th>
+                <th  style="text-align:center" id="th1">ጠቅላላ ዋጋ</th>
                 <th style="text-align:center" id="th1">ምርመራ</th>
             </tr>
             {% set i = 0%}
@@ -102,11 +102,12 @@
                   <td id="td1">{{list.product}}</td>
                    <td id="td1">{{list.unitOfMeasure}}</td>
                     <td id="td1">{{list.approvedQuantity}}</td>
-                     <td id="td1" style="width: 8%">{{list.unitPrice}}</td>
-                      <td id="td1" style="width:3%"></td>
-                      <td id="td1" style="width: 8%">{{list.unitPrice * list.approvedQuantity}}</td>
-                       <td id="td1" style="width: 3%"></td>
+                     <td id="td1" >{{list.unitPrice}}</td>
+                      {# <td id="td1" style="width:3%"></td> #}
+                      <td id="td1" >{{list.unitPrice * list.approvedQuantity}}</td>
+                       {# <td id="td1" ></td> #}
                        <td id="td1"></td>
+                       
              </tr>
         {% else %}
 
