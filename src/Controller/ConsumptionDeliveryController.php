@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\ConsumptionDelivery;
 use App\Form\ConsumptionDeliveryType;
 use App\Repository\ConsumptionDeliveryRepository;
+use App\Repository\StockBalanceRepository;
 use App\Entity\ConsumptionDeliveryList;
 use App\Form\ConsumptionDeliveryListType;
 use App\Repository\ConsumptionDeliveryListRepository;
@@ -23,7 +24,7 @@ class ConsumptionDeliveryController extends AbstractController
     /**
      * @Route("/", name="consumption_delivery_index", methods={"GET","POST"})
      */
-    public function index(ConsumptionDeliveryListRepository $consumptionDeliveryListRepository, ConsumptionDeliveryRepository $consumptionDeliveryRepository, Request $request, PaginatorInterface $paginator): Response
+    public function index(StockBalanceRepository $stockBalanceRepository, ConsumptionDeliveryListRepository $consumptionDeliveryListRepository, ConsumptionDeliveryRepository $consumptionDeliveryRepository, Request $request, PaginatorInterface $paginator): Response
     {
         if($request->request->get('approve')){
             $note = $request->request->get('remark');
@@ -43,11 +44,19 @@ class ConsumptionDeliveryController extends AbstractController
                         $list->setApprovedQuantity($request->request->get("quantity$listId"))
                              ->setRemark($request->request->get("remark$listId"))
                              ->setApprovalStatus(1);
+
+                        $sb = $stockBalanceRepository->findBy(["product" =>$list->getProduct()]);
+                        $avail = floatval($sb[0]->getAvailable()) + floatval($request->request->get("quantity$listId"));
+                        $sb[0]->setAvailable( $avail);
                     }
 
                     if($request->request->get("mySelect$listId") == "Approve all"){
                         $list->setApprovedQuantity($list->getQuantity())
                              ->setApprovalStatus(1);
+                        
+                        $sb = $stockBalanceRepository->findBy(["product" =>$list->getProduct()]);                       
+                        $avail = floatval($sb[0]->getAvailable()) - floatval($list->getQuantity());
+                        $sb[0]->setAvailable( $avail);
                     }
                     if($request->request->get("mySelect$listId") == "Reject" and $request->request->get("remark$listId")){
                         $list->setApprovalStatus(2)

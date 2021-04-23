@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Stock;
+use App\Entity\StockBalance;
 use App\Entity\StockApproval;
 use App\Entity\StockList;
 use App\Form\StockType;
@@ -10,6 +11,7 @@ use App\Form\StockListType;
 use App\Form\StockApprovalType;
 use App\Repository\StockRepository;
 use App\Repository\StockListRepository;
+use App\Repository\StockBalanceRepository;
 use App\Repository\SettingRepository;
 use App\Repository\StockApprovalRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,7 +28,7 @@ class StockController extends AbstractController
     /**
      * @Route("/", name="stock_index", methods={"GET","POST"})
      */
-    public function index(StockRepository $stockRepository, StockListRepository $stockListRepository, SettingRepository $settingRepository, Request $request, PaginatorInterface $paginator): Response
+    public function index(StockRepository $stockRepository, StockListRepository $stockListRepository, StockBalanceRepository $stockBalanceRepository, SettingRepository $settingRepository, Request $request, PaginatorInterface $paginator): Response
     {
     
         $stockApprovalLevel = $settingRepository->findOneBy(['code'=>'stock_approval_level'])->getValue();
@@ -49,11 +51,39 @@ class StockController extends AbstractController
                     $list->setApprovedQuantity($request->request->get("quantity$listId"))
                          ->setRemark($request->request->get("remark$listId"))
                          ->setApprovalStatus(1);
+                    
+                    $sb = $stockBalanceRepository->findBy(["product" =>$list->getProduct()]);
+                    if($sb != null){
+                        $avail = floatval($sb[0]->getAvailable()) + floatval($request->request->get("quantity$listId"));
+                        $sb[0]->setAvailable( $avail);
+                    }else{
+                        $stockBalance = new StockBalance;
+                        $stockBalance->setProduct($list->getProduct())
+                                     ->setAvailable(floatval($request->request->get("quantity$listId"))); 
+                                     
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $entityManager->persist($stockBalance); 
+                        }
+                    
                 }
                 
                 if($request->request->get("mySelect$listId") == "Approve all"){
                     $list->setApprovedQuantity($list->getQuantity())
                          ->setApprovalStatus(1);
+
+                    $sb = $stockBalanceRepository->findBy(["product" =>$list->getProduct()]);
+                    if($sb != null){
+                        $avail = floatval($sb[0]->getAvailable()) + floatval($list->getQuantity());
+                        $sb[0]->setAvailable( $avail);
+                        // dd($sb);
+                    }else{
+                        $stockBalance = new StockBalance;
+                        $stockBalance->setProduct($list->getProduct())
+                                    ->setAvailable(floatval($list->getQuantity())); 
+
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $entityManager->persist($stockBalance);               
+                        }
                 }
                 
                 if($request->request->get("mySelect$listId") == "Reject"){
@@ -76,6 +106,9 @@ class StockController extends AbstractController
                   ->setApprovalStatus(1);
             $this->addFlash('save', 'The Stock has been approved!');
             }
+
+            
+            
             
         }
         elseif($request->request->get('reject')){

@@ -22,15 +22,15 @@ class StockBalance
      */
     private $product;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $requested;
+    // /**
+    //  * @ORM\Column(type="integer")
+    //  */
+    // private $requested;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $delivered;
+    // /**
+    //  * @ORM\Column(type="integer", nullable=true)
+    //  */
+    // private $delivered;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -54,29 +54,29 @@ class StockBalance
         return $this;
     }
 
-    public function getRequested(): ?int
-    {
-        return $this->requested;
-    }
+    // public function getRequested(): ?int
+    // {
+    //     return $this->requested;
+    // }
 
-    public function setRequested(int $requested): self
-    {
-        $this->requested = $requested;
+    // public function setRequested(int $requested): self
+    // {
+    //     $this->requested = $requested;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function getDelivered(): ?int
-    {
-        return $this->delivered;
-    }
+    // public function getDelivered(): ?int
+    // {
+    //     return $this->delivered;
+    // }
 
-    public function setDelivered(?int $delivered): self
-    {
-        $this->delivered = $delivered;
+    // public function setDelivered(?int $delivered): self
+    // {
+    //     $this->delivered = $delivered;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getAvailable(): ?int
     {
