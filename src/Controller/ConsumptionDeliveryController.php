@@ -283,10 +283,18 @@ class ConsumptionDeliveryController extends AbstractController
     {
         $consumptionDeliveryId = $id;
         $consumptionDelivery = $consumptionDeliveryRepository->find($consumptionDeliveryId);
+
+        if($consumptionDelivery->getRequestNo()){
+            $dep = $consumptionDelivery->getRequestNo()->getSection()->getDepartment();
+        }else{
+            $dep = null;
+        }
+
         $consumptionDeliveryList=$consumptionDeliveryListRepository->findBy(['consumptionDelivery'=>$consumptionDelivery]);
         return $this->render('consumption_delivery/page4.html.twig', [
            'consumption_delivery'=>$consumptionDelivery,
-           'consumption_lists' =>$consumptionDeliveryList
+           'consumption_lists' =>$consumptionDeliveryList,
+           'dep' => $dep
        ]);
     }
 
