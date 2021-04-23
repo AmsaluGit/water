@@ -27,7 +27,7 @@ class StockType extends AbstractType
             ->add('mobile')
             ->add('typeOfDocAndNum')
             // ->add('note')
-            ->add('receivedBy')
+            // ->add('receivedBy')
             ->add('deliveredBy',EntityType::class,[
                 'class' => Customer::class,
                 'query_builder' => function (EntityRepository $er) {

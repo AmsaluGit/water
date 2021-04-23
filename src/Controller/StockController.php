@@ -39,6 +39,7 @@ class StockController extends AbstractController
             $note = $request->request->get('remark');
             $id = $request->request->get('approve');
             $stock = $stockRepository->find($id);
+            $stock->setSerialNumber(5000 + $id);
             $count = 0;
             foreach($stock->getStockLists() as $list){
                 $listId = $list->getId();
@@ -165,7 +166,7 @@ class StockController extends AbstractController
         $form_stock = $this->createForm(StockType::class, $stock);
         $form_stock->handleRequest($request);
         $user = $this->getUser();
-        $stock->setRegisteredBy($user)
+        $stock->setReceivedBy($user)
               ->setDatePurchased(new \DateTime())
               ->setApprovalStatus(3);
 
