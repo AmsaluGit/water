@@ -105,8 +105,11 @@ class CustomerController extends AbstractController
             $form->handleRequest($request);
     
             if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $customer->setType($request->request->get('customer_type'));
                 $this->getDoctrine()->getManager()->flush();
-    
+                $entityManager->persist($customer);
+                $entityManager->flush();
                 return $this->redirectToRoute('customer_index');
             }
 
@@ -129,6 +132,7 @@ class CustomerController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            $customer->setType($request->request->get('customer_type'));
             $entityManager->persist($customer);
             $entityManager->flush();
 

@@ -16,6 +16,7 @@ class CustomerType extends AbstractType
             ->add('Address')
             ->add('Phone')
             ->add('OrganizationName')
+            // ->add('type')
         ;
     }
 
