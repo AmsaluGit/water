@@ -29,7 +29,7 @@ class PurchaseController extends AbstractController
      */
     public function index(StockRequestRepository $stockRequestRepository,SettingRepository $settingRepository, Request $request, PaginatorInterface $paginator, StockRequestListRepository $stockRequestListRepository): Response
     {
-        $stockApprovalLevel = $settingRepository->findOneBy(['code'=>'stock_approval_level'])->getValue();
+        // $stockApprovalLevel = $settingRepository->findOneBy(['code'=>'stock_approval_level'])->getValue();
         // dd($request->request->all());
         // $stockRequestList = $stockRequestListRepository->find($request->request->get('child_id'));
         // $form_stockRequest_list = $this->createForm(StockRequestListType::class, $stockRequestList);
