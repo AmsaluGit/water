@@ -103,7 +103,7 @@
 														</button>
 													</form>
                                                 </td>
-												{% if not stock.approvalStatus %}												
+												{% if  stock.approvalStatus == 3 %}												
 												<td>
 
 													<form class="d-inline" method="post" action="{{ path('edit_stock_index',{'id' : stock.id}) }}">
@@ -203,7 +203,7 @@
 																				<td>{{ item.unitPrice }}</td>
 																				<td>{{ item.approvedQuantity * item.unitprice }}</td>
 																				{% endif %}
-																				{% if not stock.approvalStatus %}
+																				{% if stock.approvalStatus == 3 %}
 																				<td>
 																					<form id = "approval" method="post">
 																					
@@ -278,7 +278,7 @@
 																			</tr>
 											
 																			{% endfor %}
-																			{% if k == 1 and not stock.approvalStatus %}
+																			{% if k == 1 and stock.approvalStatus == 3 %}
 																			{# {% if not sell.approvalStatus %} #}
 																			<tr>
 																				<td colspan="8">
