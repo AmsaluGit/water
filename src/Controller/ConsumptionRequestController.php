@@ -163,7 +163,7 @@ class ConsumptionRequestController extends AbstractController
             //     }
                    
 
-            }
+            // }
 
               $entityManager = $this->getDoctrine()->getManager();
         $entityManager->flush();
