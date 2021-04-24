@@ -39,7 +39,16 @@ class StockController extends AbstractController
             $note = $request->request->get('remark');
             $id = $request->request->get('approve');
             $stock = $stockRepository->find($id);
-            $stock->setSerialNumber(5000 + $id);
+            // $stock->setSerialNumber(5000 + $id);
+            $serial= $stockRepository->getMaxSerialNo();
+            $serial_num = 0;
+            if($serial){
+                $stock->setSerialNumber(($serial[0]->getSerialNumber() + 1));
+            }
+            else{
+                $stock->setSerialNumber($serial_num);
+
+            }
             $count = 0;
             foreach($stock->getStockLists() as $list){
                 $listId = $list->getId();

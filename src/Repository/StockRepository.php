@@ -35,7 +35,17 @@ class StockRepository extends ServiceEntityRepository
             
         ;
     }
-    
+    public function getMaxSerialNo(){
+        $qb=$this->createQueryBuilder('st')
+                    ->andWhere('st.id > :ids')
+                    ->setParameter('ids', 0)
+                    ->orderBy('st.serialNumber', "DESC")
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getResult();
+
+            return $qb;
+    }
 
     /*
     public function findOneBySomeField($value): ?Stock

@@ -13,9 +13,13 @@ class PurchaseType extends AbstractType
     {
         $builder
         //    ->add('requestedBy')
-           ->add('requestingDept')
+           ->add('requestingDept',null, [
+            'required'=>true,
+            ])
         // ->add('date_of_request')
-           ->add('section')
+           ->add('section',null, [
+            'required'=>true,
+            ])
         //    ->add('approvedBy');
            
         ;
