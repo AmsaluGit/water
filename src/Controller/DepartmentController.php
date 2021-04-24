@@ -22,6 +22,7 @@ class DepartmentController extends AbstractController
     public function index(DepartmentRepository $departmentRepository, Request $request, PaginatorInterface $paginator): Response
     {
 
+        $this->denyAccessUnlessGranted("system_setting");
         if($request->request->get('edit')){
             $id=$request->request->get('edit');
             $department=$departmentRepository->findOneBy(['id'=>$id]);
@@ -79,6 +80,7 @@ class DepartmentController extends AbstractController
      */
     public function delete(Request $request, Department $department): Response
     {
+        $this->denyAccessUnlessGranted("system_setting");
         if ($this->isCsrfTokenValid('delete'.$department->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($department);

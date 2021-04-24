@@ -22,6 +22,7 @@ class SectionController extends AbstractController
      */
     public function index(SectionRepository $sectionRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        $this->denyAccessUnlessGranted("system_setting");
 
         if($request->request->get('edit')){
             $id=$request->request->get('edit');
@@ -80,6 +81,8 @@ class SectionController extends AbstractController
      */
     public function delete(Request $request, Section $section): Response
     {
+
+        $this->denyAccessUnlessGranted("system_setting");
         if ($this->isCsrfTokenValid('delete'.$section->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($section);

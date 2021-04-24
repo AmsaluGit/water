@@ -29,21 +29,10 @@ class GoodsDeliveryController extends AbstractController
      */
     public function index(SellsRepository $sellsRepository,SettingRepository $settingRepository, Request $request, PaginatorInterface $paginator, SellsListRepository $sellsListRepository): Response
     {
-        // $stockApprovalLevel = $settingRepository->findOneBy(['code'=>'stock_approval_level'])->getValue();
-        // dd($request->request->all());
-        // $sellsList = $sellsListRepository->find($request->request->get('child_id'));
-        // $form_sells_list = $this->createForm(SellsListType::class, $sellsList);
-        // $form_sells_list->handleRequest($request);
-        // if ($form_sells_list->isSubmitted() && $form_sells_list->isValid()) {
-        //     $this->getDoctrine()->getManager()->flush();
-        //     $this->addFlash("save",'saved');
-        //     // return $this->redirectToRoute('goods_delivery_index');
-        // }
 
-        
+        $this->denyAccessUnlessGranted("goods_delivery_list");
         if($request->request->get('approve')){
-
-            // dd($request->request->all());
+            $this->denyAccessUnlessGranted("goods_delivery_approval");
             $note = $request->request->get('remark');
             $id = $request->request->get('approve');
             $sells = $sellsRepository->find($id);
@@ -102,6 +91,7 @@ class GoodsDeliveryController extends AbstractController
             
         }
         elseif($request->request->get('reject')){
+            $this->denyAccessUnlessGranted("goods_delivery_approval");
             $user = $this->getUser();
             $id = $request->request->get('reject');
             $sells = $sellsRepository->find($id);
@@ -163,7 +153,7 @@ class GoodsDeliveryController extends AbstractController
      */
     public function NewSell(SellsListRepository $sellsListRepository,settingRepository $settingRepository, Request $request, SellsRepository $sellsRepository ): Response
     {  
-        
+        $this->denyAccessUnlessGranted("goods_delivery_new");
         $entityManager = $this->getDoctrine()->getManager();
        
         $sell = new Sells();
@@ -209,7 +199,7 @@ class GoodsDeliveryController extends AbstractController
      */
     public function EditSells(SellsListRepository $sellsListRepository,settingRepository $settingRepository, Request $request, SellsRepository $sellsRepository,$id ): Response
     {  
-        
+        $this->denyAccessUnlessGranted("goods_delivery_edit");
         $entityManager = $this->getDoctrine()->getManager();
         if($request->request->get('edit')){
             $sellsId=$request->request->get('edit');
@@ -268,7 +258,7 @@ class GoodsDeliveryController extends AbstractController
     public function EditSellsList(SellsListRepository $sellsListRepository,settingRepository $settingRepository, Request $request, SellsRepository $sellsRepository,$id ): Response
     {  
       
-      
+        $this->denyAccessUnlessGranted("goods_delivery_edit");
         $sellsList = $sellsListRepository->find($id);
 
         $sell = $sellsList->getSells();
@@ -305,6 +295,7 @@ class GoodsDeliveryController extends AbstractController
      */
     public function delete(Request $request, sells $sells): Response
     {
+        $this->denyAccessUnlessGranted("goods_delivery_delete");
         if ($this->isCsrfTokenValid('delete'.$sells->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($sells);
@@ -317,7 +308,7 @@ class GoodsDeliveryController extends AbstractController
      */
     public function deleteList(Request $request, SellsList $sells): Response
     {
-        
+        $this->denyAccessUnlessGranted("goods_delivery_delete");
         if ($this->isCsrfTokenValid('delete'.$sells->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($sells);

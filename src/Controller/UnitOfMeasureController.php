@@ -21,6 +21,8 @@ class UnitOfMeasureController extends AbstractController
      */
     public function index(PaginatorInterface $paginator, Request $request, UnitOfMeasureRepository $UnitOfMeasureRepository): Response
     {
+
+        $this->denyAccessUnlessGranted("system_setting");
         if($request->request->get('edit')){
             $id=$request->request->get('edit');
             $UnitOfMeasure=$UnitOfMeasureRepository->findOneBy(['id'=>$id]);
@@ -82,6 +84,7 @@ class UnitOfMeasureController extends AbstractController
      */
     public function delete(Request $request, UnitOfMeasure $unitOfMeasure): Response
     {
+        $this->denyAccessUnlessGranted("system_setting");
         if ($this->isCsrfTokenValid('delete'.$unitOfMeasure->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($unitOfMeasure);

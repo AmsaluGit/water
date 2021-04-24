@@ -32,9 +32,9 @@ class StockController extends AbstractController
     {
     
         // $stockApprovalLevel = $settingRepository->findOneBy(['code'=>'stock_approval_level'])->getValue();
-        
+        $this->denyAccessUnlessGranted("purchase_delivery_list");
         if($request->request->get('approve')){
-
+            $this->denyAccessUnlessGranted("purchase_delivery_approval");
             // dd($request->request->all());
             $note = $request->request->get('remark');
             $id = $request->request->get('approve');
@@ -113,6 +113,7 @@ class StockController extends AbstractController
             
         }
         elseif($request->request->get('reject')){
+            $this->denyAccessUnlessGranted("purchase_delivery_approval");
             $user = $this->getUser();
             $id = $request->request->get('reject');
             $stock = $stockRepository->find($id);
@@ -159,7 +160,7 @@ class StockController extends AbstractController
     public function newStock(StockApprovalRepository $stockApprovalRepository,settingRepository $settingRepository, StockRepository $stockRepository, StockListRepository $stockListRepository, Request $request): Response
     {  
 
-    
+        $this->denyAccessUnlessGranted("purchase_delivery_new");
     $entityManager = $this->getDoctrine()->getManager();
        
         $stock = new Stock();
@@ -206,7 +207,7 @@ class StockController extends AbstractController
      */
     public function EditStock(StockListRepository $stockListRepository,settingRepository $settingRepository, Request $request, StockRepository $stockRepository,$id ): Response
     {  
-        
+        $this->denyAccessUnlessGranted("purchase_delivery_edit");
         $entityManager = $this->getDoctrine()->getManager();
         if($request->request->get('edit')){
             $stockId=$request->request->get('edit');
@@ -259,12 +260,52 @@ class StockController extends AbstractController
     
 
        }
+     /**
+     * @Route("/editstocklist/{id}", name="edit_stock_list_index", methods={"GET","POST"})
+     */
+    public function EditStockList(StockListRepository $stockListRepository,settingRepository $settingRepository, Request $request, stockRepository $stockRepository,$id ): Response
+    {  
+      
+        $this->denyAccessUnlessGranted("purchase_delivery_edit");
+        $stockList = $stockListRepository->find($id);
+
+        $stock = $stockList->getStock();
+        $form_stock_list = $this->createForm(StockListType::class, $stockList);
+        $form_stock_list->handleRequest($request);
+
+        $form_stock = $this->createForm(StockType::class,$stock);
+        $form_stock->handleRequest($request);
+
+        if ($form_stock_list->isSubmitted() && $form_stock_list->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash("save",'Item Updated');
+            // return $this->redirect($request->headers->get('referer'));
+            return $this->redirectToRoute('edit_stock_index',['id'=>$stock->getId()]);
+        }
+
+        $qb=$stockListRepository->findBy(['stock'=>$stock]);
+        return $this->render('stock/stock_form.html.twig', [
+            'stock_list' => $qb,
+            'form_stock' => $form_stock->createView(),
+            'form_stock_list' => $form_stock_list->createView(),
+            'add_item'=>true,
+            'edit'=>false,
+            'edit_list'=>true,
+            'stock_lists'=>$stockList,
+            'id'=>$stock->getId(),  
+        ]);
+        
+
+       }
+   
     
     /**
      * @Route("/{id}", name="stock_delete", methods={"DELETE"})
      */
     public function delete(Request $request, stock $stock): Response
     {
+        $this->denyAccessUnlessGranted("purchase_delivery_delete");
+
         if ($this->isCsrfTokenValid('delete'.$stock->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($stock);
@@ -279,6 +320,8 @@ class StockController extends AbstractController
      */
     public function deleteList(Request $request, StockList $stockList): Response
     {
+        $this->denyAccessUnlessGranted("purchase_delivery_delete");
+
         if ($this->isCsrfTokenValid('delete'.$stockList->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($stockList);
@@ -296,7 +339,7 @@ class StockController extends AbstractController
     {
 
         $data = $stockRepository->find($id);
-        // $sellsList = new SellsList();
+        // $stockList = new SellsList();
         $qb = $stockListRepository->findBy(['stock' => $id]);
         // $theDate = new \DateTime();
         $theDate = date_create();

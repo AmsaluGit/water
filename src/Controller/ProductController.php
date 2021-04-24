@@ -20,7 +20,10 @@ class ProductController extends AbstractController
      */
     public function index(ProductRepository $productRepository, Request $request,PaginatorInterface $paginator): Response
     {
+        $this->denyAccessUnlessGranted("product_index");
         if($request->request->get('edit')){
+            $this->denyAccessUnlessGranted("product_update");
+
             $id=$request->request->get('edit');
             $product=$productRepository->findOneBy(['id'=>$id]);
             $form = $this->createForm(ProductType::class, $product);
@@ -47,10 +50,13 @@ class ProductController extends AbstractController
             ]);
 
         }
+
         $product = new Product;
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->denyAccessUnlessGranted("product_new");
+
             $entityManager = $this->getDoctrine()->getManager();
             $product->setType($request->request->get('product_type'));
             $entityManager->persist($product);
@@ -79,6 +85,8 @@ class ProductController extends AbstractController
      */
     public function delete(Request $request, Product $product): Response
     {
+        $this->denyAccessUnlessGranted("product_delete");
+
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($product);

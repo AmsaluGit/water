@@ -22,8 +22,10 @@ class ProductionReportController extends AbstractController
      */
     public function index(ProductionReportRepository $productionReportRepository,Request $request,PaginatorInterface $paginator): Response
     {
-
+        $this->denyAccessUnlessGranted("production_record_list");
         if($request->request->get('edit')){
+            $this->denyAccessUnlessGranted("production_record_edit");
+
             $id=$request->request->get('edit');
             $productionReport=$productionReportRepository->findOneBy(['id'=>$id]);
             $form = $this->createForm(ProductionReportType::class, $productionReport);
@@ -54,6 +56,8 @@ class ProductionReportController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->denyAccessUnlessGranted("production_record_new");
+
             $productionReport->setDate(new \DateTime());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($productionReport);
@@ -82,6 +86,8 @@ class ProductionReportController extends AbstractController
      */
     public function delete(Request $request, ProductionReport $productionReport): Response
     {
+        $this->denyAccessUnlessGranted("production_record_delete");
+
         if ($this->isCsrfTokenValid('delete'.$productionReport->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($productionReport);

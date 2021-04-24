@@ -46,7 +46,7 @@ class ConsumptionDeliveryRepository extends ServiceEntityRepository
     public function getMaxSerialNo(){
         $qb=$this->createQueryBuilder('d')
                     ->orderBy('d.serialNo', "DESC")
-                    ->getMaxResults(1)
+                    ->setMaxResults(1)
                     ->getQuery()
                     ->getResult();
 

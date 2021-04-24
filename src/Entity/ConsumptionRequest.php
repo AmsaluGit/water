@@ -305,7 +305,7 @@ class ConsumptionRequest
     }
 
     public function __toString(){
-        return strval($this->id);
+        return strval($this->serialNo);
     }
 
     public function getSerialNo(): ?int

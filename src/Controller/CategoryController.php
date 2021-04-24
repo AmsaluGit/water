@@ -21,6 +21,7 @@ class CategoryController extends AbstractController
      */
     public function index(CategoryRepository $categoryRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        $this->denyAccessUnlessGranted("system_setting");
         if($request->request->get('edit')){
             $id=$request->request->get('edit');
             $category=$categoryRepository->findOneBy(['id'=>$id]);
@@ -78,6 +79,8 @@ class CategoryController extends AbstractController
 
     public function delete(Request $request, Category $category): Response
     {
+
+        $this->denyAccessUnlessGranted("system_setting");
         if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($category);

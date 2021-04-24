@@ -97,7 +97,7 @@ class CustomerController extends AbstractController
      */
     public function index(CustomerRepository $customerRepository,Request $request, PaginatorInterface $paginator): Response
     {
-
+        $this->denyAccessUnlessGranted("system_setting");
         if($request->request->get('edit')){
             $id=$request->request->get('edit');
             $customer=$customerRepository->findOneBy(['id'=>$id]);
@@ -159,6 +159,7 @@ class CustomerController extends AbstractController
      */
     public function delete(Request $request, Customer $customer): Response
     {
+        $this->denyAccessUnlessGranted("system_setting");
         if ($this->isCsrfTokenValid('delete'.$customer->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($customer);

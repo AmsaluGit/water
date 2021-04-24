@@ -20,6 +20,7 @@ class StoreController extends AbstractController
      */
     public function index(StoreRepository $storeRepository, Request $request,PaginatorInterface $paginator): Response
     {
+        $this->denyAccessUnlessGranted("system_setting");
         if($request->request->get('edit')){
             $id=$request->request->get('edit');
             $store=$storeRepository->findOneBy(['id'=>$id]);
@@ -76,6 +77,8 @@ class StoreController extends AbstractController
      */
     public function delete(Request $request, Store $store): Response
     {
+
+        $this->denyAccessUnlessGranted("system_setting");
         if ($this->isCsrfTokenValid('delete'.$store->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($store);

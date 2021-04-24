@@ -27,7 +27,7 @@ class MaterialRecordController extends AbstractController
     public function index(MaterialRecordRepository $materialRecordRepository, SettingRepository $settingRepository, Request $request, PaginatorInterface $paginator): Response
     {
           
-
+        $this->denyAccessUnlessGranted("material_record_list");
         $entityManager = $this->getDoctrine()->getManager();
        
         $materialRecord = new MaterialRecord();
@@ -38,7 +38,7 @@ class MaterialRecordController extends AbstractController
               ->setDate(new \DateTime());
 
         if ($form->isSubmitted() && $form->isValid()) {    
-               
+            $this->denyAccessUnlessGranted("material_record_new");
             $entityManager = $this->getDoctrine()->getManager();
             
             $entityManager->persist($materialRecord);
@@ -63,78 +63,6 @@ class MaterialRecordController extends AbstractController
             'id'=>$materialRecord->getId(),
             
         ]);
-
-
-
-
-    
-        $stockApprovalLevel = $settingRepository->findOneBy(['code'=>'stock_approval_level'])->getValue();
-        
-        if($request->request->get('approve')){
-
-            // dd($request->request->all());
-            $note = $request->request->get('remark');
-            $id = $request->request->get('approve');
-            $materialRecord = $materialRecordRepository->find($id);
-            $count = 0;
-            foreach($materialRecord->getMaterialRecords() as $list){
-                $listId = $list->getId();
-                $var = $request->request->get("quantity$listId");
-                if($var > $list->getQuantity()){
-                    $this->addFlash('error', 'please make sure the approved quantity is less than the quantity!');
-                    return $this->redirectToRoute('materialRecord_index');
-                }else{
-                if($request->request->get("quantity$listId") and $request->request->get("mySelect$listId") == "Approve some"){
-                    $list->setApprovedQuantity($request->request->get("quantity$listId"))
-                         ->setRemark($request->request->get("remark$listId"))
-                         ->setApprovalStatus(1);
-                }
-                
-                // if($request->request->get("mySelect$listId") == "Approve all"){
-                //     $list->setApprovedQuantity($list->getQuantity())
-                //          ->setApprovalStatus(1);
-                // }
-                
-                // if($request->request->get("mySelect$listId") == "Reject"){
-                //     $list->setApprovalStatus(2)
-                //          ->setRemark($request->request->get("remark$listId"));
-                //     $count = $count+1;
-                
-             }
-             
-            } 
-            $user = $this->getUser();
-            if ($count == count($materialRecord->getMaterialRecords())){
-                $stock->setApprovedBy($user)
-                //   ->setNote($note)
-                  ->setApprovalStatus(2);
-            $this->addFlash('save', 'The Record has been rejected!');
-            }else{
-                $stock->setApprovedBy($user)
-                   ->setNote($note)
-                  ->setApprovalStatus(1);
-            $this->addFlash('save', 'The Record has been approved!');
-            }
-            
-        }
-        elseif($request->request->get('reject')){
-            $user = $this->getUser();
-            $id = $request->request->get('reject');
-            $materialRecord = $materialRecordRepository->find($id);
-            $materialRecord = $materialRecord->getMaterialRecords();
-            foreach($materialRecord as $list){
-
-                $listId = $list->getId();
-                $list->setApprovalStatus(2);
-                
-                
-            }
-            $stock->setApprovedBy($user)
-                //   ->setNote($request->request->get('remark'))
-                  ->setApprovalStatus(2);
-            $this->addFlash('save', 'The Record has been  Rejected!');
-        }
-
         
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -171,7 +99,7 @@ class MaterialRecordController extends AbstractController
      */
     public function EditMaterial(MaterialRecordRepository $materialRecordRepository,settingRepository $settingRepository, Request $request, $id ): Response
     {  
-        
+        $this->denyAccessUnlessGranted("material_record_edit");
         $entityManager = $this->getDoctrine()->getManager();
         if($request->request->get('edit')){
             $materialRecordId=$request->request->get('edit');
@@ -232,6 +160,7 @@ class MaterialRecordController extends AbstractController
      */
     public function deleteList(Request $request, MaterialRecord $materialRecord): Response
     {
+        $this->denyAccessUnlessGranted("material_record_delete");
         if ($this->isCsrfTokenValid('delete'.$materialRecord->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($materialRecord);
@@ -242,22 +171,4 @@ class MaterialRecordController extends AbstractController
     }
 
 
-    //  /**
-    //  * @Route("/download/{id}", name="download_stock_index", methods={"POST","GET"})
-    //  */
-    // public function downloadList(StockListRepository $stockListRepository, Request $request, StockRepository $stockRepository, $id): Response
-    // {
-
-    //     $data = $stockRepository->find($id);
-    //     // $sellsList = new SellsList();
-    //     $qb = $stockListRepository->findBy(['stock' => $id]);
-    //     // $theDate = new \DateTime();
-    //     $theDate = date_create();
-    //     $date = $theDate->format('Y-m-d');
-    //     return $this->render('stock/2.html.twig', [
-    //         'stock' => $data,
-    //         'stock_list'=>$qb,
-    //         'date' => $date,
-    //     ]);
-    // }
 }

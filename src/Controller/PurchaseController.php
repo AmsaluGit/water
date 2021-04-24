@@ -40,9 +40,11 @@ class PurchaseController extends AbstractController
         //     // return $this->redirectToRoute('goods_delivery_index');
         // }
 
+        $this->denyAccessUnlessGranted("purchase_request_list");
+
         
         if($request->request->get('approve')){
-
+            $this->denyAccessUnlessGranted("purchase_request_approval");
             // dd($request->request->all());
             $note = $request->request->get('remark');
             $id = $request->request->get('approve');
@@ -93,6 +95,7 @@ class PurchaseController extends AbstractController
             $this->addFlash('save', 'The  Request has been approved!');
         }
         elseif($request->request->get('reject')){
+            $this->denyAccessUnlessGranted("purchase_request_approval");
             $user = $this->getUser();
             $id = $request->request->get('reject');
             $stockRequest = $stockRequestRepository->find($id);
@@ -154,7 +157,7 @@ class PurchaseController extends AbstractController
      */
     public function NewPurchase(StockRequestListRepository $stockRequestListRepository,settingRepository $settingRepository, Request $request, StockRequestRepository $stockRequestRepository ): Response
     {  
-        
+        $this->denyAccessUnlessGranted("purchase_request_new");
         $entityManager = $this->getDoctrine()->getManager();
        
         $stockRequest = new StockRequest();
@@ -201,7 +204,7 @@ class PurchaseController extends AbstractController
      */
     public function EditStockRequest(StockRequestListRepository $stockRequestListRepository,settingRepository $settingRepository, Request $request, StockRequestRepository $stockRequestRepository,$id ): Response
     {  
-        
+        $this->denyAccessUnlessGranted("purchase_request_edit");
         $entityManager = $this->getDoctrine()->getManager();
         if($request->request->get('edit')){
             $stockRequestId=$request->request->get('edit');
@@ -260,7 +263,7 @@ class PurchaseController extends AbstractController
     public function EditStockRequestList(StockRequestListRepository $stockRequestListRepository,settingRepository $settingRepository, Request $request, StockRequestRepository $stockRequestRepository,$id ): Response
     {  
       
-      
+        $this->denyAccessUnlessGranted("purchase_request_edit");
         $stockRequestList = $stockRequestListRepository->find($id);
 
         $stockRequest = $stockRequestList->getStockRequest();
@@ -296,6 +299,7 @@ class PurchaseController extends AbstractController
      */
     public function delete(Request $request, StockRequest $stockRequest): Response
     {
+        $this->denyAccessUnlessGranted("purchase_request_delete");
         if ($this->isCsrfTokenValid('delete'.$stockRequest->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($stockRequest);
@@ -308,7 +312,7 @@ class PurchaseController extends AbstractController
      */
     public function deleteList(Request $request, StockRequestList $stockRequest): Response
     {
-        
+        $this->denyAccessUnlessGranted("purchase_request_delete");
         if ($this->isCsrfTokenValid('delete'.$stockRequest->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($stockRequest);
