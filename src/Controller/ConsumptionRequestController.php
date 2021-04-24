@@ -28,7 +28,7 @@ class ConsumptionRequestController extends AbstractController
     /**
      * @Route("/", name="consumption_index", methods={"GET","POST"})
      */
-    public function index(ConsumptionRequestListRepository $consumptionRequestListRepository, ConsumptionRequestRepository $consumptionRequestRepository, StockListRepository $stockListRepository, Request $request, PaginatorInterface $paginator): Response
+    public function index(StockBalanceRepository $stockBalanceRepository, ConsumptionRequestListRepository $consumptionRequestListRepository, ConsumptionRequestRepository $consumptionRequestRepository, StockListRepository $stockListRepository, Request $request, PaginatorInterface $paginator): Response
     {
         if($request->request->get('approve')){
             $note = $request->request->get('remark');
@@ -41,12 +41,12 @@ class ConsumptionRequestController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($consumptionDelivery);
             // $entityManager->flush();
-
+            // $availableInStock = true;
             foreach($consumptionRequest->getConsumptionRequestLists() as $list){
                 $listId = $list->getId();
                 $var = $request->request->get("quantity$listId");
 
-                if($var > $list->getQuantity()){
+                if($var > $list->getQuantity() || $var > $list->getAvailable()){
                     $this->addFlash('error', 'please make sure the approved quantity is less than the quantity!');
                     return $this->redirectToRoute('consumption_index');
                 }
@@ -68,7 +68,12 @@ class ConsumptionRequestController extends AbstractController
                     }
 
                     if($request->request->get("mySelect$listId") == "Approve all"){
-                        $list->setApprovedQuantity($list->getQuantity())
+                        if($list->getQuantity() > $list->getAvailable()){
+                            $this->addFlash('error', 'Not Enough in stock');
+                            return $this->redirectToRoute('consumption_index');
+                        }else{
+
+                            $list->setApprovedQuantity($list->getQuantity())
                              ->setApprovalStatus(1);
 
                         $consumptionDeliveryList =new ConsumptionDeliveryList();
@@ -80,6 +85,9 @@ class ConsumptionRequestController extends AbstractController
                         $entityManager = $this->getDoctrine()->getManager();
                         $entityManager->persist($consumptionDeliveryList);
                         $consumptionDelivery->addConsumptionDeliveryList($consumptionDeliveryList);
+
+                        }
+                        
                     }
                     if($request->request->get("mySelect$listId") == "Reject" and $request->request->get("remark$listId")){
                         $list->setApprovalStatus(2)
@@ -88,13 +96,15 @@ class ConsumptionRequestController extends AbstractController
 
                 }
             }
-
-            $user = $this->getUser();
-            $consumptionRequest->setApprovedBy($user)
-                               ->setNote($note)
-                               ->setApprovalStatus(1);
+            
+                $user = $this->getUser();
+                $consumptionRequest->setApprovedBy($user)
+                                   ->setNote($note)
+                                   ->setApprovalStatus(1);
 
             $this->addFlash('save', 'The Consumption request has been approved!');
+            
+            
 
         }
         elseif ($request->request->get("reject")){
@@ -121,15 +131,17 @@ class ConsumptionRequestController extends AbstractController
             $tot = 0;
             if($ls->getConsumptionRequest()->getApprovalStatus()== 3){
             $product=$ls->getProduct();
-            $avail = $stockListRepository->findBy(["product" => $product]);
+            $avail = $stockBalanceRepository->findBy(["product" => $product])[0]->getAvailable();
             
-            foreach($avail as $av){
-                if($av->getApprovalStatus()==1 ){
-                    $tot = $tot + $av->getApprovedQuantity();
-                }            
-            }
+            // foreach($avail as $av){
+            //     if($av->getApprovalStatus()==1 ){
+            //         $tot = $tot + $av->getApprovedQuantity();
+            //     }            
+            // }
+            
+            $ls->setAvailable($avail);
         }
-            $ls->setAvailable($tot);    
+                
         
           }
 
@@ -144,7 +156,7 @@ class ConsumptionRequestController extends AbstractController
                18
             );
 
-            $dp = $consumptionRequestListRepository->findAll();
+            // $dp = $consumptionRequestListRepository->findAll();
 
             // Available
             
@@ -153,20 +165,21 @@ class ConsumptionRequestController extends AbstractController
             //     $avail = $stockListRepository->findBy(["product" => $product]);
             //     $tot = 0;
             //     if($ls->getConsumptionRequest()->getApprovalStatus() == 3){
-            //         foreach($avail as $av){
-            //             if($av->getApprovalStatus() == 1){
-            //                 $tot = $tot + $av->getApprovedQuantity();
-            //             }
-            //             $ls->setAvailable($tot); 
-            //         }
-                    
+            //         // foreach($avail as $av){
+            //         //     if($av->getApprovalStatus() == 1){
+            //         //         $tot = $tot + $av->getApprovedQuantity();
+            //         //     }
+                         
+            //         // }
+            //         $tot = 
+            //         $ls->setAvailable($tot);
             //     }
                    
 
             // }
 
-              $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->flush();
+            //   $entityManager = $this->getDoctrine()->getManager();
+            //   $entityManager->flush();
             return $this->render('consumption_request/index.html.twig', [
                 'consumption_requests' => $data,
                 'consumption_list' => $dp,
