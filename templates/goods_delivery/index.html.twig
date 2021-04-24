@@ -35,9 +35,11 @@
 								</div>
 							</div>
 							<div class="card-body">
+							{% if is_granted("goods_delivery_new") %}
 								<a href="{{ path('new_sell_index') }}" class="btn btn-success btn-sm" style = "float:;">
 									New Sell
 								</a>
+							{% endif %}
 								<table class="table table-hover">
 									<thead>
 										<tr>
@@ -106,13 +108,15 @@
                                                 </td>
 												{% if not sell.approvalStatus %}												
 												<td>
-
+													{% if is_granted("goods_delivery_edit") %}
 													<form class="d-inline" method="post" action="{{ path('edit_sells_index',{'id' : sell.id}) }}">
 														<input type="hidden" name="edit" value="{{sell.id}}">
 														<button  class="btn btn-info btn-sm" title="Edit">
 															<i class="fa fa-edit"></i>
 														</button>
 													</form>
+													{% endif %}
+													{% if is_granted("goods_delivery_delete") %}
 													<button href="#modalCenter{{sell.id}}" role="button" class="btn btn-danger btn-sm" data-toggle="modal"><i class="fa fa-trash"></i></button>
 													<div id="modalCenter{{sell.id}}" class="modal fade" tabindex="-1">
 														<div class="modal-dialog modal-dialog-centered">
@@ -140,6 +144,7 @@
 															</div>
 														</div>
 													</div>
+													{% endif %}
 													
 												</td>
 												{% endif %}
@@ -154,8 +159,8 @@
 																<h4 class="card-title">Items List</h4>
 																<div class="card-tools">
 																{% if  sell.approvalStatus == 1 %}
-																	<a type = "button" class="btn btn-success btn-sm" target="_blank" href = "{{ path('download_goods_delivery_index',{'id' : sell.id}) }}">
-																		Download
+																	<a type = "button" class="btn btn-primary" target="_blank" href = "{{ path('download_goods_delivery_index',{'id' : sell.id}) }}">
+																		print
 																	</a>
 																</div>
 																{% endif %}
@@ -282,8 +287,10 @@
 																			{% if k == 1 and not sell.approvalStatus %}
 																			{# {% if not sell.approvalStatus %} #}
 																			<tr>
+																			{% if is_granted("goods_delivery_approval") %}
 																				<td colspan="8">
 																					{# <form id = "approval" method="post"> #}
+																				
 																						<div class="form" style = "margin: auto; width: 60%;">
 
 																							<div class="col-auto">
@@ -305,6 +312,7 @@
 																						</div>
 																					</form>
 																				</td>
+																			{% endif %}
 																			</tr>
 																			
 																			{# {% endif %}	 #}

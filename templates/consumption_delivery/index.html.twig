@@ -35,9 +35,11 @@
 								</div>
 							</div>
 							<div class="card-body">
+							{% if is_granted("consumption_delivery_new") %}
 								<a href="{{ path('new_consumption_delivery_index') }}" class="btn btn-success btn-sm" style = "float:;">
 									New Delivery
 								</a>
+							{% endif %}
 								<table class="table table-hover">
 									<thead>
 										<tr>
@@ -90,13 +92,15 @@
 												<td>
 												    
 												{% if consumption_delivery.approvalStatus == 3 %}
-												   
+												   {% if is_granted("consumption_delivery_edit") %}
 													<form class="d-inline" method="post" action="{{ path('edit_consumption_delivery_index',{'id' : consumption_delivery.id}) }}">
 														<input type="hidden" name="edit" value="{{consumption_delivery.id}}">
 														<button class="btn btn-info btn-sm" title="Edit">
 															<i class="fa fa-edit"></i>
 														</button>
 													</form>
+													{% endif %}
+													{% if is_granted("consumption_delivery_delete") %}
 													<button href="#modalCenter{{consumption_delivery.id}}" role="button" class="btn btn-danger btn-sm" data-toggle="modal"><i class="fa fa-trash"></i></button>
 													<div id="modalCenter{{consumption_delivery.id}}" class="modal fade" tabindex="-1">
 														<div class="modal-dialog modal-dialog-centered">
@@ -124,6 +128,7 @@
 															</div>
 														</div>
 													</div>
+													{% endif %}
 												{% endif %}
 												</td>
 
@@ -272,6 +277,7 @@
 																			{% if k == 1 and consumption_delivery.approvalStatus == 3 and consumption_delivery.receiver %}
 																			{# {% if not sell.approvalStatus %} #}
 																			<tr>
+																			{% if is_granted("consumption_delivery_new") %}
 																				<td colspan="8">
 																					{# <form id = "approval" method="post"> #}
 																						<div class="form" style = "margin: auto; width: 60%;">
@@ -295,6 +301,7 @@
 																						</div>
 																					</form>
 																				</td>
+																			{% endif %}
 																			</tr>
 																			
 																			{# {% endif %}	 #}
