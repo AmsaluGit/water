@@ -34,6 +34,11 @@
     </head>
     <body>
        <p style="text-align:center; font-size:30px;" >Production Report</p>
+       {% if not from_ == null and not to_ == null  %}
+    <p style=" font-size:20px;">Record From {{ from_ | date ('Y M d') }} to {{ to_ | date ('Y M d') }} </p>
+      {% else %}
+    <p style=" font-size:20px;">Record of the total {{ size }} Month  </p>
+      {% endif %}
        <table style="width:100%">
         <tr>
           <th colspan="8">perform/pcs</th> 

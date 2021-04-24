@@ -33,6 +33,13 @@
             flex-direction: row;
             justify-content: space-between;
            }
+           @media print {
+            #printer {
+            display: none;
+            }
+            @page { margin: 0; }
+            body { margin: 1.6cm; }
+            }
            @media screen and (max-width: 820px) {
                .col1andcol2{
                     display: flex;
@@ -41,6 +48,8 @@
                     /*text-align: center;*/
                     
               }
+              
+         }
               .end1{
                 display: none;
               }
@@ -51,11 +60,11 @@
            .endblock{
             display: none;
            }
+           
         </style> 
     </head>
     <body>
 
-         <button id="printer" style="float:right;" onClick="window.print()">PDF</button>
 		
         <table width=50%; id="table1">
             <tr>
@@ -73,10 +82,10 @@
             <tr>
                 <th style="width: 10%" id="th" >የመኪና ሰሌዳ ቁጥር</th>
                 <td style="width: 10.1%" id="td"> {{ product.plateNumber }}</td>
-                <td style="width: 30%" id="td">ተሳቢ ሰሌዳ ቁጥር<br>trial plate</td>
-                <td  id="td"> {{ product.trialNumber }}</td>
+                <td style="width: 30%" id="td">ተሳቢ ሰሌዳ ቁጥር<br>trailer plate Number</td>
+                <td  style="text-align:center" id="td"  > {{ product.trialNumber }}</td>
                 <td style="width: 14%" id="td">የሹፈሩ ስልክ ቁጥር</td>
-                <td  id="td">{{ product.phoneNumber }}</td>
+                <td  id="td" style="text-align:center" >{{ product.phoneNumber }}</td>
                 {# <td  id="td"></td> #}
             </tr>
         </table>
@@ -110,18 +119,18 @@
         </table>
         <div>
             <p class="notice" style="width: 100%;">ማስታዎሻ:_____________________________________________________________<span class="end1">____________________________________________________________</span></p>
-            <p class="endblock">____________________________________________________________</p>
+            <p class="endblock" style="padding-left: 65px">_____________________________________________________________</p>
         </div>
          <div class="col1andcol2">
              <div class"col1">
-                <p>ያዘጋጀዉ<span style="padding-left: 250px">  ተረካቢ  </span></p>
-                <p>ስም ________________________ <span style="padding-left: 40px">ስም <u> _____{{ product.receivedBy }}</u>___  </span></p>
-                <p>ፊርማ_______________________ <span style="padding-left: 40px">ፊርማ_______________________ </span></p>
+                <p>ያዘጋጀዉ<span style="padding-left: 120px">  ተረካቢ  </span></p>
+                <p>ስም __________ <span style="padding-left: 20px">ስም <u> __{{ product.receivedBy }}</u> </span></p>
+                <p>ፊርማ _________ <span style="padding-left: 15px">ፊርማ __________ </span></p>
          </div>
          <div class="col2">
-                <p> አስረካቢ<span style="padding-left: 250px">  ያፀደቀ</span></p>
-                <p>ስም <u> _____{{ product.handOveredBy }}</u>____ <span style="padding-left: 60px">ስም ___<u>{{ product.approvedBy }}</u>____  </span></p>
-                <p>ፊርማ_______________________ <span style="padding-left: 60px">ፊርማ_______________________ </span></p>
+                <p> አስረካቢ<span style="padding-left: 110px">  ያፀደቀ</span></p>
+                <p>ስም <u> __{{ product.handOveredBy }}</u>__ <span style="padding-left: 10px">ስም __<u>{{ product.approvedBy }}__</u>  </span></p>
+                <p>ፊርማ ______________ <span style="padding-left: 15px">ፊርማ ____________ </span></p>
                 <!--style="padding-left: 300px"style="padding-left: 300px"
                 style="padding-left: 180px"
                 style="padding-left: 170px"-->
@@ -131,6 +140,8 @@
                   
          <p><span style="text-decoration: underline"><b>ስርጭት</b>፡</span>1ኛ ኦርጅናል ነጭ ለሂሳብ ክፍል <span style="padding-left: 10px">2ተኛ ኮፒ ቢጫ ለአስረካቢ</span><span style="padding-left: 10px"> 3ተኛ ኮፒ ቀይ ለተረካቢ</span><span style="padding-left: 10px">4ተኛ ኮፒ ሰማያዊ ከጥራዙ ጋር ይቀመጥ<span></span> </p>
     {# {% break %} #}
+         <button id="printer" style="float:right; color:white; font-size: 17px; padding: 12px 27px; background:grey; " onClick="window.print()" >Print</button>
+
    
      </body>
 </html>

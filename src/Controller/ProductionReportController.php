@@ -109,6 +109,9 @@ public function report(Request $request, ProductionReportRepository $ProductRepo
             $p4_sum = $ProductReportRepository->RangeSum($start,$end,4);    
             return $this->render('production_report/report.html.twig', [
                 'ProductionReport' => $productReport,
+                'from_'=>$start,
+                'to_'=>$end,
+                'size' => null,
                 'p1' => $p1_sum,
                 'p2' => $p2_sum,
                 'p3' => $p3_sum,
@@ -128,6 +131,9 @@ public function report(Request $request, ProductionReportRepository $ProductRepo
             $p4_sum = $ProductReportRepository->IntervalSum(1,4);    
             return $this->render('production_report/report.html.twig', [
                 'ProductionReport' => $productReport,
+                'from_'=>null,
+                'to_'=>null,
+                'size' => 1,
                 'p1' => $p1_sum,
                 'p2' => $p2_sum,
                 'p3' => $p3_sum,
@@ -145,6 +151,9 @@ public function report(Request $request, ProductionReportRepository $ProductRepo
                 $p4_sum = $ProductReportRepository->IntervalSum(3,4);    
                 return $this->render('production_report/report.html.twig', [
                     'ProductionReport' => $productReport,
+                    'from_'=>null,
+                    'to_'=>null,
+                    'size' => 3,
                     'p1' => $p1_sum,
                     'p2' => $p2_sum,
                     'p3' => $p3_sum,
@@ -161,6 +170,9 @@ public function report(Request $request, ProductionReportRepository $ProductRepo
                 $p4_sum = $ProductReportRepository->IntervalSum(6,4);    
                 return $this->render('production_report/report.html.twig', [
                     'ProductionReport' => $productReport,
+                    'from_'=>null,
+                    'to_'=>null,
+                    'size' => 6,
                     'p1' => $p1_sum,
                     'p2' => $p2_sum,
                     'p3' => $p3_sum,
@@ -178,6 +190,9 @@ public function report(Request $request, ProductionReportRepository $ProductRepo
                 $p4_sum = $ProductReportRepository->IntervalSum(12,4);    
                 return $this->render('production_report/report.html.twig', [
                     'ProductionReport' => $productReport,
+                    'from_'=>null,
+                    'to_'=>null,
+                    'size' => 12,
                     'p1' => $p1_sum,
                     'p2' => $p2_sum,
                     'p3' => $p3_sum,
