@@ -122,10 +122,20 @@ public function NewProductDelivery(ProductDeliveryListRepository $ProductDeliver
 {  
     
     $entityManager = $this->getDoctrine()->getManager();
+   $pd =  $ProductDeliveryRepository->findBiggestSerial();
+//    dd($pd);
+//    $serial_num = $pd->getSerial();
+
+   $serial_num = 0;
+
+   if($pd){
+       $serial_num = $pd[0]->getSerial() + 1 ;
+   }
+
    
     $ProductDelivery = new ProductDelivery();
     $ProductDelivery->setDeliveryDate(new \DateTime());
-
+    $ProductDelivery->setSerial($serial_num);
     $form_ProductDelivery = $this->createForm(ProductDeliveryType::class, $ProductDelivery);
     $form_ProductDelivery->handleRequest($request);
     $user = $this->getUser();

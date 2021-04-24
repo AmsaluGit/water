@@ -35,7 +35,7 @@
     <body>
        <p style="text-align:center; font-size:30px;" >Production Report</p>
        {% if not from_ == null and not to_ == null  %}
-    <p style=" font-size:20px;">Record From {{ from_ | date ('Y M d') }} to {{ to_ | date ('Y M d') }} </p>
+    <p style=" font-size:20px;">Record From {{ from_ | date ('M d, Y') }} to {{ to_ | date ('M d, Y') }} </p>
       {% else %}
     <p style=" font-size:20px;">Record of the total {{ size }} Month  </p>
       {% endif %}

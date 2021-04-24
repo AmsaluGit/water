@@ -154,4 +154,19 @@ class ProductDeliveryRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    
+    public function findBiggestSerial()
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.id > :ids')
+            ->setParameter('ids', 0)
+            ->orderBy('p.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    
+    
 }

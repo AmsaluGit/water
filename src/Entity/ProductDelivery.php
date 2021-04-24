@@ -85,6 +85,11 @@ class ProductDelivery
      */
     private $deliveryDate;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $serial;
+
 
     public function __construct()
     {
@@ -284,6 +289,18 @@ class ProductDelivery
     public function setDeliveryDate(\DateTimeInterface $deliveryDate): self
     {
         $this->deliveryDate = $deliveryDate;
+
+        return $this;
+    }
+
+    public function getSerial(): ?int
+    {
+        return $this->serial;
+    }
+
+    public function setSerial(?int $serial): self
+    {
+        $this->serial = $serial;
 
         return $this;
     }

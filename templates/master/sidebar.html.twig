@@ -8,7 +8,7 @@
 
 
 
-          <li class="nav-item has-treeview menu-open">
+          <li class="nav-item has-treeview ">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-chart-pie"></i>
               <p>
@@ -18,30 +18,7 @@
             </a>
             <ul class="nav nav-treeview">
            
-              <li class="nav-item">
-                <a href="{{ path('user_index') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>User</p>
-                </a>
-              </li>
-              {# <li class="nav-item">
-                <a href="{{ path('user_types_index') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>User Types</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ path('user_group_index') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>User Group</p>
-                </a>
-              </li> #}
-              <li class="nav-item">
-                <a href="{{ path('permission_index') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Permission</p>
-                </a>
-              </li>
+             
                
               <li class="nav-item">
                 <a href="{{ path('unit_of_measure_index') }}" class="nav-link">
@@ -91,6 +68,29 @@
                 </a>
               </li>
 
+
+
+
+             
+            </ul>
+          </li>
+
+
+
+
+
+
+
+<li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-chart-pie"></i>
+              <p>
+               External
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+           
               <li class="nav-item">
                 <a href="{{ path('purchase_index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
@@ -104,8 +104,25 @@
                   <p>Purchase Delivery</p>
                 </a>
               </li>
+             
+            </ul>
+          </li>
+  
 
-              <li class="nav-item">
+
+
+
+
+<li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-chart-pie"></i>
+              <p>
+               Internal 
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+            <li class="nav-item">
                 <a href="{{ path('consumption_index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Consumption Requests</p>
@@ -132,13 +149,7 @@
                   <p>Goods Delivery</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="{{ path('Production_report') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Report</p>
-                </a>
-              </li>
-              <li class="nav-item">
+                           <li class="nav-item">
                 <a href="{{ path('material_index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Material Record</p>
@@ -151,8 +162,86 @@
                 </a>
               </li>
              
+             
             </ul>
           </li>
+
+
+
+
+
+
+
+
+<li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-chart-pie"></i>
+              <p>
+               Users 
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ path('user_index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>User</p>
+                </a>
+              </li>
+              {# <li class="nav-item">
+                <a href="{{ path('user_types_index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>User Types</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ path('user_group_index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>User Group</p>
+                </a>
+              </li> #}
+              <li class="nav-item">
+                <a href="{{ path('permission_index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Permission</p>
+                </a>
+              </li>
+             
+             
+            </ul>
+          </li>
+
+
+
+
+
+
+
+
+<li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-chart-pie"></i>
+              <p>
+               Report 
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+
+              <li class="nav-item">
+                <a href="{{ path('Production_report') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Report</p>
+                </a>
+              </li>
+
+
+             
+            </ul>
+          </li>
+
+
+
 
         </ul>
       </nav>
