@@ -31,9 +31,10 @@ class ProductDeliveryController extends AbstractController
 public function index(ProductDeliveryRepository $ProductDeliveryRepository,SettingRepository $settingRepository, Request $request, PaginatorInterface $paginator, ProductDeliveryListRepository $ProductDeliveryListRepository): Response
 {
 
-    
-    if($request->request->get('approve')){
+    $this->denyAccessUnlessGranted("product_delivery_list");
 
+    if($request->request->get('approve')){
+        $this->denyAccessUnlessGranted("product_delivery_approval");
         // dd($request->request->all());
         $note = $request->request->get('remark');
         $id = $request->request->get('approve');
@@ -72,6 +73,7 @@ public function index(ProductDeliveryRepository $ProductDeliveryRepository,Setti
         $this->addFlash('save', 'The ProductDelivery has been approved!');
     }
     elseif($request->request->get('reject')){
+        $this->denyAccessUnlessGranted("product_delivery_approval");
         $user = $this->getUser();
         $id = $request->request->get('reject');
         $ProductDelivery = $ProductDeliveryRepository->find($id);
@@ -120,7 +122,7 @@ public function index(ProductDeliveryRepository $ProductDeliveryRepository,Setti
  */
 public function NewProductDelivery(ProductDeliveryListRepository $ProductDeliveryListRepository,settingRepository $settingRepository, Request $request, ProductDeliveryRepository $ProductDeliveryRepository ): Response
 {  
-    
+    $this->denyAccessUnlessGranted("product_delivery_new");
     $entityManager = $this->getDoctrine()->getManager();
    $pd =  $ProductDeliveryRepository->findBiggestSerial();
 //    dd($pd);
@@ -179,6 +181,7 @@ public function NewProductDelivery(ProductDeliveryListRepository $ProductDeliver
  */
 public function EditProductDelivery(ProductDeliveryListRepository $ProductDeliveryListRepository, Request $request, ProductDeliveryRepository $ProductDeliveryRepository,$id ): Response
 {  
+    $this->denyAccessUnlessGranted("product_delivery_edit");
     
     $entityManager = $this->getDoctrine()->getManager();
     if($request->request->get('edit')){
@@ -237,7 +240,7 @@ public function EditProductDelivery(ProductDeliveryListRepository $ProductDelive
  */
 public function EditProductDeliveryList(ProductDeliveryListRepository $ProductDeliveryListRepository,settingRepository $settingRepository, Request $request, ProductDeliveryRepository $ProductDeliveryRepository,$id ): Response
 {  
-  
+    $this->denyAccessUnlessGranted("product_delivery_edit");
   
     $ProductDeliveryList = $ProductDeliveryListRepository->find($id);
 
@@ -273,6 +276,7 @@ public function EditProductDeliveryList(ProductDeliveryListRepository $ProductDe
  */
 public function delete(Request $request, ProductDelivery $ProductDelivery): Response
 {
+    $this->denyAccessUnlessGranted("product_delivery_delete");
     if ($this->isCsrfTokenValid('delete'.$ProductDelivery->getId(), $request->request->get('_token'))) {
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($ProductDelivery);
@@ -285,7 +289,7 @@ public function delete(Request $request, ProductDelivery $ProductDelivery): Resp
  */
 public function deleteList(Request $request, ProductDeliveryList $ProductDelivery): Response
 {
-    
+    $this->denyAccessUnlessGranted("product_delivery_delete");
     if ($this->isCsrfTokenValid('delete'.$ProductDelivery->getId(), $request->request->get('_token'))) {
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($ProductDelivery);
@@ -322,7 +326,7 @@ public function printList(Request $request, ProductDeliveryListRepository $Produ
 public function report(Request $request, ProductDeliveryListRepository $ProductDeliveryListRepository, ProductDeliveryRepository $ProductDeliveryRepository): Response
 {   
 
-   
+    $this->denyAccessUnlessGranted("report");
     if($request->request->get('radio')== 1){
        
         if($request->request->get('range_generate')){
