@@ -65,6 +65,7 @@
     </head>
     <body>
 
+        <p style="float:right; padding-right: 65px"> No: {{ product.serial }}</p>
 		
         <table width=50%; id="table1">
             <tr>
@@ -101,6 +102,7 @@
                 <th  style="text-align:center" id="th1">ጠቅላላ ዋጋ</th>
             </tr>
             {% set i = 1 %}
+            {% set Total_sum = 0 %}
             {% for item in ProductDelivery_list %}
             {% if not item.approvedQuantity == null %}
              <tr>
@@ -112,10 +114,21 @@
                     <td id="td1" >{{ item.weight }}</td>
                      <td id="td1" >{{ item.unitPrice }}</td>
                      <td id="td1" style="width: 8%">{{ item.unitPrice * item.quantity }}</td>
+                     {% set Total_sum = Total_sum + item.unitPrice * item.quantity  %}
                       
              </tr>
              {% endif %}
-             {% endfor %}   
+             {% endfor %}
+              <tr>
+                <td id="td1"></td>
+                 <td id="td1">Total</td>
+                  <td id="td1"></td>
+                   <td id="td1"></td>
+                    <td id="td1" ></td>
+                     <td id="td1" ></td>
+                     <td id="td1" style="width: 8%">{{ Total_sum }}</td>
+                     
+             </tr>   
         </table>
         <div>
             <p class="notice" style="width: 100%;">ማስታዎሻ:_____________________________________________________________<span class="end1">____________________________________________________________</span></p>
