@@ -42,6 +42,15 @@ class ConsumptionRequestController extends AbstractController
             $entityManager->persist($consumptionDelivery);
             // $entityManager->flush();
             // $availableInStock = true;
+            $serial= $consumptionRequestRepository->getMaxSerialNo();
+            $serial_num = 0;
+            if($serial){
+                $consumptionRequest->setSerialNo(($serial[0]->getSerialNo() + 1));
+            }
+            else{
+                $consumptionRequest->setSerialNo($serial_num);
+
+            }
             foreach($consumptionRequest->getConsumptionRequestLists() as $list){
                 $listId = $list->getId();
                 $var = $request->request->get("quantity$listId");

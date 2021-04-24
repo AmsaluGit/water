@@ -31,6 +31,15 @@ class ConsumptionDeliveryController extends AbstractController
             $id = $request->request->get('approve');
             $consumptionDelivery =$consumptionDeliveryRepository->find($id);
 
+            $serial= $consumptionDeliveryRepository->getMaxSerialNo();
+            $serial_num = 0;
+            
+            if($serial){
+                $consumptionDelivery->setSerialNo($serial[0]->getSerialNo() + 1);
+            }
+            else{
+                $consumptionDelivery->setSerialNo($serial_num);
+            }
             foreach($consumptionDelivery->getConsumptionDeliveryLists() as $list){
                 $listId = $list->getId();
                 $var = $request->request->get("quantity$listId");

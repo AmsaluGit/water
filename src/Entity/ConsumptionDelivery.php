@@ -66,6 +66,11 @@ class ConsumptionDelivery
      */
     private $placeOfDelivery;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $serialNo;
+
     public function __construct()
     {
         $this->consumptionDeliveryLists = new ArrayCollection();
@@ -200,6 +205,18 @@ class ConsumptionDelivery
     public function setPlaceOfDelivery(?string $placeOfDelivery): self
     {
         $this->placeOfDelivery = $placeOfDelivery;
+
+        return $this;
+    }
+
+    public function getSerialNo(): ?int
+    {
+        return $this->serialNo;
+    }
+
+    public function setSerialNo(?int $serialNo): self
+    {
+        $this->serialNo = $serialNo;
 
         return $this;
     }

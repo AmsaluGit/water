@@ -139,13 +139,13 @@
 															<h4 class="card-title">Items List</h4>
 														<div class="card-tools">
 
-													{% if not stockRequest.approvalStatus == 3 %}	
+													{% if stockRequest.approvalStatus == 1 %}	
 
 														 {# <form class="d-inline" method="post" action="{{path('download_purchase_index',{'id':stockRequest.id})}}"> #}
 														 {# <input type="hidden" name="edit" value="{{stockRequest.id}}"> #}
 
 														 <a target=" blank " href= "{{path('download_purchase_index',{'id':stockRequest.id})}}" class="btn btn-success btn-sm" title="Download"> Download  </a>
-														 </form>
+														 {# </form> #}
 														
 													{% endif %}
 														 </div>

@@ -47,7 +47,17 @@ class GoodsDeliveryController extends AbstractController
             $note = $request->request->get('remark');
             $id = $request->request->get('approve');
             $sells = $sellsRepository->find($id);
-            $sells ->setSerialNumber(5000 + $id);
+            // $sells ->setSerialNumber(5000 + $id);
+            $serial= $sellsRepository->getMaxSerialNo();
+            $serial_num = 0;
+            
+            if($serial){
+                $sells->setSerialNumber($serial[0]->getSerialNumber() + 1);
+            }
+            else{
+                $sells->setSerialNumber($serial_num);
+            }
+
             $count = 0;
             foreach($sells->getSellsLists() as $list){
                 $listId = $list->getId();

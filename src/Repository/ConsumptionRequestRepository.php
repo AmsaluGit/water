@@ -57,6 +57,18 @@ class ConsumptionRequestRepository extends ServiceEntityRepository
         ;
     }
 
+    public function getMaxSerialNo(){
+        $qb=$this->createQueryBuilder('c')
+                    ->andWhere('c.id > :ids')
+                    ->setParameter('ids', 0)
+                    ->orderBy('c.serialNo', "DESC")
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getResult();
+
+        return $qb;
+        
+    }
     // /**
     //  * @return ConsumptionRequest[] Returns an array of ConsumptionRequest objects
     //  */

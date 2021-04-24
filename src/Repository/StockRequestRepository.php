@@ -18,6 +18,17 @@ class StockRequestRepository extends ServiceEntityRepository
         parent::__construct($registry, StockRequest::class);
     }
 
+    public function getMaxSerialNo(){
+        $qb=$this->createQueryBuilder('st')
+                    ->andWhere('st.id > :ids')
+                    ->setParameter('ids', 0)
+                    ->orderBy('st.serialNumber', "DESC")
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getResult();
+
+            return $qb;
+    }
     // /**
     //  * @return StockRequest[] Returns an array of StockRequest objects
     //  */

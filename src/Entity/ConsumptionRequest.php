@@ -70,6 +70,11 @@ class ConsumptionRequest
      */
     private $section;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $serialNo;
+
     // /**
     //  * @ORM\ManyToOne(targetEntity=Section::class, inversedBy="consumptionRequests")
     //  */
@@ -301,6 +306,18 @@ class ConsumptionRequest
 
     public function __toString(){
         return strval($this->id);
+    }
+
+    public function getSerialNo(): ?int
+    {
+        return $this->serialNo;
+    }
+
+    public function setSerialNo(?int $serialNo): self
+    {
+        $this->serialNo = $serialNo;
+
+        return $this;
     }
  
 }

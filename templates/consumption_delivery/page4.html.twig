@@ -56,7 +56,7 @@
         </style>
     </head>
     <body>
-        <p style="padding-left: 45%"><b style="text-decoration: underline">የጥሬ እቃ መረከቢያ ደረሰኝ</b><em style="padding-left: 10%">N0.</em><em style="padding-left: 3%;color:red">0086</em></p>
+        <p style="padding-left: 45%"><b style="text-decoration: underline">የጥሬ እቃ መረከቢያ ደረሰኝ</b><em style="padding-left: 10%">N0:</em><em style="padding-left: 3%;color:red">{{consumption_delivery.serialNo}}</em></p>
          <button style="float:right;" id="printpagebutton" onclick="printpage()">
                     Print
                 </button></p>
@@ -114,7 +114,7 @@
         {% endfor %}
         </table>
            <div>
-            <p class="notice" style="width: 100%;">ማስታዎሻ:_____________________________________________________________<span class="end1">____________________________________________________________</span></p>
+            <p class="notice" style="width: 100%;">ማስታዎሻ:<em style="text-decoration:underline;">{{ consumption_delivery.note }}</em><span class="end1"></span></p>
             <p class="endblock">____________________________________________________________</p>
         </div>
          <div class="col1andcol2">

@@ -47,6 +47,19 @@ class PurchaseController extends AbstractController
             $note = $request->request->get('remark');
             $id = $request->request->get('approve');
             $stockRequest = $stockRequestRepository->find($id);
+
+            $serial= $stockRequestRepository->getMaxSerialNo();
+            $entityManager = $this->getDoctrine()->getManager();
+            $serial_num = 0;
+            
+            if($serial){
+                $stockRequest->setSerialNumber($serial[0]->getSerialNumber() + 1);
+            }
+            else{
+                $stockRequest->setSerialNumber($serial_num);
+            }
+     
+                $entityManager->persist($stockRequest);
             
             foreach($stockRequest->getStockRequestLists() as $list){
                 $listId = $list->getId();

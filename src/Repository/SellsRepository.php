@@ -40,6 +40,17 @@ class SellsRepository extends ServiceEntityRepository
                       ->getQuery()
             ;
     }
+    public function getMaxSerialNo(){
+        $qb=$this->createQueryBuilder('s')
+                    ->andWhere('s.id > :ids')
+                    ->setParameter('ids', 0)
+                    ->orderBy('s.serialNumber', "DESC")
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getResult();
+
+         return $qb;
+    }
 
     // /**
     //  * @return Sells[] Returns an array of Sells objects
