@@ -26,7 +26,10 @@ class ConsumptionDeliveryController extends AbstractController
      */
     public function index(StockBalanceRepository $stockBalanceRepository, ConsumptionDeliveryListRepository $consumptionDeliveryListRepository, ConsumptionDeliveryRepository $consumptionDeliveryRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        $this->denyAccessUnlessGranted("consumption_delivery_list");
+
         if($request->request->get('approve')){
+            $this->denyAccessUnlessGranted("consumption_delivery_approval");
             $note = $request->request->get('remark');
             $id = $request->request->get('approve');
             $consumptionDelivery =$consumptionDeliveryRepository->find($id);
@@ -84,6 +87,8 @@ class ConsumptionDeliveryController extends AbstractController
 
         }
         elseif ($request->request->get("reject")){
+            $this->denyAccessUnlessGranted("consumption_delivery_approval");
+
             $user = $this->getUser();
             $id = $request->request->get('reject');
             $consumptionDelivery = $consumptionDeliveryRepository->find($id);
@@ -125,6 +130,7 @@ class ConsumptionDeliveryController extends AbstractController
      */
     public function newConsumptionDelivery(ConsumptionDeliveryListRepository $consumptionDeliveryListRepository, Request $request, ConsumptionDeliveryRepository $consumptionDeliveryRepository): Response
     {
+        $this->denyAccessUnlessGranted("consumption_delivery_new");
         $entityManager = $this->getDoctrine()->getManager();
 
         $consumptionDelivery = new ConsumptionDelivery();
@@ -171,6 +177,7 @@ class ConsumptionDeliveryController extends AbstractController
 
      public function editConsumptionDelivery(ConsumptionDeliveryListRepository $consumptionDeliveryListRepository, Request $request, ConsumptionDeliveryRepository $consumptionDeliveryRepository, $id): Response
      {
+        $this->denyAccessUnlessGranted("consumption_delivery_edit");
          $entityManager = $this->getDoctrine()->getManager();
 
          if($request->request->get('edit')){
@@ -236,6 +243,7 @@ class ConsumptionDeliveryController extends AbstractController
      */
     public function editConsumptionDeliveryList(ConsumptionDeliveryListRepository $consumptionDeliveryListRepository, Request $request, ConsumptionDeliveryRepository $consumptionDeliveryRepository,$id ): Response
     {  
+        $this->denyAccessUnlessGranted("consumption_delivery_edit");
       
         $consumptionDeliveryList = $consumptionDeliveryListRepository->find($id);
 
@@ -273,6 +281,8 @@ class ConsumptionDeliveryController extends AbstractController
      */
     public function parentDelete(Request $request, ConsumptionDelivery $consumptionDelivery): Response
     {
+        $this->denyAccessUnlessGranted("consumption_delivery_delete");
+
         if ($this->isCsrfTokenValid('delete'.$consumptionDelivery->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($consumptionDelivery);
@@ -285,6 +295,8 @@ class ConsumptionDeliveryController extends AbstractController
      */
     public function deleteChild(Request $request, ConsumptionDeliveryList $consumptionDeliveryList): Response
     {   
+        $this->denyAccessUnlessGranted("consumption_delivery_delete");
+
         if ($this->isCsrfTokenValid('delete'.$consumptionDeliveryList->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($consumptionDeliveryList);

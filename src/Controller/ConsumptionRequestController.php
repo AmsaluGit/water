@@ -30,7 +30,9 @@ class ConsumptionRequestController extends AbstractController
      */
     public function index(StockBalanceRepository $stockBalanceRepository, ConsumptionRequestListRepository $consumptionRequestListRepository, ConsumptionRequestRepository $consumptionRequestRepository, StockListRepository $stockListRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        $this->denyAccessUnlessGranted("consumption_request_list");
         if($request->request->get('approve')){
+            $this->denyAccessUnlessGranted("consumption_request_approval");
             $note = $request->request->get('remark');
             $id = $request->request->get('approve');
             $consumptionRequest =$consumptionRequestRepository->find($id);
@@ -117,6 +119,7 @@ class ConsumptionRequestController extends AbstractController
 
         }
         elseif ($request->request->get("reject")){
+            $this->denyAccessUnlessGranted("consumption_request_approval");
             $user = $this->getUser();
             $id = $request->request->get('reject');
             $consumptionRequest = $consumptionRequestRepository->find($id);
@@ -200,6 +203,7 @@ class ConsumptionRequestController extends AbstractController
      */
     public function newConsumptionRequest(ConsumptionRequestListRepository $consumptionRequestListRepository, Request $request, ConsumptionRequestRepository $consumptionRequestRepository): Response
     {
+        $this->denyAccessUnlessGranted("consumption_request_new");
         $entityManager = $this->getDoctrine()->getManager();
 
         $consumptionRequest = new ConsumptionRequest();
@@ -245,6 +249,7 @@ class ConsumptionRequestController extends AbstractController
 
      public function editConsumptionRequest(StockBalanceRepository $stockBalanceRepository, ConsumptionRequestListRepository $consumptionRequestListRepository, Request $request, ConsumptionRequestRepository $consumptionRequestRepository, $id): Response
      {
+         $this->denyAccessUnlessGranted("consumption_request_edit");
          $entityManager = $this->getDoctrine()->getManager();
 
          if($request->request->get('edit')){
@@ -306,6 +311,7 @@ class ConsumptionRequestController extends AbstractController
      */
     public function editConsumptionRequestList(ConsumptionRequestListRepository $consumptionRequestListRepository, Request $request, ConsumptionRequestRepository $consumptionRequestRepository,$id ): Response
     {
+        $this->denyAccessUnlessGranted("consumption_request_edit");
 
         $consumptionRequestList = $consumptionRequestListRepository->find($id);
 
@@ -341,6 +347,8 @@ class ConsumptionRequestController extends AbstractController
      */
     public function parentDelete(Request $request, ConsumptionRequest $consumptionRequest): Response
     {
+        $this->denyAccessUnlessGranted("consumption_request_delete");
+
         if ($this->isCsrfTokenValid('delete'.$consumptionRequest->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($consumptionRequest);
@@ -353,6 +361,7 @@ class ConsumptionRequestController extends AbstractController
      */
     public function deleteChild(Request $request, ConsumptionRequestList $consumptionRequestList): Response
     {
+        $this->denyAccessUnlessGranted("consumption_request_delete");
 
         if ($this->isCsrfTokenValid('delete'.$consumptionRequestList->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
