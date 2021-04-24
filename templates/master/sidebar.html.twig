@@ -7,7 +7,7 @@
            
 
 
-
+          {% if is_granted("system_setting") %}
           <li class="nav-item has-treeview ">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-chart-pie"></i>
@@ -75,8 +75,7 @@
             </ul>
           </li>
 
-
-
+{% endif %}
 
 
 
@@ -90,21 +89,23 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-           
+
+           {% if is_granted("purchase_request_list") %}
               <li class="nav-item">
                 <a href="{{ path('purchase_index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Purchase Request</p>
                 </a>
               </li>
-
+            {% endif %}
+            {% if is_granted("purchase_delivery_list") %}
               <li class="nav-item">
                 <a href="{{ path('stock_index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Purchase Delivery</p>
                 </a>
               </li>
-             
+             {% endif %}
             </ul>
           </li>
   
@@ -122,46 +123,54 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+            {% if is_granted("consumption_request_list") %}
             <li class="nav-item">
                 <a href="{{ path('consumption_index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Consumption Requests</p>
                 </a>
               </li>
-              
+            {% endif %}
+            {% if is_granted("consumption_delivery_list") %}
               <li class="nav-item">
                 <a href="{{ path('consumption_delivery_index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Consumption Delivery</p>
                 </a>
               </li>
-
+            {% endif %}
+            {% if is_granted("product_delivery_list") %}
               <li class="nav-item">
                 <a href="{{ path('product_delivery_index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Product Delivery</p>
                 </a>
               </li>
-              
+            {% endif %}
+            {% if is_granted("goods_delivery_list") %}  
               <li class="nav-item">
                 <a href="{{ path('goods_delivery_index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Goods Delivery</p>
                 </a>
               </li>
-                           <li class="nav-item">
+            {% endif %}
+            {% if is_granted("product_delivery_list") %}
+              <li class="nav-item">
                 <a href="{{ path('material_index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Daily Raw Materials</p>
                 </a>
               </li>
+            {% endif %}
+            {% if is_granted("production_record_list") %}
               <li class="nav-item">
                 <a href="{{ path('production_report_index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Production Record</p>
                 </a>
               </li>
-             
+             {% endif %}
              
             </ul>
           </li>
@@ -172,7 +181,7 @@
 
 
 
-
+{% if is_granted("user_list") %}
 <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-chart-pie"></i>
@@ -210,14 +219,14 @@
              
             </ul>
           </li>
+{% endif %}
 
 
 
 
 
 
-
-
+{% if is_granted("report") %}
 <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-chart-pie"></i>
@@ -240,7 +249,7 @@
             </ul>
           </li>
 
-
+{% endif %}
 
 
         </ul>

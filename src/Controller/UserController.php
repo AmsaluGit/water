@@ -35,7 +35,7 @@ class UserController extends AbstractController
     public function index(UserPasswordEncoderInterface $encoder,Request $request, UserRepository $userRepository, PaginatorInterface $paginator): Response 
     {
         $pageSize=5;
-        $this->denyAccessUnlessGranted("user_list");
+        // $this->denyAccessUnlessGranted("user_list");
         $user = new User();
         $searchForm = $this->createForm(userFilterType::class,$user);
         $searchForm->handleRequest($request);
@@ -99,7 +99,7 @@ class UserController extends AbstractController
      */
     public function delete(Request $request, User $user): Response
     {
-        $this->denyAccessUnlessGranted("user_delete");
+        // $this->denyAccessUnlessGranted("user_delete");
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($user);
