@@ -24,7 +24,9 @@ class PurchaseListType extends AbstractType
             },
         ])
         ->add('spcicification')
-        ->add('unitOfMeasure')
+        ->add('unitOfMeasure',null, [
+            'required'=>true,
+            ])
         ->add('quantity')
         ->add('remark')
         
