@@ -51,13 +51,15 @@
     </head>
     <body>
     <button id="printPageButton" onClick="window.print();" style = "float:right;" >Print</button>
-         <p style="padding-left: 200px"><b>የእቃ ማስረከቢያ ሰነድ</b><span style="padding-left: 100px">ቀን </span></p> 
-        <p ><b style="text-decoration: underline;padding-left: 200px">Goods Delivery Order</b><span style="padding-left: 90px">Date  {{ date }}</span></p>
+         <p style="padding-left: 200px"><b>የእቃ ማስረከቢያ ሰነድ</b><span style="padding-left: 40%">ቀን </span></p> 
+        <p ><b style="text-decoration: underline;padding-left: 200px">Goods Delivery Order</b><span style="padding-left: 20%">Date  {{ date }}</span></p>
+        
         <table class="g"; width=65%>
             <tr>
                 <th style="width: 40%"id="th" >የርክክብ ቦታ<br>Place of delivery</th>
                 <td id="td">{{sell.placeOfDelivery}}</td>
             </tr>
+            <p style="padding-left: 200px"><span style="padding-left: 60%">No {{ sell.serialNumber }} </span></p>
         </table>
         <br>
          <table class="g"; width=75%>

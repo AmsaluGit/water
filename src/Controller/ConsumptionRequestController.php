@@ -10,6 +10,7 @@ use App\Form\ConsumptionRequestType;
 use App\Form\ConsumptionRequestListType;
 use App\Repository\ConsumptionRequestRepository;
 use App\Repository\ConsumptionRequestListRepository;
+use App\Repository\StockBalanceRepository;
 use App\Repository\StockListRepository;
 use App\Repository\SettingRepository;
 use App\Form\ConsumptionApprovalForm;
@@ -145,24 +146,24 @@ class ConsumptionRequestController extends AbstractController
 
             $dp = $consumptionRequestListRepository->findAll();
 
-            //Available
+            // Available
             
-            foreach($dp as $ls){
-                $product=$ls->getProduct();
-                $avail = $stockListRepository->findBy(["product" => $product]);
-                $tot = 0;
-                if($ls->getConsumptionRequest()->getApprovalStatus() == 3){
-                foreach($avail as $av){
-                    if($av->getApprovalStatus() == 1){
-                        $tot = $tot + $av->getApprovedQuantity();
-                    }
-                    $ls->setAvailable($tot); 
-                }
-                
-                }
+            // foreach($dp as $ls){
+            //     $product=$ls->getProduct();
+            //     $avail = $stockListRepository->findBy(["product" => $product]);
+            //     $tot = 0;
+            //     if($ls->getConsumptionRequest()->getApprovalStatus() == 3){
+            //         foreach($avail as $av){
+            //             if($av->getApprovalStatus() == 1){
+            //                 $tot = $tot + $av->getApprovedQuantity();
+            //             }
+            //             $ls->setAvailable($tot); 
+            //         }
+                    
+            //     }
                    
 
-              }
+            // }
 
               $entityManager = $this->getDoctrine()->getManager();
         $entityManager->flush();
@@ -220,7 +221,7 @@ class ConsumptionRequestController extends AbstractController
      * @Route("/editconsumption/{id}", name="edit_consumption_request_index", methods={"GET","POST"})
      */
 
-     public function editConsumptionRequest(ConsumptionRequestListRepository $consumptionRequestListRepository, Request $request, ConsumptionRequestRepository $consumptionRequestRepository, $id): Response
+     public function editConsumptionRequest(StockBalanceRepository $stockBalanceRepository, ConsumptionRequestListRepository $consumptionRequestListRepository, Request $request, ConsumptionRequestRepository $consumptionRequestRepository, $id): Response
      {
          $entityManager = $this->getDoctrine()->getManager();
 
@@ -241,7 +242,7 @@ class ConsumptionRequestController extends AbstractController
           $consumptionRequestList = new ConsumptionRequestList();
           $form_consumption_list = $this->createForm(ConsumptionRequestListType::class, $consumptionRequestList);
           $form_consumption_list->handleRequest($request);
-
+          
 
           //edit info on Consumption Request
           if($form_consumption->isSubmitted() && $form_consumption->isValid()){
@@ -255,7 +256,7 @@ class ConsumptionRequestController extends AbstractController
           if($form_consumption_list->isSubmitted() && $form_consumption_list->isValid()){
               $consumptionRequest = $entityManager->getRepository(ConsumptionRequest::class)->find($request->request->get("parentId"));
               $consumptionRequestList->setConsumptionRequest($consumptionRequest);
-              $consumptionRequestList->setAvailable(4);
+              $consumptionRequestList->setAvailable($stockBalanceRepository->findBy(["product"=>$consumptionRequestList->getProduct()])[0]->getAvailable());
 
           // $consumptionRequestList->setIssue(4);
               $entityManager->persist($consumptionRequestList);

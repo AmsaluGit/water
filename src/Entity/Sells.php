@@ -81,6 +81,11 @@ class Sells
      */
     private $ApprovalStatus;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $serialNumber;
+
     // /**
     //  * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="sells")
     //  */
@@ -270,4 +275,16 @@ class Sells
 
     //     return $this;
     // }
+
+    public function getSerialNumber(): ?int
+    {
+        return $this->serialNumber;
+    }
+
+    public function setSerialNumber(?int $serialNumber): self
+    {
+        $this->serialNumber = $serialNumber;
+
+        return $this;
+    }
 }

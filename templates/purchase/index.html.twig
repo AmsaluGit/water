@@ -91,7 +91,7 @@
 													</form>
                                                 </td>												
 												<td>
-                                                {% if stockRequest.approvalStatus == null%}
+                                                {% if stockRequest.approvalStatus == 3 %}
 													<form class="d-inline" method="post" action="{{ path('edit_stockRequest_index',{'id' : stockRequest.id}) }}">
 														<input type="hidden" name="edit" value="{{stockRequest.id}}">
 														<button  class="btn btn-info btn-sm" title="Edit">
@@ -139,7 +139,7 @@
 															<h4 class="card-title">Items List</h4>
 														<div class="card-tools">
 
-													{% if not stockRequest.approvalStatus == null%}	
+													{% if not stockRequest.approvalStatus == 3 %}	
 
 														 {# <form class="d-inline" method="post" action="{{path('download_purchase_index',{'id':stockRequest.id})}}"> #}
 														 {# <input type="hidden" name="edit" value="{{stockRequest.id}}"> #}
@@ -193,7 +193,7 @@
 																				{# <td>{{ item.weight }}</td>
 																				<td>{{ item.unitPrice }}</td>
 																				<td>{{ item.quantity * item.unitprice }}</td> #}
-																				{% if not stockRequest.approvalStatus %}
+																				{% if  stockRequest.approvalStatus == 3 %}
 																				<td>
 																					<form id = "approval" method="post">
 																					
@@ -270,7 +270,7 @@
 																			</tr>
 											
 																			{% endfor %}
-																			{% if k == 1 and not stockRequest.approvalStatus %}
+																			{% if k == 1 and stockRequest.approvalStatus == 3 %}
 																			{# {% if not sell.approvalStatus %} #}
 																			<tr>
 																				<td colspan="8">

@@ -47,6 +47,7 @@ class GoodsDeliveryController extends AbstractController
             $note = $request->request->get('remark');
             $id = $request->request->get('approve');
             $sells = $sellsRepository->find($id);
+            $sells ->setSerialNumber(5000 + $id);
             $count = 0;
             foreach($sells->getSellsLists() as $list){
                 $listId = $list->getId();
@@ -324,8 +325,9 @@ class GoodsDeliveryController extends AbstractController
         $data = $sellsRepository->find($id);
         // $sellsList = new SellsList();
         $qb = $sellsListRepository->findBy(['sells' => $id]);
-        $theDate = new \DateTime();
-        $date = $theDate->format('Y-m-d H:i:s');
+        // $theDate = new \DateTime();
+        // $date = $theDate->format('Y-m-d H:i:s');
+        $date = date("Y/m/d");
         return $this->render('goods_delivery/6.html.twig', [
             'sell' => $data,
             'sellslist'=>$qb,

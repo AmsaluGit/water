@@ -109,6 +109,11 @@ class Stock
      */
     private $note;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $serialNumber;
+
     public function __construct()
     {
         $this->stockApprovals = new ArrayCollection();
@@ -369,6 +374,18 @@ class Stock
     public function setNote(?string $note): self
     {
         $this->note = $note;
+
+        return $this;
+    }
+
+    public function getSerialNumber(): ?int
+    {
+        return $this->serialNumber;
+    }
+
+    public function setSerialNumber(?int $serialNumber): self
+    {
+        $this->serialNumber = $serialNumber;
 
         return $this;
     }
